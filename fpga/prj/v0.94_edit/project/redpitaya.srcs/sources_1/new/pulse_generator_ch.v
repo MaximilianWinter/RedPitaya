@@ -90,15 +90,35 @@ begin
     buf_rdata_o <= wf_buf[buf_addr_i];
 end
 
+reg  iteration_done = 1'b0;
+
 always @(posedge clk_i)
 begin
-    if (rstn_i == 1'b0 || trigger_i == 1'b0) begin
+    if (rstn_i == 1'b0)
+    begin
         wf_pnt <= {30{1'b0}};
     end
+    
+    if (trigger_i == 1'b1) begin
+        if (iteration_done) begin
+            wf_pnt <= {30{1'b0}};
+        end
+        else begin
+            if (wf_npnt[29:16] < 14'd16383) begin
+                wf_pnt <= wf_npnt[29:0];
+            end
+            else if (wf_npnt[29:16] == 14'd16383) begin
+                iteration_done <= 1'b1;
+                wf_pnt <= {30{1'b0}};
+            end
+        end
+    end
     else begin
-        wf_pnt <= wf_npnt[29:0];
+        wf_pnt <= {30{1'b0}};
+        iteration_done <= 1'b0;
     end
 end
+
 assign wf_npnt = wf_pnt + step_i;//{14'd1,{16{1'b0}}};
 assign wf_rp = wf_pnt[29:16];
 

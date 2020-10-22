@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="20" Path="C:/Users/mWinter/Documents/HiWi_MPQ/Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.xpr">
+<Project Version="7" Minor="20" Path="C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="0cb14296a77542ff8f2aa22cce74253c"/>
@@ -58,11 +58,11 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_axi_protocol_converter_0_0/system_axi_protocol_converter_0_0.xci">
-          <Proxy FileSetName="system_axi_protocol_converter_0_0"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_proc_sys_reset_0/system_proc_sys_reset_0.xci">
           <Proxy FileSetName="system_proc_sys_reset_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_axi_protocol_converter_0_0/system_axi_protocol_converter_0_0.xci">
+          <Proxy FileSetName="system_axi_protocol_converter_0_0"/>
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_processing_system7_0/system_processing_system7_0.xci">
           <Proxy FileSetName="system_processing_system7_0"/>
@@ -265,7 +265,7 @@
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/pulse_generator_lp.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/pulse_generator_lp.v"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/pulse_generator_lp.v"/>
           <Attr Name="ImportTime" Val="1532621808"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -295,7 +295,7 @@
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/pulsegen_development/pulse_generator.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/pulsegen_development/pulse_generator.v"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/pulsegen_development/pulse_generator.v"/>
           <Attr Name="ImportTime" Val="1532548104"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -305,7 +305,7 @@
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/pulsegen_development/pulse_generator3.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/pulsegen_development/pulse_generator3.v"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/pulsegen_development/pulse_generator3.v"/>
           <Attr Name="ImportTime" Val="1532619944"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -365,7 +365,7 @@
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_block_sh.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_pid_block_sh.v"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_block_sh.v"/>
           <Attr Name="ImportTime" Val="1526549556"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -375,7 +375,7 @@
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_block_sh_d.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_pid_block_sh_d.v"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_block_sh_d.v"/>
           <Attr Name="ImportTime" Val="1528973076"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -385,7 +385,7 @@
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_edit.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_pid_edit.v"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_edit.v"/>
           <Attr Name="ImportTime" Val="1526496858"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -395,7 +395,7 @@
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_sh.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_pid_sh.v"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_sh.v"/>
           <Attr Name="ImportTime" Val="1532461546"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

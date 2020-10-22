@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/mWinter/Documents/HiWi_MPQ/Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.runs/impl_1'
+HD_PWD='C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
