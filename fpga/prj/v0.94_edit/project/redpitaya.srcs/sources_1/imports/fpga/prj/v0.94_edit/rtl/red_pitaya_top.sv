@@ -625,11 +625,11 @@ end
 pulse_generator_top pg_top(
     .dac_a_i         (adc_dat[0]),
     .dac_a_o         (asg_dat[0]),
-    .trigger_a_i     (trigger_a),
+    .trigger_a_i     (trigger_b), // TODO: need to change
     
     .dac_b_i         (adc_dat[1]),
     .dac_b_o         (asg_dat[1]),
-    .trigger_b_i     (trigger_b),
+    .trigger_b_i     (trigger_b), // TODO: need to change
 
     .clk_i  (adc_clk),
     .rstn_i (adc_rstn),

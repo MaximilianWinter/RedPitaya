@@ -52,12 +52,14 @@ module pulse_generator_ch(
 
 reg [14-1: 0]   wf_buf [0:16384]   ;
 
-reg [28-1: 0]   scaled_wf_previous_val;
-reg [14-1: 0]   scaled_wf_prev_val;
+reg [28-1: 0]   scaled_wf_p_val;
+//reg [14-1: 0]   scaled_wf_prev_val;
 reg [14-1: 0]   scaled_wf_current_val;
 reg [14-1: 0]   wf_current_val;
-reg [14-1: 0]   wf_previous_val;
-reg [14-1: 0]   wf_pprevious_val;
+reg [14-1: 0]   wf_pppp_val;
+reg [14-1: 0]   wf_ppp_val;
+reg [14-1: 0]   wf_pp_val;
+reg [14-1: 0]   wf_p_val;
     
 wire [14-1: 0]   wf_rp      ;
 reg [30-1: 0]   wf_pnt     ;
@@ -65,19 +67,20 @@ wire [31-1: 0]  wf_npnt    ;
 
 always @(posedge clk_i)
 begin
-    wf_pprevious_val <= wf_buf[wf_rp];
-    wf_previous_val <= wf_pprevious_val;
+    wf_pppp_val <= wf_buf[wf_rp];
+    wf_ppp_val <= wf_pppp_val;
+    wf_pp_val <= wf_ppp_val;
     
-    wf_current_val <= wf_previous_val;
+    wf_p_val <= wf_pp_val;
+    wf_current_val <= wf_p_val;
    
 end
 
 // TODO: check delays induced by that! should be 3 clk cycles = 24ns
 always @(posedge clk_i)
 begin
-    scaled_wf_previous_val <= $signed(wf_current_val) * $signed({1'b0,amp_i});
-    scaled_wf_prev_val <= scaled_wf_previous_val[28-1:13];
-    scaled_wf_current_val <= scaled_wf_prev_val;
+    scaled_wf_p_val <= $signed(wf_pp_val) * $signed({1'b0,amp_i});
+    scaled_wf_current_val <= scaled_wf_p_val[28-1:13];
 end
 
 always @(posedge clk_i)
@@ -98,9 +101,9 @@ begin
     begin
         wf_pnt <= {30{1'b0}};
     end
-    
+  
     if (trigger_i == 1'b1) begin
-        if (iteration_done) begin
+        if (iteration_done == 1'b1) begin
             wf_pnt <= {30{1'b0}};
         end
         else begin
@@ -119,7 +122,7 @@ begin
     end
 end
 
-assign wf_npnt = wf_pnt + step_i;//{14'd1,{16{1'b0}}};
+assign wf_npnt = wf_pnt + {14'd1,{16{1'b0}}}; //step_i; TODO: can change to step_i
 assign wf_rp = wf_pnt[29:16];
 
 //////////////////////////////
