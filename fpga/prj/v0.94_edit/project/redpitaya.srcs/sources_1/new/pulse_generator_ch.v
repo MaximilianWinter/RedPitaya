@@ -39,22 +39,31 @@ module pulse_generator_ch(
     input       [ 14-1: 0]  amp_i           ,
     input       [ 14-1: 0]  offset_i        ,
     input                   offset_mode_i   ,
-    input       [ 14-1: 0]  delay_i         ,
+    input       [ 14-1: 0]  wf_delay_i      ,
+    input       [ 14-1: 0]  swf_delay_i     ,
     input       [ 14-1: 0]  set_ki_i        ,
     input                   int_rst_i       ,
     input       [ 3-1: 0]   ch_mode_i       ,
     input       [ 30-1: 0]  step_i
     );
     
+
 ////////////////////////
 ///WAVEFORM BUFFERING///
 ////////////////////////
 
 reg [14-1: 0]   wf_buf [0:16384]   ;
 
-reg [28-1: 0]   scaled_wf_p_val;
-//reg [14-1: 0]   scaled_wf_prev_val;
-reg [14-1: 0]   scaled_wf_current_val;
+always @(posedge clk_i)
+begin
+    if (buf_we_i) wf_buf[buf_addr_i] <= buf_wdata_i[14-1:0];
+end
+    
+always @(posedge clk_i)
+begin
+    buf_rdata_o <= wf_buf[buf_addr_i];
+end
+
 reg [14-1: 0]   wf_current_val;
 reg [14-1: 0]   wf_pppp_val;
 reg [14-1: 0]   wf_ppp_val;
@@ -76,57 +85,119 @@ begin
    
 end
 
-// TODO: check delays induced by that! should be 3 clk cycles = 24ns
-always @(posedge clk_i)
-begin
-    scaled_wf_p_val <= $signed(wf_pp_val) * $signed({1'b0,amp_i});
-    scaled_wf_current_val <= scaled_wf_p_val[28-1:13];
-end
-
-always @(posedge clk_i)
-begin
-    if (buf_we_i) wf_buf[buf_addr_i] <= buf_wdata_i[14-1:0];
-end
-    
-always @(posedge clk_i)
-begin
-    buf_rdata_o <= wf_buf[buf_addr_i];
-end
-
-reg  iteration_done = 1'b0;
+reg  wf_iteration_done = 1'b0;
+reg [14-1:0] wf_delay_counter = 14'h0;
 
 always @(posedge clk_i)
 begin
     if (rstn_i == 1'b0)
     begin
         wf_pnt <= {30{1'b0}};
+	wf_iteration_done <= 1'b0;
+	wf_delay_counter <= 14'h0;
     end
   
     if (trigger_i == 1'b1) begin
-        if (iteration_done == 1'b1) begin
+        if (wf_iteration_done == 1'b1) begin
             wf_pnt <= {30{1'b0}};
         end
         else begin
-            if (wf_npnt[29:16] < 14'd16383) begin
-                wf_pnt <= wf_npnt[29:0];
-            end
-            else if (wf_npnt[29:16] == 14'd16383) begin
-                iteration_done <= 1'b1;
-                wf_pnt <= {30{1'b0}};
-            end
+	    if (wf_delay_counter < wf_delay_i) begin
+	        wf_delay_counter <= wf_delay_counter + 14'd1;
+	    end
+	    else begin		
+		    if (wf_npnt[29:16] < 14'd16383) begin
+		        wf_pnt <= wf_npnt[29:0];
+		    end
+		    else if (wf_npnt[29:16] == 14'd16383) begin
+		        wf_iteration_done <= 1'b1;
+		        wf_pnt <= {30{1'b0}};
+		    end
+	    end	
         end
     end
     else begin
         wf_pnt <= {30{1'b0}};
-        iteration_done <= 1'b0;
+        wf_iteration_done <= 1'b0;
+	wf_delay_counter <= 14'h0;
     end
 end
 
 assign wf_npnt = wf_pnt + {14'd1,{16{1'b0}}}; //step_i; TODO: can change to step_i
 assign wf_rp = wf_pnt[29:16];
 
+///////////////////////////////
+///SCALED WAVEFORM BUFFERING///
+///////////////////////////////
+
+reg [14-1: 0]   swf_current_val;
+reg [14-1: 0]   swf_pppp_val;
+reg [14-1: 0]   swf_ppp_val;
+reg [14-1: 0]   swf_pp_val;
+reg [28-1: 0]   swf_p_val;
+
+wire [14-1: 0]   swf_rp      ;
+reg [30-1: 0]   swf_pnt     ;
+wire [31-1: 0]  swf_npnt    ;
+
+always @(posedge clk_i)
+begin
+    swf_pppp_val <= wf_buf[swf_rp];
+    swf_ppp_val <= swf_pppp_val;
+    swf_pp_val <= swf_ppp_val;
+    
+    swf_p_val <= $signed(swf_pp_val) * $signed({1'b0,amp_i});
+    swf_current_val <= swf_p_val[28-1:13];
+end
+
+reg  swf_iteration_done = 1'b0;
+reg [14-1:0] swf_delay_counter = 14'h0;
+
+always @(posedge clk_i)
+begin
+    if (rstn_i == 1'b0)
+    begin
+        swf_pnt <= {30{1'b0}};
+	swf_iteration_done <= 1'b0;
+	swf_delay_counter <= 14'h0;
+    end
+  
+    if (trigger_i == 1'b1) begin
+        if (swf_iteration_done == 1'b1) begin
+            swf_pnt <= {30{1'b0}};
+        end
+        else begin
+	    if (swf_delay_counter < swf_delay_i) begin
+	        swf_delay_counter <= swf_delay_counter + 14'd1;
+	    end
+	    else begin		
+		    if (swf_npnt[29:16] < 14'd16383) begin
+		        swf_pnt <= swf_npnt[29:0];
+		    end
+		    else if (swf_npnt[29:16] == 14'd16383) begin
+		        swf_iteration_done <= 1'b1;
+		        swf_pnt <= {30{1'b0}};
+		    end
+	    end	
+        end
+    end
+    else begin
+        swf_pnt <= {30{1'b0}};
+        swf_iteration_done <= 1'b0;
+	swf_delay_counter <= 14'h0;
+    end
+end
+
+assign swf_npnt = swf_pnt + {14'd1,{16{1'b0}}}; //step_i; TODO: can change to step_i
+assign swf_rp = swf_pnt[29:16];
+
+
+
+
+
+
 //////////////////////////////
-///ERROR SIGNAL CALCULATION/// ///TODO: Implement other type of delay
+///ERROR SIGNAL CALCULATION///
 //////////////////////////////
 
 reg [15-1:0]    error = 15'h0;
@@ -141,8 +212,8 @@ begin
             error <= 15'h0;
         end
         else begin
-            if (wf_rp > delay_i && wf_rp < 14'd16383) begin
-                error <= $signed(scaled_wf_current_val) - $signed(dat_i) + $signed(offset);
+            if (wf_rp < 14'd16383) begin
+                error <= $signed(swf_current_val) - $signed(dat_i) + $signed(offset);
             end
             else if (wf_rp == 14'd16383) begin
                 error_calc_done <= 1'b1;
@@ -298,7 +369,7 @@ begin
     case(ch_mode_i)
         3'b000: begin gen_out <= $signed(pid_reg[29-1:15]); end
         3'b001: begin gen_out <= $signed(wf_current_val); end
-        3'b010: begin gen_out <= $signed(scaled_wf_current_val); end
+        3'b010: begin gen_out <= $signed(swf_current_val); end
         3'b011: begin gen_out <= $signed(error); end
         3'b100: begin gen_out <= $signed(int_out); end
     endcase
