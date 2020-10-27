@@ -28,6 +28,7 @@ module pulse_generator_ch(
     input                   trigger_i       ,
     input       [ 14-1: 0]  dat_i           ,
     output      [ 14-1: 0]  dat_o           ,
+    output      [ 14-1: 0]  debug_ch_o      ,
     
     // Buffer organisation
     input                   buf_we_i        ,
@@ -52,7 +53,7 @@ module pulse_generator_ch(
 ///WAVEFORM BUFFERING///
 ////////////////////////
 
-reg [14-1: 0]   wf_buf [0:16384]   ;
+reg [15-1: 0]   wf_buf [0:16384]   ;
 
 always @(posedge clk_i)
 begin
@@ -64,11 +65,11 @@ begin
     buf_rdata_o <= wf_buf[buf_addr_i];
 end
 
-reg [14-1: 0]   wf_current_val;
-reg [14-1: 0]   wf_pppp_val;
-reg [14-1: 0]   wf_ppp_val;
-reg [14-1: 0]   wf_pp_val;
-reg [14-1: 0]   wf_p_val;
+reg [15-1: 0]   wf_current_val;
+reg [15-1: 0]   wf_pppp_val;
+reg [15-1: 0]   wf_ppp_val;
+reg [15-1: 0]   wf_pp_val;
+reg [15-1: 0]   wf_p_val;
     
 wire [14-1: 0]   wf_rp      ;
 reg [30-1: 0]   wf_pnt     ;
@@ -131,10 +132,10 @@ assign wf_rp = wf_pnt[29:16];
 ///////////////////////////////
 
 reg [14-1: 0]   swf_current_val;
-reg [14-1: 0]   swf_pppp_val;
-reg [14-1: 0]   swf_ppp_val;
-reg [14-1: 0]   swf_pp_val;
-reg [28-1: 0]   swf_p_val;
+reg [15-1: 0]   swf_pppp_val;
+reg [15-1: 0]   swf_ppp_val;
+reg [15-1: 0]   swf_pp_val;
+reg [29-1: 0]   swf_p_val;
 
 wire [14-1: 0]   swf_rp      ;
 reg [30-1: 0]   swf_pnt     ;
@@ -146,8 +147,8 @@ begin
     swf_ppp_val <= swf_pppp_val;
     swf_pp_val <= swf_ppp_val;
     
-    swf_p_val <= $signed(swf_pp_val) * $signed({1'b0,amp_i});
-    swf_current_val <= swf_p_val[28-1:13];
+    swf_p_val <= $signed(swf_pp_val) * $signed(amp_i);
+    swf_current_val <= swf_p_val[29-1:15];
 end
 
 reg  swf_iteration_done = 1'b0;
@@ -249,9 +250,9 @@ begin
             end
         end
         else begin //NOTE: in original file: '=' instead of '<='
-            counter_off <= 8'h0;
-            offset_meas <= offset_reg[20-1:6];
-            offset_reg <= 21'h0;
+            counter_off = 8'h0;
+            offset_meas = offset_reg[20-1:6];
+            offset_reg = 21'h0;
         end
         counter_off <= counter_off + 8'h1;
     end
@@ -375,8 +376,8 @@ begin
     endcase
 end
 
-assign dat_o = gen_out;
-
+assign dat_o = $signed(pid_reg[29-1:15]);
+assign debug_ch_o = gen_out;
 
     
 endmodule

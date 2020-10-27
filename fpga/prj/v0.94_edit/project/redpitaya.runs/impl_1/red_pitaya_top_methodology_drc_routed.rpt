@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date         : Tue Oct 27 13:51:12 2020
+| Date         : Tue Oct 27 16:54:29 2020
 | Host         : mpq4p217 running 64-bit major release  (build 9200)
 | Command      : report_methodology -file red_pitaya_top_methodology_drc_routed.rpt -rpx red_pitaya_top_methodology_drc_routed.rpx
 | Design       : red_pitaya_top
@@ -23,12 +23,12 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 125
+             Violations found: 104
 +-----------+----------+-------------------------------------------------+------------+
 | Rule      | Severity | Description                                     | Violations |
 +-----------+----------+-------------------------------------------------+------------+
-| SYNTH-6   | Warning  | Timing of a block RAM might be sub-optimal      | 14         |
-| TIMING-15 | Warning  | Large hold violation on inter-clock path        | 28         |
+| SYNTH-6   | Warning  | Timing of a block RAM might be sub-optimal      | 7          |
+| TIMING-15 | Warning  | Large hold violation on inter-clock path        | 14         |
 | TIMING-17 | Warning  | Non-clocked sequential cell                     | 1          |
 | TIMING-18 | Warning  | Missing input or output delay                   | 46         |
 | XDCC-5    | Warning  | User Non-Timing constraint/property overwritten | 4          |
@@ -39,210 +39,105 @@ Table of Contents
 -----------------
 SYNTH-6#1 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_a/wf_buf_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#2 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_a/wf_buf_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#3 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_a/wf_buf_reg_1_2, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_2, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#4 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_a/wf_buf_reg_1_3, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_3, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#5 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_a/wf_buf_reg_1_4, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_4, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#6 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_a/wf_buf_reg_1_5, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
-Related violations: <none>
-
-SYNTH-6#7 Warning
-Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_a/wf_buf_reg_1_6, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
-Related violations: <none>
-
-SYNTH-6#8 Warning
-Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
-Related violations: <none>
-
-SYNTH-6#9 Warning
-Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
-Related violations: <none>
-
-SYNTH-6#10 Warning
-Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_2, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
-Related violations: <none>
-
-SYNTH-6#11 Warning
-Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_3, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
-Related violations: <none>
-
-SYNTH-6#12 Warning
-Timing of a block RAM might be sub-optimal  
-The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_4, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
-Related violations: <none>
-
-SYNTH-6#13 Warning
-Timing of a block RAM might be sub-optimal  
 The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_5, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
-SYNTH-6#14 Warning
+SYNTH-6#7 Warning
 Timing of a block RAM might be sub-optimal  
 The timing for the instance pg_top/pg_ch_b/wf_buf_reg_1_6, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 TIMING-15#1 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.596 ns between adc_dat_i[0][13] (clocked by adc_clk) and adc_dat_raw_reg[0][11]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.033 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.596 ns between adc_dat_i[1][7] (clocked by adc_clk) and adc_dat_raw_reg[1][5]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.118 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#2 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.596 ns between adc_dat_i[0][5] (clocked by adc_clk) and adc_dat_raw_reg[0][3]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.039 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.596 ns between adc_dat_i[1][9] (clocked by adc_clk) and adc_dat_raw_reg[1][7]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.122 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#3 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.596 ns between adc_dat_i[1][7] (clocked by adc_clk) and adc_dat_raw_reg[1][5]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.118 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.600 ns between adc_dat_i[1][10] (clocked by adc_clk) and adc_dat_raw_reg[1][8]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.115 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#4 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.596 ns between adc_dat_i[1][9] (clocked by adc_clk) and adc_dat_raw_reg[1][7]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.122 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.600 ns between adc_dat_i[1][11] (clocked by adc_clk) and adc_dat_raw_reg[1][9]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.113 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#5 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.600 ns between adc_dat_i[0][14] (clocked by adc_clk) and adc_dat_raw_reg[0][12]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.077 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.603 ns between adc_dat_i[1][13] (clocked by adc_clk) and adc_dat_raw_reg[1][11]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.117 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#6 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.600 ns between adc_dat_i[1][10] (clocked by adc_clk) and adc_dat_raw_reg[1][8]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.115 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.603 ns between adc_dat_i[1][15] (clocked by adc_clk) and adc_dat_raw_reg[1][13]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.110 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#7 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.600 ns between adc_dat_i[1][11] (clocked by adc_clk) and adc_dat_raw_reg[1][9]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.113 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.607 ns between adc_dat_i[1][2] (clocked by adc_clk) and adc_dat_raw_reg[1][0]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.153 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#8 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.603 ns between adc_dat_i[0][6] (clocked by adc_clk) and adc_dat_raw_reg[0][4]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.026 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.608 ns between adc_dat_i[1][12] (clocked by adc_clk) and adc_dat_raw_reg[1][10]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.141 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#9 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.603 ns between adc_dat_i[0][7] (clocked by adc_clk) and adc_dat_raw_reg[0][5]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.024 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.608 ns between adc_dat_i[1][14] (clocked by adc_clk) and adc_dat_raw_reg[1][12]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.140 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#10 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.603 ns between adc_dat_i[1][13] (clocked by adc_clk) and adc_dat_raw_reg[1][11]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.117 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.610 ns between adc_dat_i[1][4] (clocked by adc_clk) and adc_dat_raw_reg[1][2]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.128 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#11 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.603 ns between adc_dat_i[1][15] (clocked by adc_clk) and adc_dat_raw_reg[1][13]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.110 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.610 ns between adc_dat_i[1][5] (clocked by adc_clk) and adc_dat_raw_reg[1][3]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.119 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#12 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.604 ns between adc_dat_i[0][15] (clocked by adc_clk) and adc_dat_raw_reg[0][13]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.138 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+There is a large inter-clock skew of 2.611 ns between adc_dat_i[1][3] (clocked by adc_clk) and adc_dat_raw_reg[1][1]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.162 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
 TIMING-15#13 Warning
 Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.604 ns between adc_dat_i[0][2] (clocked by adc_clk) and adc_dat_raw_reg[0][0]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.050 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#14 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.604 ns between adc_dat_i[0][3] (clocked by adc_clk) and adc_dat_raw_reg[0][1]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.133 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#15 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.604 ns between adc_dat_i[0][4] (clocked by adc_clk) and adc_dat_raw_reg[0][2]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.043 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#16 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.607 ns between adc_dat_i[0][11] (clocked by adc_clk) and adc_dat_raw_reg[0][9]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.104 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#17 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.607 ns between adc_dat_i[0][12] (clocked by adc_clk) and adc_dat_raw_reg[0][10]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.101 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#18 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.607 ns between adc_dat_i[1][2] (clocked by adc_clk) and adc_dat_raw_reg[1][0]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.153 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#19 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.608 ns between adc_dat_i[0][10] (clocked by adc_clk) and adc_dat_raw_reg[0][8]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.094 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#20 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.608 ns between adc_dat_i[0][8] (clocked by adc_clk) and adc_dat_raw_reg[0][6]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.074 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#21 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.608 ns between adc_dat_i[0][9] (clocked by adc_clk) and adc_dat_raw_reg[0][7]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.081 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#22 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.608 ns between adc_dat_i[1][12] (clocked by adc_clk) and adc_dat_raw_reg[1][10]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.141 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#23 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.608 ns between adc_dat_i[1][14] (clocked by adc_clk) and adc_dat_raw_reg[1][12]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.140 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#24 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.610 ns between adc_dat_i[1][4] (clocked by adc_clk) and adc_dat_raw_reg[1][2]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.128 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#25 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.610 ns between adc_dat_i[1][5] (clocked by adc_clk) and adc_dat_raw_reg[1][3]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.119 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#26 Warning
-Large hold violation on inter-clock path  
-There is a large inter-clock skew of 2.611 ns between adc_dat_i[1][3] (clocked by adc_clk) and adc_dat_raw_reg[1][1]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.162 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
-Related violations: <none>
-
-TIMING-15#27 Warning
-Large hold violation on inter-clock path  
 There is a large inter-clock skew of 2.611 ns between adc_dat_i[1][6] (clocked by adc_clk) and adc_dat_raw_reg[1][4]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.119 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
 
-TIMING-15#28 Warning
+TIMING-15#14 Warning
 Large hold violation on inter-clock path  
 There is a large inter-clock skew of 2.611 ns between adc_dat_i[1][8] (clocked by adc_clk) and adc_dat_raw_reg[1][6]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.151 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
 Related violations: <none>
