@@ -28,7 +28,7 @@ module pulse_generator_ch(
     input                   trigger_i       ,
     input       [ 14-1: 0]  dat_i           ,
     output      [ 14-1: 0]  dat_o           ,
-    output      [ 14-1: 0]  debug_ch_o      ,
+    //output      [ 14-1: 0]  debug_ch_o      ,
     
     // Buffer organisation
     input                   buf_we_i        ,
@@ -36,6 +36,8 @@ module pulse_generator_ch(
     input       [ 14-1: 0]  buf_wdata_i     ,
     output reg  [ 14-1: 0]  buf_rdata_o     ,
     output reg  [ 14-1: 0]  buf_rpnt_o      ,
+    
+    output reg  [ 14-1: 0]  sig_buf_rdata_o ,
     
     input       [ 14-1: 0]  amp_i           ,
     input       [ 14-1: 0]  offset_i        ,
@@ -373,11 +375,58 @@ begin
         3'b010: begin gen_out <= $signed(swf_current_val); end
         3'b011: begin gen_out <= $signed(error); end
         3'b100: begin gen_out <= $signed(int_out); end
+        3'b101: begin gen_out <= $signed(dat_i); end
     endcase
 end
 
 assign dat_o = $signed(pid_reg[29-1:15]);
-assign debug_ch_o = gen_out;
+//assign debug_ch_o = gen_out;
 
+///////////////////////////////
+///WRITING SIGNALS TO MEMORY///
+///////////////////////////////
+reg [14-1:0] sig_buf [0:16383];
+
+reg [14-1:0] buf_pnt;
+wire [14-1:0] buf_npnt;
+
+reg buf_iteration_done = 1'b0;
+// signal buffer logic
+always @(posedge clk_i)
+begin
+    if (rstn_i == 1'b0) begin
+        buf_pnt <= {14{1'b0}};        
+        buf_iteration_done <= 1'b0;
+    end
+    
+    if (trigger_i == 1'b1) begin
+        if (buf_iteration_done == 1'b1) begin
+            buf_pnt <= {14{1'b0}}; 
+        end
+        else begin
+            if (buf_npnt < 14'd16383) begin
+                buf_pnt <= buf_npnt;
+            end
+            else if (buf_npnt == 14'd16383) begin
+                buf_iteration_done <= 1'b1;
+                buf_pnt <= {14{1'b0}};
+            end
+        end
+    end
+    else begin
+        buf_pnt <= {14{1'b0}};
+        buf_iteration_done <= 1'b0;
+    end
+end
+assign buf_npnt = buf_pnt + 14'd1;
+
+always @(posedge clk_i) begin
+    sig_buf[buf_pnt] <= $signed(gen_out);
+end
+
+always @(posedge clk_i)
+begin
+    sig_buf_rdata_o <= sig_buf[buf_addr_i];
+end
     
 endmodule

@@ -57,6 +57,9 @@ wire  [  14-1: 0] buf_b_rdata  ; //Buffer A, read data, 14 bits - Max
 wire  [  14-1: 0] buf_b_rpnt   ; //Buffer A, current read pointer, 14 bits - Max
 reg   [  32-1: 0] buf_b_rpnt_rd; //Buffer A, ???, 32 bits; NOT given to asg_ch; need to understand its role better -Max  
 
+wire  [  14-1: 0] sig_buf_a_rdata ;
+
+wire  [  14-1: 0] sig_buf_b_rdata ;
 
 reg [14-1:0] amp_a;
 reg [14-1:0] offset_a;
@@ -173,13 +176,16 @@ begin
             
             20'h2zzzz : begin sys_ack <= ack_dly;   sys_rdata <= {{18{1'b0}}, buf_b_rdata}; end
             
+            20'h3zzzz : begin sys_ack <= ack_dly;   sys_rdata <= {{18{1'b0}}, sig_buf_a_rdata}; end
+            20'h4zzzz : begin sys_ack <= ack_dly;   sys_rdata <= {{18{1'b0}}, sig_buf_b_rdata}; end
+          
             default : begin sys_ack <= sys_en;  sys_rdata <= 32'h0; end
         endcase
         
     end
 end
 
-/*
+
 pulse_generator_ch pg_ch_a(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
@@ -194,6 +200,8 @@ pulse_generator_ch pg_ch_a(
     .buf_rdata_o    (buf_a_rdata),
     .buf_rpnt_o     (buf_a_rpnt),
     
+    .sig_buf_rdata_o (sig_buf_a_rdata),
+    
     //all set via RAM:
     .amp_i          (amp_a),
     .offset_i       (offset_a),
@@ -205,7 +213,7 @@ pulse_generator_ch pg_ch_a(
     .ch_mode_i      (ch_mode_a),
     .step_i         (step_a)
 );
-*/
+
 pulse_generator_ch pg_ch_b(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
@@ -213,13 +221,15 @@ pulse_generator_ch pg_ch_b(
     .trigger_i(trigger_b_i),
     .dat_i(dac_b_i),
     .dat_o(dac_b_o),
-    .debug_ch_o(dac_a_o),
+    //.debug_ch_o(dac_a_o),
     
     .buf_we_i       (buf_b_we),
     .buf_addr_i     (buf_b_addr),
     .buf_wdata_i    (sys_wdata[14-1:0]),
     .buf_rdata_o    (buf_b_rdata),
     .buf_rpnt_o     (buf_b_rpnt),
+    
+    .sig_buf_rdata_o (sig_buf_b_rdata),
     
     //all set via RAM:
     .amp_i          (amp_b),

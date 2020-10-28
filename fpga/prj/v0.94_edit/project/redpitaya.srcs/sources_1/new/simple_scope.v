@@ -48,20 +48,22 @@ reg   [   4-1: 0] adc_rval      ;
 wire              adc_rd_dv     ;
 // WRITE
 
+reg trigger = 1'b0;
+
 always @(posedge clk_i)
 begin
-    if (rstn_i == 1'b0) begin
+    if (rstn_i == 1'b0 || trigger == 1'b0) begin
         adc_wp      <= {14{1'b0}};
     end
     else begin
         adc_wp <= adc_wp + 1;
-        adc_wp_cur <= adc_wp ;
     end
 
 end
 
-always @(posedge clk_i) begin
-adc_a_buf[adc_wp] <= $signed(adc_a_i);
+always @(posedge clk_i)
+begin
+    adc_a_buf[adc_wp] <= $signed(adc_a_i);
 end
 
 // READ
@@ -78,9 +80,23 @@ always @(posedge clk_i) begin
    adc_raddr   <= sys_addr[15:2] ; // address synchronous to clock
    adc_a_raddr <= adc_raddr     ; // double register 
    adc_a_rd    <= $signed(adc_a_buf[adc_a_raddr]) ;
+   //adc_a_rd    <= $signed(adc_a_buf[sys_addr[15:2]]) ;
 end
 
 // System Bus
+always @(posedge clk_i)
+begin
+    if (rstn_i == 1'b0) begin
+        trigger <= 1'b0;
+    end
+    else begin
+        if (sys_wen) begin
+            if (sys_addr[19:0]==20'h00)   trigger   <= sys_wdata[     0] ;
+        end
+    end
+end
+
+
 
 wire sys_en;
 assign sys_en = sys_wen | sys_ren;
@@ -93,6 +109,7 @@ end else begin
    sys_err <= 1'b0 ;
 
    casez (sys_addr[19:0])
+     20'h00000 : begin sys_ack <= sys_en;          sys_rdata <= {{32-1{1'b0}}, trigger}; end
 
 
 

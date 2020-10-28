@@ -608,9 +608,20 @@ extra_simple_asg asg_A(
     .sys_ack         (sys[6].ack  )
 );
 */
+reg trigger_b = 1'b0;
+
+always @(posedge adc_clk)
+begin
+    if ($signed(adc_dat[0]) > 14'sd750) begin
+    trigger_b <= 1'b1;
+    end
+    else begin
+        trigger_b <= 1'b0;
+    end
+end
 
 simple_scope scope_A(
-    .adc_a_i    (adc_dat[0]),
+    .adc_a_i    (adc_dat[1]),
     
     .clk_i  (adc_clk),
     .rstn_i (adc_rstn),    
@@ -623,19 +634,6 @@ simple_scope scope_A(
     .sys_err         (sys[5].err  ),
     .sys_ack         (sys[5].ack  )
 );
-
-
-reg trigger_b = 1'b0;
-
-always @(posedge adc_clk)
-begin
-    if ($signed(adc_dat[0]) > 14'sd750) begin
-    trigger_b <= 1'b1;
-    end
-    else begin
-        trigger_b <= 1'b0;
-    end
-end
 
 pulse_generator_top pg_top(
     .dac_a_i         (adc_dat[0]),
