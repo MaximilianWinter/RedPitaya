@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date         : Tue Oct 27 16:53:12 2020
+| Date         : Tue Oct 27 17:43:33 2020
 | Host         : mpq4p217 running 64-bit major release  (build 9200)
 | Command      : report_utilization -file red_pitaya_top_utilization_synth.rpt -pb red_pitaya_top_utilization_synth.pb
 | Design       : red_pitaya_top
@@ -30,13 +30,13 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs*             |  710 |     0 |     17600 |  4.03 |
-|   LUT as Logic          |  710 |     0 |     17600 |  4.03 |
+| Slice LUTs*             |  752 |     0 |     17600 |  4.27 |
+|   LUT as Logic          |  752 |     0 |     17600 |  4.27 |
 |   LUT as Memory         |    0 |     0 |      6000 |  0.00 |
-| Slice Registers         |  864 |     0 |     35200 |  2.45 |
-|   Register as Flip Flop |  864 |     0 |     35200 |  2.45 |
+| Slice Registers         |  879 |     0 |     35200 |  2.50 |
+|   Register as Flip Flop |  879 |     0 |     35200 |  2.50 |
 |   Register as Latch     |    0 |     0 |     35200 |  0.00 |
-| F7 Muxes                |    3 |     0 |      8800 |  0.03 |
+| F7 Muxes                |    0 |     0 |      8800 |  0.00 |
 | F8 Muxes                |    0 |     0 |      4400 |  0.00 |
 +-------------------------+------+-------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
@@ -57,7 +57,7 @@ Table of Contents
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
 | 0     |          Yes |         Set |            - |
-| 864   |          Yes |       Reset |            - |
+| 879   |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -92,7 +92,7 @@ Table of Contents
 +-----------------------------+------+-------+-----------+-------+
 |          Site Type          | Used | Fixed | Available | Util% |
 +-----------------------------+------+-------+-----------+-------+
-| Bonded IOB                  |   73 |     0 |       100 | 73.00 |
+| Bonded IOB                  |   87 |     0 |       100 | 87.00 |
 | Bonded IPADs                |    0 |     0 |         2 |  0.00 |
 | Bonded IOPADs               |    0 |     0 |       130 |  0.00 |
 | PHY_CONTROL                 |    0 |     0 |         2 |  0.00 |
@@ -149,21 +149,20 @@ Table of Contents
 +-----------+------+---------------------+
 |  Ref Name | Used | Functional Category |
 +-----------+------+---------------------+
-| FDRE      |  864 |        Flop & Latch |
-| LUT6      |  252 |                 LUT |
-| LUT4      |  149 |                 LUT |
-| LUT3      |  149 |                 LUT |
-| LUT5      |  127 |                 LUT |
-| LUT1      |   97 |                 LUT |
-| LUT2      |   60 |                 LUT |
-| IBUF      |   40 |                  IO |
-| CARRY4    |   34 |          CarryLogic |
+| FDRE      |  879 |        Flop & Latch |
+| LUT6      |  311 |                 LUT |
+| LUT4      |  153 |                 LUT |
+| LUT5      |  125 |                 LUT |
+| LUT3      |  119 |                 LUT |
+| LUT1      |  110 |                 LUT |
+| IBUF      |   54 |                  IO |
+| LUT2      |   50 |                 LUT |
+| CARRY4    |   36 |          CarryLogic |
 | OBUF      |   29 |                  IO |
 | ODDR      |   18 |                  IO |
 | OBUFT     |   18 |                  IO |
 | RAMB36E1  |   14 |        Block Memory |
 | BUFG      |   10 |               Clock |
-| MUXF7     |    3 |               MuxFx |
 | DSP48E1   |    3 |    Block Arithmetic |
 | PLLE2_ADV |    1 |               Clock |
 | IBUFDS    |    1 |                  IO |

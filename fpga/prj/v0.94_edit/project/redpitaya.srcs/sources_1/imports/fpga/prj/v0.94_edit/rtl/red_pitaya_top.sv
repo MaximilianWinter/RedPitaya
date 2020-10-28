@@ -608,8 +608,8 @@ extra_simple_asg asg_A(
     .sys_ack         (sys[6].ack  )
 );
 */
-/*
-reg trigger_a = 1'b1;
+
+
 reg trigger_b = 1'b0;
 
 always @(posedge adc_clk)
@@ -620,7 +620,7 @@ begin
     else begin
         trigger_b <= 1'b0;
     end
-end*/
+end
 
 pulse_generator_top pg_top(
     .dac_a_i         (adc_dat[0]),
@@ -629,7 +629,8 @@ pulse_generator_top pg_top(
     
     .dac_b_i         (adc_dat[1]),
     .dac_b_o         (asg_dat[1]),
-    .trigger_b_i     (exp_p_in[7]), // TODO: need to change
+    //.trigger_b_i     (exp_p_in[7]), // TODO: need to change
+    .trigger_b_i     (trigger_b),
 
     .clk_i  (adc_clk),
     .rstn_i (adc_rstn),
