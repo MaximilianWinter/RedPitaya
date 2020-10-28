@@ -294,7 +294,7 @@ sys_bus_interconnect #(
 
 // silence unused busses - enabled bus 6 -Lukas
 sys_bus_stub sys_bus_stub_4 (sys[4]);
-sys_bus_stub sys_bus_stub_5 (sys[5]);
+//sys_bus_stub sys_bus_stub_5 (sys[5]);
 sys_bus_stub sys_bus_stub_7 (sys[7]);
 /*
 generate
@@ -608,6 +608,21 @@ extra_simple_asg asg_A(
     .sys_ack         (sys[6].ack  )
 );
 */
+
+simple_scope scope_A(
+    .adc_a_i    (adc_dat[0]),
+    
+    .clk_i  (adc_clk),
+    .rstn_i (adc_rstn),    
+    
+    .sys_addr        (sys[5].addr ),
+    .sys_wdata       (sys[5].wdata),
+    .sys_wen         (sys[5].wen  ),
+    .sys_ren         (sys[5].ren  ),
+    .sys_rdata       (sys[5].rdata),
+    .sys_err         (sys[5].err  ),
+    .sys_ack         (sys[5].ack  )
+);
 
 
 reg trigger_b = 1'b0;
