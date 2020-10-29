@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1603899082">
+<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1603989148">
   <File Type="RDS-PROPCONSTRS" Name="red_pitaya_top_drc_synth.rpt"/>
   <File Type="PA-TCL" Name="red_pitaya_top.tcl"/>
   <File Type="RDS-RDS" Name="red_pitaya_top.vds"/>
@@ -27,6 +27,20 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/new/pulse_generator_ch.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/pulse_generator_delta_finder.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/pulse_generator_init.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>

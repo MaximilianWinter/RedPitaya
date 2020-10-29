@@ -28,7 +28,6 @@ module pulse_generator_ch(
     input                   trigger_i       ,
     input       [ 14-1: 0]  dat_i           ,
     output      [ 14-1: 0]  dat_o           ,
-    //output      [ 14-1: 0]  debug_ch_o      ,
     
     // Buffer organisation
     input                   buf_we_i        ,
@@ -47,7 +46,8 @@ module pulse_generator_ch(
     input       [ 14-1: 0]  set_ki_i        ,
     input                   int_rst_i       ,
     input       [ 3-1: 0]   ch_mode_i       ,
-    input       [ 30-1: 0]  step_i
+    input       [ 30-1: 0]  step_i          ,
+    input                   delta_state_i   
     );
     
 
@@ -194,45 +194,10 @@ end
 assign swf_npnt = swf_pnt + {14'd1,{16{1'b0}}}; //step_i; TODO: can change to step_i
 assign swf_rp = swf_pnt[29:16];
 
-
-
-
-
-
-//////////////////////////////
-///ERROR SIGNAL CALCULATION///
-//////////////////////////////
-
-reg [15-1:0]    error = 15'h0;
-reg             error_calc_done = 1'b0;
-
-reg [14-1:0]    offset = 14'h0;
-
-always @(posedge clk_i)
-begin
-    if (trigger_i == 1'b1) begin
-        if (error_calc_done) begin
-            error <= 15'h0;
-        end
-        else begin
-            if (wf_rp < 14'd16383) begin
-                error <= $signed(swf_current_val) - $signed(dat_i) + $signed(offset);
-            end
-            else if (wf_rp == 14'd16383) begin
-                error_calc_done <= 1'b1;
-                error <= 15'h0;
-            end
-        end    
-    end
-    else begin
-        error <= 15'h0;
-        error_calc_done <= 1'b0;    
-    end
-end 
-
 ////////////////////////
 ///OFFSET CALCULATION///
 ////////////////////////
+reg [14-1:0]    offset = 14'h0;
 reg  [   8-1: 0] counter_off = 8'h1; 
 reg  [  21-1: 0] offset_reg  = 21'h0; // Bit 21 (MSB) reserved for potential overflow during signed addition/subtraction
 reg  [  14-1: 0] offset_meas = 14'h0;
@@ -271,95 +236,71 @@ begin
     endcase
 end
 
-////////////////
-///INTEGRATOR///
-////////////////
+////////////////////////////
+///INIT INTEGRATOR MODULE///
+////////////////////////////
+wire [ 14-1: 0] error;
+wire [ 14-1: 0] int_out;
+wire [ 14-1: 0] i_cont;
 
-reg  [29-1:0]   ki_mult;
-wire [33-1:0]   int_sum;
-reg  [32-1:0]   int_reg;
-wire [14-1:0]   int_out;
-
-always @(posedge clk_i)
-begin
-    ki_mult <= $signed(error) * $signed(set_ki_i);
+pulse_generator_init init(
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
     
-    if (int_rst_i) begin
-        int_reg <= 32'h0;
-    end
-    else if (int_sum[33-1:33-2] == 2'b01) begin
-        int_reg <= 32'h7FFFFFFF;
-    end
-    else if (int_sum[33-1:33-2] == 2'b10) begin
-        int_reg <= 32'h80000000;
-    end
-    else begin
-        int_reg <= int_sum[32-1:0];
-    end
-end
+    .trigger_i(trigger_i),
+    
+    .wf_current_val_i(wf_current_val),
+    .swf_current_val_i(swf_current_val),
+    .dat_i(dat_i),
+    
+    .offset_i(offset),
+    .wf_rp_i(wf_rp),
+    .swf_rp_i(swf_rp),
+    
+    .set_ki_i(set_ki_i),
+    .int_rst_i(int_rst_i),
+    
+    .error_o(error),
+    .int_o(int_out),
+    .i_cont_o(i_cont)
+);
 
-assign int_sum = $signed(ki_mult) + $signed(int_reg);
-assign int_out = int_reg[32-1:18]; 
+/////////////////////////
+///DELTA FINDER MODULE///
+/////////////////////////
 
-//////////////////////////
-///INTEGRATOR AVERAGING///
-//////////////////////////
-
-
-reg [8-1:0]     counter_int = 8'h1;
-reg [21-1:0]    int_avg_reg = 21'h0;
-reg [14-1:0]    int_avg = 14'h0;
-
-always @(posedge clk_i)
-begin
-    if ($signed(counter_int) <= 8'sh40) begin
-        if (int_avg_reg[21-1:21-2] == 2'b01) begin
-            int_avg <= 21'h7FFFF;
-        end
-        else if (int_avg_reg[21-1:21-2] == 2'b10) begin
-            int_avg_reg <= 21'h80000;
-        end
-        else begin
-            int_avg_reg <= $signed(int_avg_reg[20:0]) + $signed(int_out);
-        end
-    end
-    else begin //NOTE: in original file, equal signs used instead of arrows
-        counter_int <= 8'h0;
-        int_avg <= int_avg_reg[20-1:6];
-        int_avg_reg <= 21'h0;
-    end
-    counter_int <= counter_int + 8'h1;
-end 
-
-///////////////////////
-///CONTROLLER OUTPUT/// TODO; in original file: WAVE 2
-///////////////////////
+pulse_generator_delta_finder delta_finder(
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
+    
+    .trigger_i(trigger_i),
+    
+    .swf_current_val_i(swf_current_val),
+    .dat_i(dat_i),
+    .state_i(delta_state_i)
+);
 
 
-reg [29-1:0]    pid_reg = 29'h0;
-reg             controller_out_done = 1'b0;
 
-always @(posedge clk_i)
-begin
-    if (trigger_i == 1'b1) begin
-        if (controller_out_done) begin
-            pid_reg <= 29'h0;
-        end
-        else begin            
-            if (wf_rp < 14'd16383) begin
-                pid_reg <= $signed(wf_current_val) * $signed(int_out); //NOTE: actually WAVE 2
-            end
-            else if (wf_rp == 14'd16383) begin
-                controller_out_done <= 1'b1;
-                pid_reg <= 29'h0;
-            end
-        end
-    end
-    else begin
-        pid_reg <= 29'h0;
-        controller_out_done <= 1'b0;
-    end
-end 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /////////////////
 ///OUTPUT MODE///
@@ -370,7 +311,7 @@ reg [14-1:0] gen_out;
 always @(posedge clk_i)
 begin
     case(ch_mode_i)
-        3'b000: begin gen_out <= $signed(pid_reg[29-1:15]); end
+        3'b000: begin gen_out <= $signed(i_cont); end
         3'b001: begin gen_out <= $signed(wf_current_val); end
         3'b010: begin gen_out <= $signed(swf_current_val); end
         3'b011: begin gen_out <= $signed(error); end
@@ -379,8 +320,7 @@ begin
     endcase
 end
 
-assign dat_o = $signed(pid_reg[29-1:15]);
-//assign debug_ch_o = gen_out;
+assign dat_o = $signed(i_cont);
 
 ///////////////////////////////
 ///WRITING SIGNALS TO MEMORY///

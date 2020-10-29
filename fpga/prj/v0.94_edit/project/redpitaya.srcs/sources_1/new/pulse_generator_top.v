@@ -70,6 +70,7 @@ reg [14-1:0] set_ki_a;
 reg          int_rst_a = 1'b0;
 reg [3-1:0]  ch_mode_a = 3'b000;
 reg [30-1:0] step_a = {14'd1,{16{1'b0}}};
+reg          delta_state_a;
 
 reg [14-1:0] amp_b;
 reg [14-1:0] offset_b;
@@ -80,6 +81,7 @@ reg [14-1:0] set_ki_b;
 reg          int_rst_b = 1'b0;
 reg [3-1:0]  ch_mode_b = 3'b000;
 reg [30-1:0] step_b = {14'd1,{16{1'b0}}};
+reg          delta_state_b;
 
 
 
@@ -132,6 +134,9 @@ begin
                 20'h48 : begin int_rst_b     <= sys_wdata[0]; end
                 20'h4C : begin ch_mode_b    <= sys_wdata[3-1:0]; end
                 20'h50 : begin step_b       <= sys_wdata[30-1:0]; end
+                
+                20'h54 : begin delta_state_a     <= sys_wdata[0]; end
+                20'h58 : begin delta_state_b     <= sys_wdata[0]; end
             endcase
         
         end
@@ -172,6 +177,9 @@ begin
             20'h4C : begin sys_ack <= sys_en;        sys_rdata <= {{32-3{1'b0}}, ch_mode_b}; end
             20'h50 : begin sys_ack <= sys_en;        sys_rdata <= {{32-30{1'b0}}, step_b}; end
         
+            20'h54 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, delta_state_a}; end
+            20'h58 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, delta_state_b}; end
+            
             20'h1zzzz : begin sys_ack <= ack_dly;   sys_rdata <= {{18{1'b0}}, buf_a_rdata}; end
             
             20'h2zzzz : begin sys_ack <= ack_dly;   sys_rdata <= {{18{1'b0}}, buf_b_rdata}; end
@@ -211,7 +219,8 @@ pulse_generator_ch pg_ch_a(
     .set_ki_i       (set_ki_a),
     .int_rst_i      (int_rst_a),
     .ch_mode_i      (ch_mode_a),
-    .step_i         (step_a)
+    .step_i         (step_a),
+    .delta_state_i  (delta_state_a)
 );
 
 pulse_generator_ch pg_ch_b(
@@ -240,7 +249,8 @@ pulse_generator_ch pg_ch_b(
     .set_ki_i       (set_ki_b),
     .int_rst_i      (int_rst_b),
     .ch_mode_i      (ch_mode_b),
-    .step_i         (step_b)
+    .step_i         (step_b),
+    .delta_state_i  (delta_state_b)
 );
 
 
