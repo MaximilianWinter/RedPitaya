@@ -15,7 +15,7 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments:
+// Additional Comments: debug channel enabled
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +28,7 @@ module pulse_generator_ch(
     input                   trigger_i       ,
     input       [ 14-1: 0]  dat_i           ,
     output      [ 14-1: 0]  dat_o           ,
-    //output      [ 14-1: 0]  debug_ch_o      ,
+    output      [ 14-1: 0]  debug_ch_o      ,
     
     // Buffer organisation
     input                   buf_we_i        ,
@@ -380,7 +380,7 @@ begin
 end
 
 assign dat_o = $signed(pid_reg[29-1:15]);
-//assign debug_ch_o = gen_out;
+assign debug_ch_o = gen_out;
 
 ///////////////////////////////
 ///WRITING SIGNALS TO MEMORY///

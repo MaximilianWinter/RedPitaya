@@ -15,7 +15,7 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments:
+// Additional Comments: only channel B active; dac_a_o serves as debug channel
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -185,7 +185,7 @@ begin
     end
 end
 
-
+/*
 pulse_generator_ch pg_ch_a(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
@@ -212,7 +212,7 @@ pulse_generator_ch pg_ch_a(
     .int_rst_i      (int_rst_a),
     .ch_mode_i      (ch_mode_a),
     .step_i         (step_a)
-);
+);*/
 
 pulse_generator_ch pg_ch_b(
     .clk_i(clk_i),
@@ -221,7 +221,7 @@ pulse_generator_ch pg_ch_b(
     .trigger_i(trigger_b_i),
     .dat_i(dac_b_i),
     .dat_o(dac_b_o),
-    //.debug_ch_o(dac_a_o),
+    .debug_ch_o(dac_a_o),
     
     .buf_we_i       (buf_b_we),
     .buf_addr_i     (buf_b_addr),

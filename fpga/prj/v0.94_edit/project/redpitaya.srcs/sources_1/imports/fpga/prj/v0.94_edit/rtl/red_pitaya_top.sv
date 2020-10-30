@@ -608,6 +608,8 @@ extra_simple_asg asg_A(
     .sys_ack         (sys[6].ack  )
 );
 */
+
+/// Channel A input serves as trigger for channel B
 reg trigger_b = 1'b0;
 
 always @(posedge adc_clk)
