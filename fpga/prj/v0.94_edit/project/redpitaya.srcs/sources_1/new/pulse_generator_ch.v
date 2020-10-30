@@ -55,7 +55,7 @@ module pulse_generator_ch(
 ///WAVEFORM BUFFERING///
 ////////////////////////
 
-reg [15-1: 0]   wf_buf [0:16384]   ;
+reg [15-1: 0]   wf_buf [0:16383]   ;
 
 always @(posedge clk_i)
 begin
@@ -268,7 +268,7 @@ pulse_generator_init init(
 /////////////////////////
 ///DELTA FINDER MODULE///
 /////////////////////////
-
+/*
 pulse_generator_delta_finder delta_finder(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
@@ -279,7 +279,7 @@ pulse_generator_delta_finder delta_finder(
     .dat_i(dat_i),
     .state_i(delta_state_i)
 );
-
+*/
 
 
 
