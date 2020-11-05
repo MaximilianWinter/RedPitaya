@@ -3,10 +3,10 @@
 <!--The data in this file is primarily intended for consumption by Xilinx tools.
 The structure and the elements are likely to change over the next few releases.
 This means code written to parse this file will need to be revisited each subsequent release.-->
-<application name="pa" timeStamp="Fri Oct 30 15:53:37 2020">
+<application name="pa" timeStamp="Thu Nov  5 10:39:17 2020">
 <section name="Project Information" visible="false">
-<property name="ProjectID" value="91908d8d209a4426bac775670eed9952" type="ProjectID"/>
-<property name="ProjectIteration" value="97" type="ProjectIteration"/>
+<property name="ProjectID" value="72c3c6e9c26743df84046731f0865d24" type="ProjectID"/>
+<property name="ProjectIteration" value="2" type="ProjectIteration"/>
 </section>
 <section name="PlanAhead Usage" visible="true">
 <item name="Project Data">
@@ -17,69 +17,15 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="ImplStrategy" value="Vivado Implementation Defaults" type="ImplStrategy"/>
 </item>
 <item name="Java Command Handlers">
-<property name="AddSources" value="14" type="JavaHandler"/>
-<property name="CloseProject" value="5" type="JavaHandler"/>
-<property name="CustomizeRSBBlock" value="1" type="JavaHandler"/>
-<property name="EditCopy" value="10" type="JavaHandler"/>
-<property name="EditPaste" value="1" type="JavaHandler"/>
-<property name="EditUndo" value="56" type="JavaHandler"/>
-<property name="OpenBlockDesign" value="1" type="JavaHandler"/>
-<property name="OpenHardwareManager" value="1" type="JavaHandler"/>
-<property name="OpenProject" value="5" type="JavaHandler"/>
-<property name="RunBitgen" value="91" type="JavaHandler"/>
-<property name="RunImplementation" value="10" type="JavaHandler"/>
-<property name="RunSynthesis" value="27" type="JavaHandler"/>
-<property name="SaveFileProxyHandler" value="11" type="JavaHandler"/>
-<property name="ShowView" value="34" type="JavaHandler"/>
-<property name="ToolsTemplates" value="1" type="JavaHandler"/>
-<property name="ViewTaskImplementation" value="25" type="JavaHandler"/>
-<property name="ViewTaskSynthesis" value="2" type="JavaHandler"/>
-<property name="ZoomOut" value="6" type="JavaHandler"/>
+<property name="RunBitgen" value="1" type="JavaHandler"/>
 </item>
 <item name="Gui Resources Info">
-<property name="AbstractFileView_CLOSE" value="2" type="GuiResourceData"/>
-<property name="AbstractSearchablePanel_SHOW_SEARCH" value="1" type="GuiResourceData"/>
-<property name="BaseDialog_OK" value="260" type="GuiResourceData"/>
-<property name="BaseDialog_YES" value="82" type="GuiResourceData"/>
-<property name="ClosePlanner_YES" value="1" type="GuiResourceData"/>
-<property name="CmdMsgDialog_MESSAGES" value="1" type="GuiResourceData"/>
-<property name="CmdMsgDialog_OK" value="23" type="GuiResourceData"/>
-<property name="CreateSrcFileDialog_FILE_NAME" value="14" type="GuiResourceData"/>
-<property name="DefineModulesDialog_DEFINE_MODULES_AND_SPECIFY_IO_PORTS" value="44" type="GuiResourceData"/>
-<property name="ExpRunTreePanel_EXP_RUN_TREE_TABLE" value="10" type="GuiResourceData"/>
-<property name="FileSetPanel_FILE_SET_PANEL_TREE" value="440" type="GuiResourceData"/>
-<property name="FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE" value="265" type="GuiResourceData"/>
-<property name="GettingStartedView_OPEN_PROJECT" value="5" type="GuiResourceData"/>
-<property name="HCodeEditor_CLOSE" value="4" type="GuiResourceData"/>
-<property name="HCodeEditor_SEARCH_TEXT_COMBO_BOX" value="95" type="GuiResourceData"/>
-<property name="HExceptionDialog_CONTINUE" value="4" type="GuiResourceData"/>
-<property name="HExceptionDialog_EXIT" value="2" type="GuiResourceData"/>
-<property name="LanguageTemplatesDialog_TEMPLATES_TREE" value="36" type="GuiResourceData"/>
-<property name="LogPanel_LOG_NAVIGATOR" value="1" type="GuiResourceData"/>
-<property name="MsgTreePanel_MESSAGE_VIEW_TREE" value="30" type="GuiResourceData"/>
-<property name="MsgView_WARNING_MESSAGES" value="1" type="GuiResourceData"/>
-<property name="NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE" value="2" type="GuiResourceData"/>
-<property name="PACommandNames_RUN_BITGEN" value="1" type="GuiResourceData"/>
-<property name="PACommandNames_ZOOM_OUT" value="2" type="GuiResourceData"/>
-<property name="PAViews_ADDRESS_EDITOR" value="1" type="GuiResourceData"/>
-<property name="PAViews_CODE" value="113" type="GuiResourceData"/>
-<property name="PAViews_DEVICE" value="4" type="GuiResourceData"/>
-<property name="PAViews_PROJECT_SUMMARY" value="1" type="GuiResourceData"/>
-<property name="PAViews_SYSTEM" value="1" type="GuiResourceData"/>
-<property name="ProjectSummaryUtilizationGadget_PROJECT_SUMMARY_UTILIZATION_GADGET_TABBED" value="98" type="GuiResourceData"/>
-<property name="ProjectSummaryUtilizationPanel_PROJECT_SUMMARY_UTILIZATION_PANEL_TABBED" value="49" type="GuiResourceData"/>
-<property name="ProjectSummaryUtilizationPanel_PROJECT_SUMMARY_UTILIZATION_TABLE" value="5" type="GuiResourceData"/>
-<property name="ProjectTab_CLOSE_DESIGN" value="1" type="GuiResourceData"/>
-<property name="RDICommands_COPY" value="12" type="GuiResourceData"/>
-<property name="RunGadget_SHOW_ERROR" value="1" type="GuiResourceData"/>
-<property name="SrcChooserPanel_ADD_HDL_AND_NETLIST_FILES_TO_YOUR_PROJECT" value="1" type="GuiResourceData"/>
-<property name="SrcChooserPanel_CREATE_FILE" value="14" type="GuiResourceData"/>
-<property name="StateMonitor_RESET_RUN" value="2" type="GuiResourceData"/>
-<property name="SyntheticaGettingStartedView_RECENT_PROJECTS" value="9" type="GuiResourceData"/>
-<property name="SyntheticaStateMonitor_CANCEL" value="2" type="GuiResourceData"/>
-<property name="TaskBanner_CLOSE" value="30" type="GuiResourceData"/>
-<property name="TclConsoleView_TCL_CONSOLE_CODE_EDITOR" value="2" type="GuiResourceData"/>
-<property name="TouchpointSurveyDialog_NO" value="1" type="GuiResourceData"/>
+<property name="BaseDialog_OK" value="1" type="GuiResourceData"/>
+<property name="BaseDialog_YES" value="1" type="GuiResourceData"/>
+<property name="CmdMsgDialog_OK" value="1" type="GuiResourceData"/>
+<property name="FileSetPanel_FILE_SET_PANEL_TREE" value="5" type="GuiResourceData"/>
+<property name="FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE" value="2" type="GuiResourceData"/>
+<property name="SyntheticaGettingStartedView_RECENT_PROJECTS" value="1" type="GuiResourceData"/>
 </item>
 </section>
 </application>

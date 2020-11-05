@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date             : Fri Oct 30 15:55:59 2020
+| Date             : Thu Nov  5 10:41:58 2020
 | Host             : mpq4p217 running 64-bit major release  (build 9200)
 | Command          : report_power -file red_pitaya_top_power_routed.rpt -pb red_pitaya_top_power_summary_routed.pb -rpx red_pitaya_top_power_routed.rpx
 | Design           : red_pitaya_top
@@ -30,12 +30,12 @@ Table of Contents
 ----------
 
 +--------------------------+-------+
-| Total On-Chip Power (W)  | 1.959 |
-| Dynamic (W)              | 1.819 |
-| Device Static (W)        | 0.140 |
+| Total On-Chip Power (W)  | 1.988 |
+| Dynamic (W)              | 1.847 |
+| Device Static (W)        | 0.141 |
 | Effective TJA (C/W)      | 11.5  |
-| Max Ambient (C)          | 62.4  |
-| Junction Temperature (C) | 47.6  |
+| Max Ambient (C)          | 62.1  |
+| Junction Temperature (C) | 47.9  |
 | Confidence Level         | Low   |
 | Setting File             | ---   |
 | Simulation Activity File | ---   |
@@ -49,9 +49,9 @@ Table of Contents
 +-------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                 | Power (W) | Used     | Available | Utilization (%) |
 +-------------------------+-----------+----------+-----------+-----------------+
-| Clocks                  |     0.021 |       14 |       --- |             --- |
-| Slice Logic             |     0.008 |     3574 |       --- |             --- |
-|   LUT as Logic          |     0.007 |     1245 |     17600 |            7.07 |
+| Clocks                  |     0.020 |       14 |       --- |             --- |
+| Slice Logic             |     0.008 |     3575 |       --- |             --- |
+|   LUT as Logic          |     0.007 |     1244 |     17600 |            7.07 |
 |   Register              |    <0.001 |     1687 |     35200 |            4.79 |
 |   CARRY4                |    <0.001 |       66 |      4400 |            1.50 |
 |   F7/F8 Muxes           |    <0.001 |       28 |     17600 |            0.16 |
@@ -61,11 +61,11 @@ Table of Contents
 | Block RAM               |     0.125 |       28 |        60 |           46.67 |
 | PLL                     |     0.097 |        1 |         2 |           50.00 |
 | DSPs                    |     0.004 |        3 |        80 |            3.75 |
-| I/O                     |     0.254 |       85 |       100 |           85.00 |
+| I/O                     |     0.282 |       85 |       100 |           85.00 |
 | XADC                    |     0.004 |        1 |       --- |             --- |
 | PS7                     |     1.292 |        1 |       --- |             --- |
-| Static Power            |     0.140 |          |           |                 |
-| Total                   |     1.959 |          |           |                 |
+| Static Power            |     0.141 |          |           |                 |
+| Total                   |     1.988 |          |           |                 |
 +-------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,9 +75,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.180 |       0.171 |      0.009 |
-| Vccaux    |       1.800 |     0.068 |       0.056 |      0.012 |
-| Vcco33    |       3.300 |     0.074 |       0.073 |      0.001 |
+| Vccint    |       1.000 |     0.181 |       0.172 |      0.009 |
+| Vccaux    |       1.800 |     0.069 |       0.057 |      0.012 |
+| Vcco33    |       3.300 |     0.082 |       0.081 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
 | Vcco18    |       1.800 |     0.002 |       0.001 |      0.001 |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |
@@ -88,7 +88,7 @@ Table of Contents
 | MGTAVcc   |       1.000 |     0.000 |       0.000 |      0.000 |
 | MGTAVtt   |       1.200 |     0.000 |       0.000 |      0.000 |
 | MGTVccaux |       1.800 |     0.000 |       0.000 |      0.000 |
-| Vccpint   |       1.000 |     0.711 |       0.678 |      0.033 |
+| Vccpint   |       1.000 |     0.712 |       0.678 |      0.034 |
 | Vccpaux   |       1.800 |     0.038 |       0.027 |      0.010 |
 | Vccpll    |       1.800 |     0.017 |       0.014 |      0.003 |
 | Vcco_ddr  |       1.500 |     0.356 |       0.354 |      0.002 |
@@ -158,7 +158,7 @@ Table of Contents
 +------------------------------------------------+-----------+
 | Name                                           | Power (W) |
 +------------------------------------------------+-----------+
-| red_pitaya_top                                 |     1.819 |
+| red_pitaya_top                                 |     1.847 |
 |   i_hk                                         |     0.002 |
 |   i_iobufn[0]                                  |    <0.001 |
 |   i_iobufn[1]                                  |    <0.001 |
@@ -177,14 +177,14 @@ Table of Contents
 |   i_iobufp[6]                                  |    <0.001 |
 |   i_iobufp[7]                                  |    <0.001 |
 |   pg_top                                       |     0.104 |
-|     pg_ch_b                                    |     0.101 |
+|     pg_ch_b                                    |     0.102 |
 |   pll                                          |     0.097 |
 |   ps                                           |     1.315 |
 |     axi_slave_gp0                              |     0.002 |
 |     system_i                                   |     1.313 |
-|       axi_protocol_converter_0                 |     0.012 |
-|         inst                                   |     0.012 |
-|           gen_axilite.gen_b2s_conv.axilite_b2s |     0.012 |
+|       axi_protocol_converter_0                 |     0.011 |
+|         inst                                   |     0.011 |
+|           gen_axilite.gen_b2s_conv.axilite_b2s |     0.011 |
 |             RD.ar_channel_0                    |     0.002 |
 |               ar_cmd_fsm_0                     |    <0.001 |
 |               cmd_translator_0                 |     0.001 |
@@ -193,7 +193,7 @@ Table of Contents
 |             RD.r_channel_0                     |     0.002 |
 |               rd_data_fifo_0                   |     0.001 |
 |               transaction_fifo_0               |    <0.001 |
-|             SI_REG                             |     0.004 |
+|             SI_REG                             |     0.003 |
 |               ar_pipe                          |     0.001 |
 |               aw_pipe                          |     0.001 |
 |               b_pipe                           |    <0.001 |
@@ -222,9 +222,9 @@ Table of Contents
 |           AXI_XADC_CORE_I                      |     0.005 |
 |           INTR_CTRLR_GEN_I.INTERRUPT_CONTROL_I |    <0.001 |
 |           SOFT_RESET_I                         |    <0.001 |
-|   pwm[0]                                       |     0.001 |
-|   pwm[1]                                       |     0.001 |
-|   pwm[2]                                       |     0.001 |
+|   pwm[0]                                       |    <0.001 |
+|   pwm[1]                                       |    <0.001 |
+|   pwm[2]                                       |    <0.001 |
 |   pwm[3]                                       |     0.001 |
 |   scope_A                                      |     0.037 |
 +------------------------------------------------+-----------+

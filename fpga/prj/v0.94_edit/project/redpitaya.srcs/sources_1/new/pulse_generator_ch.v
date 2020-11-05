@@ -380,7 +380,7 @@ begin
 end
 
 assign dat_o = $signed(pid_reg[29-1:15]);
-assign debug_ch_o = gen_out;
+assign debug_ch_o = $signed(swf_current_val);//gen_out; write waveform from memory to debug output channel
 
 ///////////////////////////////
 ///WRITING SIGNALS TO MEMORY///
