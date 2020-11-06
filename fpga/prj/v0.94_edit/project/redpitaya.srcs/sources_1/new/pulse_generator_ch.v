@@ -322,6 +322,7 @@ end
 
 assign dat_o = $signed(i_cont);
 
+
 ///////////////////////////////
 ///WRITING SIGNALS TO MEMORY///
 ///////////////////////////////
