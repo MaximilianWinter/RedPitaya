@@ -83,6 +83,10 @@ reg [3-1:0]  ch_mode_b = 3'b000;
 reg [30-1:0] step_b = {14'd1,{16{1'b0}}};
 reg          delta_state_b;
 
+reg          trigger_b;
+reg [3-1:0]  avg_buf_state_b;
+reg          avg_buf_rstn_b;
+
 
 
 always @(posedge clk_i)
@@ -117,12 +121,20 @@ begin
             case(sys_addr[19:0])
                 20'h0 : begin amp_a         <= sys_wdata[14-1:0]; end
                 20'h4 : begin offset_a      <= sys_wdata[14-1:0]; end
-                20'h8 : begin offset_mode_a <= sys_wdata[0]; end
+                
+                //20'h8 : begin offset_mode_a <= sys_wdata[0]; end
+                20'h8 : begin trigger_b <= sys_wdata[0]; end
+                
                 20'hC : begin wf_delay_a       <= sys_wdata[14-1:0]; end
 		        20'h10 : begin swf_delay_a       <= sys_wdata[14-1:0]; end
                 20'h14 : begin set_ki_a      <= sys_wdata[14-1:0]; end
-                20'h18 : begin int_rst_a     <= sys_wdata[0]; end
-                20'h20 : begin ch_mode_a    <= sys_wdata[3-1:0]; end
+                //20'h18 : begin int_rst_a     <= sys_wdata[0]; end
+                20'h18 : begin avg_buf_rstn_b     <= sys_wdata[0]; end
+                
+                
+                //20'h20 : begin ch_mode_a    <= sys_wdata[3-1:0]; end
+                20'h20 : begin avg_buf_state_b    <= sys_wdata[3-1:0]; end
+                
                 20'h24 : begin step_a       <= sys_wdata[30-1:0]; end
                 
                 20'h30 : begin amp_b         <= sys_wdata[14-1:0]; end
@@ -159,13 +171,20 @@ begin
         casez (sys_addr[19:0])
             20'h0 : begin sys_ack <= sys_en;        sys_rdata <= {{32-14{1'b0}}, amp_a}; end
             20'h4 : begin sys_ack <= sys_en;        sys_rdata <= {{32-14{1'b0}}, offset_a}; end
-            20'h8 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, offset_mode_a}; end
+            
+            //20'h8 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, offset_mode_a}; end
+            20'h8 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, trigger_b}; end
+            
             20'hC : begin sys_ack <= sys_en;        sys_rdata <= {{32-14{1'b0}}, wf_delay_a}; end
             20'h10 : begin sys_ack <= sys_en;        sys_rdata <= {{32-14{1'b0}}, swf_delay_a}; end
             20'h14 : begin sys_ack <= sys_en;        sys_rdata <= {{32-14{1'b0}}, set_ki_a}; end
-            20'h18 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, int_rst_a}; end
+            //20'h18 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, int_rst_a}; end
+            20'h18 : begin sys_ack <= sys_en;        sys_rdata <= {{32-1{1'b0}}, avg_buf_rstn_b}; end
+            
             20'h1C : begin sys_ack <= sys_en;        sys_rdata <= {{32-3{1'b0}}, ch_mode_a}; end
-            20'h20 : begin sys_ack <= sys_en;        sys_rdata <= {{32-30{1'b0}}, step_a}; end
+            
+            //20'h20 : begin sys_ack <= sys_en;        sys_rdata <= {{32-30{1'b0}}, step_a}; end
+            20'h20 : begin sys_ack <= sys_en;        sys_rdata <= {{32-3{1'b0}}, avg_buf_state_b}; end
             
             20'h30 : begin sys_ack <= sys_en;        sys_rdata <= {{32-14{1'b0}}, amp_b}; end
             20'h34 : begin sys_ack <= sys_en;        sys_rdata <= {{32-14{1'b0}}, offset_b}; end
@@ -193,7 +212,7 @@ begin
     end
 end
 
-
+/*
 pulse_generator_ch pg_ch_a(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
@@ -222,12 +241,13 @@ pulse_generator_ch pg_ch_a(
     .step_i         (step_a),
     .delta_state_i  (delta_state_a)
 );
+*/
 
 pulse_generator_ch pg_ch_b(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
     
-    .trigger_i(trigger_b_i),
+    .trigger_i(trigger_b), // set via RAM
     .dat_i(dac_b_i),
     .dat_o(dac_b_o),
     //.debug_ch_o(dac_a_o),
@@ -250,7 +270,9 @@ pulse_generator_ch pg_ch_b(
     .int_rst_i      (int_rst_b),
     .ch_mode_i      (ch_mode_b),
     .step_i         (step_b),
-    .delta_state_i  (delta_state_b)
+    .delta_state_i  (delta_state_b),
+    .avg_buf_state_i (avg_buf_state_b),
+    .avg_buf_rstn_i (avg_buf_rstn_b)
 );
 
 

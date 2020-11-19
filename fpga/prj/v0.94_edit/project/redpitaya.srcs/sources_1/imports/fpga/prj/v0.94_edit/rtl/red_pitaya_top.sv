@@ -620,6 +620,7 @@ begin
     end
 end
 
+/*
 simple_scope scope_A(
     .adc_a_i    (adc_dat[1]),
     
@@ -657,5 +658,24 @@ pulse_generator_top pg_top(
     .sys_ack         (sys[6].ack  )
 
 );
-  
+*/
+
+pg_top pg(
+    .clk_i  (adc_clk),
+    .rstn_i (adc_rstn),
+    
+    .pd_i(adc_dat[1]),
+    .ctrl_sig_o(asg_dat[1]),
+    
+    .trigger_i(trigger_b),
+    
+    .sys_addr        (sys[6].addr ),
+    .sys_wdata       (sys[6].wdata),
+    .sys_wen         (sys[6].wen  ),
+    .sys_ren         (sys[6].ren  ),
+    .sys_rdata       (sys[6].rdata),
+    .sys_err         (sys[6].err  ),
+    .sys_ack         (sys[6].ack  )
+);
+
 endmodule: red_pitaya_top

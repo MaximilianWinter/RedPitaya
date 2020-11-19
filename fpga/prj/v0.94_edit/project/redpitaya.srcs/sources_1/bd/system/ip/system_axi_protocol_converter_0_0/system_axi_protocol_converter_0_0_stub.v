@@ -1,11 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.2 (lin64) Build 1909853 Thu Jun 15 18:39:10 MDT 2017
-// Date        : Thu Oct 15 14:00:04 2020
+// Date        : Thu Oct 15 14:00:03 2020
 // Host        : maximilian-laptop running 64-bit Ubuntu 18.04.5 LTS
-// Command     : write_verilog -force -mode synth_stub
-//               {/home/maximilian/LRZ_Sync+Share/Studium/WS2021/HiWi_MPQ/Lukas_Projekt/Pulse Stabilization Red
-//               Pitaya/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/bd/system/ip/system_axi_protocol_converter_0_0/system_axi_protocol_converter_0_0_stub.v}
+// Command     : write_verilog -force -mode synth_stub -rename_top system_axi_protocol_converter_0_0 -prefix
+//               system_axi_protocol_converter_0_0_ system_axi_protocol_converter_0_0_stub.v
 // Design      : system_axi_protocol_converter_0_0
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7z010clg400-1

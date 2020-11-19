@@ -25,7 +25,7 @@ module pulse_generator_ch(
     input               rstn_i          ,
     
     // Channel
-    input                   trigger_i       ,
+    input                   trigger_i       , //setting trigger over RAM - for testing
     input       [ 14-1: 0]  dat_i           ,
     output      [ 14-1: 0]  dat_o           ,
     
@@ -47,9 +47,10 @@ module pulse_generator_ch(
     input                   int_rst_i       ,
     input       [ 3-1: 0]   ch_mode_i       ,
     input       [ 30-1: 0]  step_i          ,
-    input                   delta_state_i   
+    input                   delta_state_i   ,
+    input       [ 3-1: 0]   avg_buf_state_i,
+    input                   avg_buf_rstn_i
     );
-    
 
 ////////////////////////
 ///WAVEFORM BUFFERING///
@@ -239,10 +240,11 @@ end
 ////////////////////////////
 ///INIT INTEGRATOR MODULE///
 ////////////////////////////
+
 wire [ 14-1: 0] error;
 wire [ 14-1: 0] int_out;
 wire [ 14-1: 0] i_cont;
-
+/*
 pulse_generator_init init(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
@@ -264,7 +266,7 @@ pulse_generator_init init(
     .int_o(int_out),
     .i_cont_o(i_cont)
 );
-
+*/
 /////////////////////////
 ///DELTA FINDER MODULE///
 /////////////////////////
@@ -281,8 +283,16 @@ pulse_generator_delta_finder delta_finder(
 );
 */
 
+wire [14-1:0] avg_wf;
 
-
+moving_averager avg(
+    .dat_i(swf_current_val),
+    .dat_o(avg_wf),
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
+    .buf_state_i(avg_buf_state_i),
+    .buf_rstn_i(avg_buf_rstn_i)
+);
 
 
 
@@ -317,6 +327,7 @@ begin
         3'b011: begin gen_out <= $signed(error); end
         3'b100: begin gen_out <= $signed(int_out); end
         3'b101: begin gen_out <= $signed(dat_i); end
+        3'b111: begin gen_out <= $signed(avg_wf); end
     endcase
 end
 
