@@ -78,6 +78,7 @@ calibrator cal(
 ///////////////////////
 
 reg [14-1:0] k_p;
+reg [14-1:0] delta_pd;
 
 reg pctrl_buf_we;
 reg pctrl_ref_buf_we;
@@ -93,12 +94,13 @@ controller pctrl(
 	.rstn_i(rstn_i),
 	
 	.trigger_i(trigger_i),		// note: this is the trigger for the pulse generation
-	.do_ctrl_i(module_mode),
+	.do_init_i(module_mode),
 	
 	.ctrl_sig_o(pctrl_ctrl_sig),
 	.pd_i(pd_i),
 	
 	.k_p_i(k_p),
+	.delta_pd_i(delta_pd),
 	
 	.ctrl_buf_we_i(pctrl_buf_we),			// note: we want to write the ref_wf from memory into an array
 	.ref_buf_we_i(pctrl_ref_buf_we),
@@ -161,6 +163,7 @@ begin
 			case(sys_addr[19:0])
 				20'h0: begin module_mode	<= sys_wdata[0]; end // this writes data from memory to the internal module_mode register
 				20'h4: begin k_p		<= sys_wdata[14-1:0]; end
+				20'h8: begin delta_pd		<= sys_wdata[14-1:0]; end
 			endcase
 		end
 	end
@@ -182,6 +185,7 @@ begin
 		casez (sys_addr[19:0])
 			20'h0: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, module_mode}; end
 			20'h4: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, k_p}; end
+			20'h4: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_pd}; end
 			
 			20'h1zzzz: begin sys_ack <= sys_en; 	sys_rdata <= {{18{1'b0}}, pctrl_buf_rdata}; end // this writes data from the controller module to memory
 			20'h2zzzz: begin sys_ack <= sys_en;	sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory

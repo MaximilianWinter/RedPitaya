@@ -20,23 +20,23 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module sram #(parameter ADDR_WIDTH = 8, DATA_WIDTH = 8, DEPTH = 256) (
-    input wire i_clk,
-    input wire [ADDR_WIDTH-1:0] i_addr, 
-    input wire i_write,
-    input wire [DATA_WIDTH-1:0] i_data,
-    output reg [DATA_WIDTH-1:0] o_data 
+module sram(
+    input       clk_i,
+    input [14-1:0] waddr_i,
+    input [14-1:0] raddr_i, 
+    input          write_enable_i,
+    input [14-1:0] data_i,
+    output reg [14-1:0] data_o 
     );
 
-    reg [DATA_WIDTH-1:0] memory_array [0:DEPTH-1]; 
+reg [14-1:0] memory_array [0:16384-1]; 
 
-    always @ (posedge i_clk)
-    begin
-        if(i_write) begin
-            memory_array[i_addr] <= i_data;
-        end
-        else begin
-            o_data <= memory_array[i_addr];
-        end     
+always @(posedge clk_i)
+begin
+    if (write_enable_i) begin
+        memory_array[waddr_i] <= data_i;
     end
+    data_o <= memory_array[raddr_i];
+end
+
 endmodule
