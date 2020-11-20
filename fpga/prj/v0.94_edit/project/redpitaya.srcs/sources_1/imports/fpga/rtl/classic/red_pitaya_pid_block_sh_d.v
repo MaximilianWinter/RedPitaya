@@ -72,7 +72,11 @@ module red_pitaya_pid_block_sh_d #(          //changed name -Lukas
    input      [ 14-1: 0] set_kd_i        ,  // Kd
    input                 int_rst_i       ,  // integrator reset
    input      [ 14-1: 0] set_delay1_i    ,  // delay1 -Lukas
-   input      [ 14-1: 0] set_delay2_i       // delay2 -Lukas
+   input      [ 14-1: 0] set_delay2_i    ,   // delay2 -Lukas
+   input      [ 14-1: 0] factor_i        ,
+   input      [ 14-1: 0] upper_val_i     ,
+   input      [ 14-1: 0] lower_val_i     ,
+   input      [ 14-1: 0] delta_val_i
 );
 
 
@@ -171,6 +175,7 @@ assign kp_mult = $signed(error) * $signed(set_kp_i);
 reg   [    29-1: 0] ki_mult       ;
 wire  [    33-1: 0] int_sum       ;
 reg   [    32-1: 0] int_reg       ;
+reg   [    46-1: 0] int_reg_mult  ; // added --Max
 wire  [32-ISR-1: 0] int_shr       ;
 
 always @(posedge clk_i) begin
@@ -180,19 +185,20 @@ always @(posedge clk_i) begin
    end
    else begin
       ki_mult <= $signed(error) * $signed(set_ki_i) ;
+      //int_reg_mult <= $signed(int_reg) * $signed(factor_i);
 
       if (int_rst_i)
          int_reg <= 32'h0; // reset
-      else if (int_sum[33-1:33-2] == 2'b01) // positive saturation
-         int_reg <= 32'h7FFFFFFF; // max positive
-      else if (int_sum[33-1:33-2] == 2'b10) // negative saturation
-         int_reg <= 32'h80000000; // max negative
+      else if ($signed(int_reg[32-1:18]) > $signed(upper_val_i)) // positive saturation
+         int_reg <= $signed(int_sum[32-1:0]) - $signed({delta_val_i,{18{1'b0}}}); // max positive
+      else if ($signed(int_reg[32-1:18]) < $signed(lower_val_i)) // negative saturation
+         int_reg <= $signed(int_sum[32-1:0]) + $signed({delta_val_i,{18{1'b0}}}); // max negative
       else
          int_reg <= int_sum[32-1:0]; // use sum as it is
    end
 end
 
-assign int_sum = $signed(ki_mult) + $signed(int_reg) ;
+assign int_sum = $signed(ki_mult) + $signed(int_reg);//$signed(int_reg_mult[46-1:13])  ; //added factor here --Max
 assign int_shr = int_reg[32-1:ISR] ;
 
 
@@ -251,17 +257,18 @@ always @(posedge clk_i) begin
       else if ({pid_sum[33-1],&pid_sum[33-2:13]} == 2'b10) //negative overflow
          pid_out <= 14'h2000 ;
       else
-         pid_out <= pid_sum[14-1:0] ;
+        // including jump
+        /**if (pid_sum[14-1:0] > upper_val_i)
+            pid_out <= pid_sum[14-1:0] - delta_val_i ;
+        else if (pid_sum[14-1:0] > lower_val_i)
+            pid_out <= pid_sum[14-1:0] + delta_val_i ;
+        else **/
+        pid_out <= pid_sum[14-1:0];
    end
 end
 
-assign pid_sum = $signed(kp_reg) + $signed(int_shr) + $signed(kd_reg_s) ;
-
-
-
-
-
-
+//assign pid_sum = $signed(kp_reg) + $signed(int_shr) + $signed(kd_reg_s) ;
+assign pid_sum = $signed(int_shr);
 assign dat_o = pid_out ;
 
 

@@ -4,6 +4,12 @@
  * Uses two parameters of PID21 for the delay values. The remaining parameters are currently unused. 
  */
  
+ /**
+ *Max - 20.11.2020 - added factor for integrator module
+ *
+ *
+ *
+ */
 
 /**
  * $Id: red_pitaya_pid.v 961 2014-01-21 11:40:39Z matej.oblak $
@@ -150,6 +156,11 @@ reg  [ 14-1: 0] set_12_ki    ;
 reg  [ 14-1: 0] set_12_kd    ;
 reg             set_12_irst  ;
 
+reg [14-1:0]    factor; //added --Max
+reg [14-1:0]    upper_val;
+reg [14-1:0]    lower_val;
+reg [14-1:0]    delta_val;
+
 red_pitaya_pid_block_sh_d #(
   .PSR (  PSR   ),
   .ISR (  ISR   ),
@@ -169,7 +180,11 @@ red_pitaya_pid_block_sh_d #(
   .set_kd_i     (  set_12_kd      ),  // Kd
   .int_rst_i    (  set_12_irst    ),  // integrator reset
   .set_delay1_i (  set_21_kd      ),  // use Kd from PID11 for delay1 -Lukas
-  .set_delay2_i (  set_21_ki      )   // use KI from PID21 for delay2 -Lukas
+  .set_delay2_i (  set_21_ki      ),   // use KI from PID21 for delay2 -Lukas
+  .factor_i     (  factor         ), //added --Max
+  .upper_val_i  (  upper_val      ),
+  .lower_val_i  (  lower_val      ),
+  .delta_val_i  (  delta_val      )
 );
 
 //---------------------------------------------------------------------------------
@@ -264,6 +279,8 @@ always @(posedge clk_i) begin
       set_22_ki    <= 14'd0 ;
       set_22_kd    <= 14'd0 ;
       set_22_irst  <=  1'b1 ;
+      
+      factor       <= 14'd0 ; //added --Max
 
    end
    else begin
@@ -286,6 +303,11 @@ always @(posedge clk_i) begin
          if (sys_addr[19:0]==16'h44)    set_22_kp  <= sys_wdata[14-1:0] ;
          if (sys_addr[19:0]==16'h48)    set_22_ki  <= sys_wdata[14-1:0] ;
          if (sys_addr[19:0]==16'h4C)    set_22_kd  <= sys_wdata[14-1:0] ;
+         
+         if (sys_addr[19:0]==16'h50)    factor     <= sys_wdata[14-1:0] ; //added -- Max
+         if (sys_addr[19:0]==16'h54)    upper_val  <= sys_wdata[14-1:0] ;
+         if (sys_addr[19:0]==16'h58)    lower_val  <= sys_wdata[14-1:0] ;
+         if (sys_addr[19:0]==16'h5C)    delta_val  <= sys_wdata[14-1:0] ;
       end
    end
 end
@@ -322,7 +344,12 @@ end else begin
       20'h44 : begin sys_ack <= sys_en;          sys_rdata <= {{32-14{1'b0}}, set_22_kp}          ; end 
       20'h48 : begin sys_ack <= sys_en;          sys_rdata <= {{32-14{1'b0}}, set_22_ki}          ; end 
       20'h4C : begin sys_ack <= sys_en;          sys_rdata <= {{32-14{1'b0}}, set_22_kd}          ; end 
-
+      
+      20'h50 : begin sys_ack <= sys_en;          sys_rdata <= {{32-14{1'b0}}, factor}          ; end //added --Max
+      20'h54 : begin sys_ack <= sys_en;          sys_rdata <= {{32-14{1'b0}}, upper_val}          ; end
+      20'h58 : begin sys_ack <= sys_en;          sys_rdata <= {{32-14{1'b0}}, lower_val}          ; end
+      20'h5C : begin sys_ack <= sys_en;          sys_rdata <= {{32-14{1'b0}}, delta_val}          ; end
+     
      default : begin sys_ack <= sys_en;          sys_rdata <=  32'h0                              ; end
    endcase
 end

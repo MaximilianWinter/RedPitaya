@@ -293,8 +293,7 @@ sys_bus_interconnect #(
 );
 
 // silence unused busses - enabled bus 6 -Lukas
-sys_bus_stub sys_bus_stub_4 (sys[4]);
-//sys_bus_stub sys_bus_stub_5 (sys[5]);
+sys_bus_stub sys_bus_stub_5 (sys[5]);
 sys_bus_stub sys_bus_stub_7 (sys[7]);
 /*
 generate
@@ -309,7 +308,7 @@ endgenerate
 
 logic [4-1:0] [24-1:0] pwm_cfg;
 
-/*red_pitaya_ams i_ams (
+red_pitaya_ams i_ams (
   // power test
   .clk_i           (adc_clk ),  // clock
   .rstn_i          (adc_rstn),  // reset - active low
@@ -327,7 +326,7 @@ logic [4-1:0] [24-1:0] pwm_cfg;
   .sys_err         (sys[4].err  ),
   .sys_ack         (sys[4].ack  )
 );
-*/
+
 red_pitaya_pwm pwm [4-1:0] (
   // system signals
   .clk   (pwm_clk ),
@@ -507,7 +506,7 @@ red_pitaya_asg i_asg (
 ////////////////////////////////////////////////////////////////////////////////
 //  MIMO PID controller
 ////////////////////////////////////////////////////////////////////////////////
-/*
+
 red_pitaya_pid_sh i_pid (         //called modified pid module -Lukas
    // signals
   .clk_i           (adc_clk   ),  // clock
@@ -517,20 +516,20 @@ red_pitaya_pid_sh i_pid (         //called modified pid module -Lukas
   .dat_a_o         (pid_dat[0]),  // out 1
   .dat_b_o         (pid_dat[1]),  // out 2
   // System bus
-  .sys_addr        (sys[3].addr ),
-  .sys_wdata       (sys[3].wdata),
-  .sys_wen         (sys[3].wen  ),
-  .sys_ren         (sys[3].ren  ),
-  .sys_rdata       (sys[3].rdata),
-  .sys_err         (sys[3].err  ),
-  .sys_ack         (sys[3].ack  )
+  .sys_addr        (sys[6].addr ),
+  .sys_wdata       (sys[6].wdata),
+  .sys_wen         (sys[6].wen  ),
+  .sys_ren         (sys[6].ren  ),
+  .sys_rdata       (sys[6].rdata),
+  .sys_err         (sys[6].err  ),
+  .sys_ack         (sys[6].ack  )
 );
-*/
+
 ////////////////////////////////////////////////////////////////////////////////
 //  Pulse generator
 ////////////////////////////////////////////////////////////////////////////////
-
-/*pulse_generator_lp i_pgen ( 		  // call new pulse generator module -Lukas
+/*
+pulse_generator_lp i_pgen ( 		  // call new pulse generator module -Lukas
    // signals
   .clk_i           (adc_clk   ),  // clock
   .rstn_i          (adc_rstn  ),  // reset - active low
@@ -547,117 +546,5 @@ red_pitaya_pid_sh i_pid (         //called modified pid module -Lukas
   .sys_err         (sys[6].err  ),
   .sys_ack         (sys[6].ack  )
  );
-*/ 
-
-/*
-reg trigger_a = 1'b0;
-reg trigger_b = 1'b0;
- 
-single_pulse_generator i_pgen_a(
-   // signals
-    .clk_i           (adc_clk   ),  // clock
-    .rstn_i          (adc_rstn  ),  // reset - active low
-    
-    .trigger_a_i     (trigger_a),
-    .dat_a_i         (adc_dat[0]),  // in 1
-    .dat_a_o         (asg_dat[0]),  // out 1 - use the ASG outputs to avoid interferences with the PID output. Saturation is already taken care of above -Lukas
-    
-    // System bus
-    .sys_addr        (sys[6].addr ),
-    .sys_wdata       (sys[6].wdata),
-    .sys_wen         (sys[6].wen  ),
-    .sys_ren         (sys[6].ren  ),
-    .sys_rdata       (sys[6].rdata),
-    .sys_err         (sys[6].err  ),
-    .sys_ack         (sys[6].ack  )
-
-);
-
-single_pulse_generator i_pgen_b(
-   // signals
-    .clk_i           (adc_clk   ),  // clock
-    .rstn_i          (adc_rstn  ),  // reset - active low
-    
-    .trigger_a_i     (trigger_b),
-    .dat_a_i         (adc_dat[1]),  // in 1
-    .dat_a_o         (asg_dat[1]),  // out 1 - use the ASG outputs to avoid interferences with the PID output. Saturation is already taken care of above -Lukas
-    
-    // System bus
-    .sys_addr        (sys[5].addr ),
-    .sys_wdata       (sys[5].wdata),
-    .sys_wen         (sys[5].wen  ),
-    .sys_ren         (sys[5].ren  ),
-    .sys_rdata       (sys[5].rdata),
-    .sys_err         (sys[5].err  ),
-    .sys_ack         (sys[5].ack  )
-
-);*/
-/*
-extra_simple_asg asg_A(
-    .dac_a_o  (asg_dat[0]),
-    
-    .clk_i  (adc_clk),
-    .rstn_i (adc_rstn),
-    
-    .sys_addr        (sys[6].addr ),
-    .sys_wdata       (sys[6].wdata),
-    .sys_wen         (sys[6].wen  ),
-    .sys_ren         (sys[6].ren  ),
-    .sys_rdata       (sys[6].rdata),
-    .sys_err         (sys[6].err  ),
-    .sys_ack         (sys[6].ack  )
-);
-*/
-
-/// Channel A input serves as trigger for channel B
-reg trigger_b = 1'b0;
-
-always @(posedge adc_clk)
-begin
-    if ($signed(adc_dat[0]) > 14'sd750) begin
-    trigger_b <= 1'b1;
-    end
-    else begin
-        trigger_b <= 1'b0;
-    end
-end
-
-simple_scope scope_A(
-    .adc_a_i    (adc_dat[1]),
-    
-    .clk_i  (adc_clk),
-    .rstn_i (adc_rstn),    
-    
-    .sys_addr        (sys[5].addr ),
-    .sys_wdata       (sys[5].wdata),
-    .sys_wen         (sys[5].wen  ),
-    .sys_ren         (sys[5].ren  ),
-    .sys_rdata       (sys[5].rdata),
-    .sys_err         (sys[5].err  ),
-    .sys_ack         (sys[5].ack  )
-);
-
-pulse_generator_top pg_top(
-    .dac_a_i         (adc_dat[0]),
-    .dac_a_o         (asg_dat[0]),
-    .trigger_a_i     (exp_p_in[6]), // TODO: need to change
-    
-    .dac_b_i         (adc_dat[1]),
-    .dac_b_o         (asg_dat[1]),
-    //.trigger_b_i     (exp_p_in[7]), // TODO: need to change
-    .trigger_b_i     (trigger_b),
-
-    .clk_i  (adc_clk),
-    .rstn_i (adc_rstn),
-    
-    .sys_addr        (sys[6].addr ),
-    .sys_wdata       (sys[6].wdata),
-    .sys_wen         (sys[6].wen  ),
-    .sys_ren         (sys[6].ren  ),
-    .sys_rdata       (sys[6].rdata),
-    .sys_err         (sys[6].err  ),
-    .sys_ack         (sys[6].ack  )
-
-);
-  
+*/  
 endmodule: red_pitaya_top
