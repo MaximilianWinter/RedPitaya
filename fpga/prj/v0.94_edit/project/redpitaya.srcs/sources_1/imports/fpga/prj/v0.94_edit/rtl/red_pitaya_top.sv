@@ -666,6 +666,7 @@ pg_top pg(
     
     .pd_i(adc_dat[1]),
     .ctrl_sig_o(asg_dat[1]),
+    .test_sig_o(asg_dat[0]),
     
     .trigger_i(trigger_b),
     

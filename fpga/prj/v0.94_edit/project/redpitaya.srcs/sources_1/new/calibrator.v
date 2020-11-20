@@ -81,7 +81,7 @@ begin
 					end
 				
 				2'b10:	begin
-						response_curve[out] <= avg;
+						response_curve[out] <= out;//avg; NOTE THIS IS FOR TESTING
 						state <= 2'b00;
 						
 						if (out == 14'd8191) begin

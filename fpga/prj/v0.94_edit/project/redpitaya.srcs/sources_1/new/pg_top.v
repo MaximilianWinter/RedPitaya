@@ -31,7 +31,9 @@ module pg_top(
 	// Channel A Signals
 	input	[14-1:0]	pd_i,
 	output	[14-1:0]	ctrl_sig_o,
-	input			trigger_i,
+	output  [14-1:0]    test_sig_o,
+	
+	input			    trigger_i,
 	
 	//System Bus
 	input      [ 32-1: 0] sys_addr  ,  // bus address
@@ -82,9 +84,16 @@ reg [14-1:0] delta_pd;
 
 reg pctrl_buf_we;
 reg pctrl_ref_buf_we;
+
+reg do_init = 1'b0;
+reg trigger = 1'b0;
+
 reg [14-1:0] pctrl_buf_addr;
 wire [14-1:0] pctrl_buf_rdata;
 wire [14-1:0] pctrl_ref_buf_rdata;
+wire [14-1:0] pctrl_general_buf_rdata;
+
+reg [3-1:0] general_buf_state;
 
 wire [14-1:0] pctrl_ctrl_sig;
 wire [14-1:0] pctrl_pd_i;
@@ -94,10 +103,12 @@ controller pctrl(
 	.rstn_i(rstn_i),
 	
 	.trigger_i(trigger_i),		// note: this is the trigger for the pulse generation
-	.do_init_i(module_mode),
+	//.trigger_i(trigger),
+	.do_init_i(do_init), // bug
 	
 	.ctrl_sig_o(pctrl_ctrl_sig),
 	.pd_i(pd_i),
+	.test_sig_o(test_sig_o),
 	
 	.k_p_i(k_p),
 	.delta_pd_i(delta_pd),
@@ -107,7 +118,9 @@ controller pctrl(
 	.buf_addr_i(pctrl_buf_addr),
 	.buf_wdata_i(sys_wdata[14-1:0]),
 	.ctrl_buf_rdata_o(pctrl_buf_rdata),			// and we might want to read it/or other signals for test purposes
-	.ref_buf_rdata_o(pctrl_ref_buf_rdata)
+	.ref_buf_rdata_o(pctrl_ref_buf_rdata),
+	.general_buf_rdata_o(pctrl_general_buf_rdata),
+	.general_buf_state_i(general_buf_state)
 	
 );
 
@@ -164,6 +177,10 @@ begin
 				20'h0: begin module_mode	<= sys_wdata[0]; end // this writes data from memory to the internal module_mode register
 				20'h4: begin k_p		<= sys_wdata[14-1:0]; end
 				20'h8: begin delta_pd		<= sys_wdata[14-1:0]; end
+				20'hC: begin general_buf_state <= sys_wdata[3-1:0]; end
+				20'h10: begin do_init		<= sys_wdata[0]; end
+				20'h14: begin trigger		<= sys_wdata[0]; end
+				20'h18: begin cal_trigger		<= sys_wdata[0]; end
 			endcase
 		end
 	end
@@ -185,11 +202,16 @@ begin
 		casez (sys_addr[19:0])
 			20'h0: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, module_mode}; end
 			20'h4: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, k_p}; end
-			20'h4: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_pd}; end
+			20'h8: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_pd}; end
+			20'hC: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, general_buf_state}; end
+			20'h10: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, do_init}; end
+			20'h14: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, trigger}; end
+			20'h18: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, cal_trigger}; end
 			
-			20'h1zzzz: begin sys_ack <= sys_en; 	sys_rdata <= {{18{1'b0}}, pctrl_buf_rdata}; end // this writes data from the controller module to memory
-			20'h2zzzz: begin sys_ack <= sys_en;	sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory
-			20'h3zzzz: begin sys_ack <= sys_en; 	sys_rdata <= {{18{1'b0}}, pctrl_ref_buf_rdata}; end
+			20'h1zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_buf_rdata}; end // this writes data from the controller module to memory
+			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory
+			20'h3zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_ref_buf_rdata}; end
+			20'h4zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_general_buf_rdata}; end
 			
 			default: begin sys_ack <= sys_en; sys_rdata <= 32'h0; end
 		endcase

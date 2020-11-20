@@ -15,7 +15,7 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: without delta-t determination
+// Additional Comments: without delta-t determination; bitfile generation works - 19.11. 18:51
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +30,8 @@ module controller(
 	output	[14-1:0]	ctrl_sig_o,
 	input	[14-1:0]	pd_i,
 	
+	output  [14-1:0]    test_sig_o,
+	
 	input	[14-1:0]	k_p_i,
 	input   [14-1:0]    delta_pd_i,
 	
@@ -38,7 +40,9 @@ module controller(
 	input	[14-1:0]	buf_addr_i,
 	input	[14-1:0]	buf_wdata_i,
 	output	reg [14-1:0]	ctrl_buf_rdata_o,
-	output	reg [14-1:0]	ref_buf_rdata_o
+	output	reg [14-1:0]	ref_buf_rdata_o,
+	output reg [14-1:0]    general_buf_rdata_o,
+	input [3-1:0]      general_buf_state_i
 
 );
 //////////////////////////////
@@ -260,6 +264,59 @@ assign init_ctrl_sig_rpnt = ctrl_sig_rpnt; // for top
 assign pd_wpnt = ctrl_sig_rpnt; // for top
 
 assign pd_rpnt = ref_rpnt + delta_pd_i; // for bottom
+
+
+
+
+
+
+
+
+
+reg [14-1:0]    general_buf_waddr;
+reg [14-1:0]    general_buf_raddr;
+reg             general_buf_we;
+reg [14-1:0]    general_buf_wdata;
+wire [14-1:0]   general_buf_rdata;
+
+sram general_buf_ram(
+    .clk_i(clk_i),
+    .waddr_i(general_buf_waddr),
+    .raddr_i(general_buf_raddr),
+    .write_enable_i(general_buf_we),
+    .data_i(general_buf_wdata),
+    .data_o(general_buf_rdata)
+);
+
+reg [14-1:0] general_out;
+
+always @(posedge clk_i)
+begin
+    case (general_buf_state_i)
+        //3'b000: begin general_out <= output_val; end // controller output
+        3'b000: begin general_out <= ref_rdata; end
+        3'b001: begin general_out <= pd_rdata; end
+    endcase
+end
+
+assign test_sig_o = general_out;
+
+wire [14-1:0] general_buf_wpnt;
+
+assign general_buf_wpnt = ctrl_sig_wpnt;
+
+always @(posedge clk_i)
+begin
+    general_buf_wdata <= general_out;
+    general_buf_we <= (!trigger_i);
+    general_buf_waddr <= general_buf_wpnt;
+    general_buf_raddr <= buf_addr_i;
+    
+    general_buf_rdata_o <= general_buf_rdata;
+end
+
+
+
 
 
 
