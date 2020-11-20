@@ -76,7 +76,8 @@ module red_pitaya_pid_block_sh_d #(          //changed name -Lukas
    input      [ 14-1: 0] factor_i        ,
    input      [ 14-1: 0] upper_val_i     ,
    input      [ 14-1: 0] lower_val_i     ,
-   input      [ 14-1: 0] delta_val_i
+   input      [ 15-1: 0] delta_val_i     ,
+   input      [ 32-1: 0] jump_delay_i
 );
 
 
@@ -178,31 +179,60 @@ reg   [    32-1: 0] int_reg       ;
 reg   [    46-1: 0] int_reg_mult  ; // added --Max
 wire  [32-ISR-1: 0] int_shr       ;
 
+reg jumped = 1'b0;
+reg [32-1:0] jump_counter = 32'd0;
+
+wire [33-1:0] int_reg_pos_jump;
+wire [33-1:0] int_reg_neg_jump;
+
 always @(posedge clk_i) begin
    if (rstn_i == 1'b0) begin
       ki_mult  <= {29{1'b0}};
       int_reg  <= {32{1'b0}};
    end
    else begin
-      ki_mult <= $signed(error) * $signed(set_ki_i) ;
-      //int_reg_mult <= $signed(int_reg) * $signed(factor_i);
-
-      if (int_rst_i)
-         int_reg <= 32'h0; // reset
-      else if ($signed(int_reg[32-1:18]) > $signed(upper_val_i)) // positive saturation
-         int_reg <= $signed(int_sum[32-1:0]) - $signed({delta_val_i,{18{1'b0}}}); // max positive
-      else if ($signed(int_reg[32-1:18]) < $signed(lower_val_i)) // negative saturation
-         int_reg <= $signed(int_sum[32-1:0]) + $signed({delta_val_i,{18{1'b0}}}); // max negative
-      else
-         int_reg <= int_sum[32-1:0]; // use sum as it is
+      if (!jumped) begin
+          ki_mult <= $signed(error) * $signed(set_ki_i) ;
+          //int_reg_mult <= $signed(int_reg) * $signed(factor_i);
+          if (int_rst_i) begin
+             int_reg <= 32'h0; // reset
+          end
+          else if (int_sum[33-1:33-2] == 2'b01) begin // positive saturation
+            int_reg <= 32'h7FFFFFFF; // max positive
+          end
+          else if (int_sum[33-1:33-2] == 2'b10) begin // negative saturation
+            int_reg <= 32'h80000000; // max negative    
+          end  
+          else if ($signed(int_sum[32-1:18]) > $signed(upper_val_i)) begin // positive saturation
+             jumped <= 1'b1;
+             int_reg <= {int_reg_neg_jump[33-1],int_reg_neg_jump[31-1:0]}; // max positive         
+          end
+          else if ($signed(int_sum[32-1:18]) < $signed(lower_val_i)) begin // negative saturation
+             int_reg <= {int_reg_pos_jump[33-1],int_reg_pos_jump[31-1:0]}; // max negative
+             jumped <= 1'b1;
+             end
+          else begin
+             int_reg <= int_sum[32-1:0]; // use sum as it is
+          end
+      end
+      else begin
+         if (jump_counter < jump_delay_i) begin
+            jump_counter <= jump_counter + 32'd1;
+         end
+         else begin
+            jump_counter <= 32'd0;
+            jumped <= 1'b0;
+         end
+      end
+             
    end
 end
 
 assign int_sum = $signed(ki_mult) + $signed(int_reg);//$signed(int_reg_mult[46-1:13])  ; //added factor here --Max
-assign int_shr = int_reg[32-1:ISR] ;
+assign int_shr = int_reg[32-1:18] ;
 
-
-
+assign int_reg_pos_jump = $signed(int_sum[32-1:0]) + $signed({delta_val_i,{17{1'b0}}});
+assign int_reg_neg_jump = $signed(int_sum[32-1:0]) - $signed({delta_val_i,{17{1'b0}}});
 
 
 
