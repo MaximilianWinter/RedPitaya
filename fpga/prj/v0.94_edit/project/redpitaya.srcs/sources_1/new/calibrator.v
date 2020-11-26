@@ -58,7 +58,7 @@ begin
 		else begin
 			case (state)
 				2'b00:	begin
-						if (counter == 250) begin
+						if (counter == 16000) begin
 							state <= 2'b01;
 							counter <= 14'h0;
 						end
@@ -69,19 +69,19 @@ begin
 				
 				2'b01:	begin
 						if (counter < 1024) begin
-							sum <= sum + pd_i;
+							sum <= $signed(sum) + $signed(pd_i);
 							counter <= counter + 1;
 						end
 						else begin
 							state <= 2'b10;
 							counter <= 14'h0;
-							avg <= sum[24-1:10];
+							avg <= $signed(sum[24-1:10]);
 							sum <= 24'h0;
 						end
 					end
 				
 				2'b10:	begin
-						response_curve[out] <= avg;
+						response_curve[out] <= $signed(avg);
 						state <= 2'b00;
 						
 						if (out == 14'd8191) begin

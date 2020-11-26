@@ -42,7 +42,8 @@ module controller(
 	output	reg [14-1:0]	ctrl_buf_rdata_o,
 	output	reg [14-1:0]	ref_buf_rdata_o,
 	output reg [14-1:0]    general_buf_rdata_o,
-	input [3-1:0]      general_buf_state_i
+	input [3-1:0]      general_buf_state_i,
+	input  [14-1:0]    offset_i
 
 );
 //////////////////////////////
@@ -180,35 +181,25 @@ begin
             
             output_val <= 14'd0;
             
-            error <= $signed(ref_rdata) - $signed(pd_rdata);
+            error <= $signed(ref_rdata) - $signed(pd_rdata) + $signed(offset_i);
             scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
             ctrl_sig_wf_val <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]);
             
         end
         else begin
-            if (first) begin
-                output_val <= init_ctrl_sig_rdata;
-                
-                ctrl_sig_we <= 1'b1;
-                ctrl_sig_wf_val <= init_ctrl_sig_rdata;
-                
-                if (trig_it_done) begin
-                    first <= 1'b0;
-                end
-            end
-            else begin
-                ctrl_sig_we <= 1'b0;
-                if ($signed(ctrl_sig_rdata) < 0) begin // avoid negative output; NOTE: maybe it is better to do this already when writing vals to array!
-                    output_val <= 14'd0;
-                end
-                else begin
-                    output_val <= ctrl_sig_rdata;
-                end
-            end
+            ctrl_sig_we <= 1'b0;
+            //if ($signed(ctrl_sig_rdata) < 0) begin // avoid negative output; NOTE: maybe it is better to do this already when writing vals to array!
+            //    output_val <= 14'd0;
+            //end
+            //else begin
+                output_val <= ctrl_sig_rdata;
+            //end
         end
+
     end
     else begin
-        first <= 1'b1;
+        ctrl_sig_we <= 1'b1;
+        ctrl_sig_wf_val <= init_ctrl_sig_rdata;
     end
 end
 
@@ -233,12 +224,25 @@ begin
             ctrl_sig_rpnt <= 14'd0;
         end
         else begin
-            if (ctrl_sig_nrpnt < 14'd16383) begin
-                 ctrl_sig_rpnt <= ctrl_sig_nrpnt;
+            if (do_init_i) begin
+                if (ctrl_sig_nwpnt < 14'd16383) begin
+                    ctrl_sig_rpnt <= ctrl_sig_nrpnt;
+                    ctrl_sig_wpnt <= ctrl_sig_nwpnt;
+                end
+                else begin
+                    trig_it_done <= 1'b1;
+                    ctrl_sig_wpnt <= 14'd0;
+                    ctrl_sig_rpnt <= 14'd0;
+                end
             end
             else begin
-                trig_it_done <= 1'b1;
-                ctrl_sig_rpnt <= 14'd0;
+                if (ctrl_sig_nrpnt < 14'd16383) begin
+                     ctrl_sig_rpnt <= ctrl_sig_nrpnt;
+                end
+                else begin
+                    trig_it_done <= 1'b1;
+                    ctrl_sig_rpnt <= 14'd0;
+                end
             end
         end
     end
@@ -269,7 +273,7 @@ end
 
 assign ctrl_sig_nrpnt = ctrl_sig_rpnt + 14'd1; // for top and bottom
 
-assign ctrl_sig_nwpnt = ctrl_sig_wpnt + 14'd1; // for bottom
+assign ctrl_sig_nwpnt = ctrl_sig_wpnt + 14'd1; // for top and bottom
 assign ref_nrpnt = ref_rpnt + 14'd1;            // for bottom
 
 assign init_ctrl_sig_rpnt = ctrl_sig_rpnt; // for top

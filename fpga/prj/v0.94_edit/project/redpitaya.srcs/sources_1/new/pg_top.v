@@ -98,6 +98,8 @@ reg [3-1:0] general_buf_state;
 wire [14-1:0] pctrl_ctrl_sig;
 wire [14-1:0] pctrl_pd_i;
 
+reg [14-1:0] offset;
+
 controller pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
@@ -120,7 +122,8 @@ controller pctrl(
 	.ctrl_buf_rdata_o(pctrl_buf_rdata),			// and we might want to read it/or other signals for test purposes
 	.ref_buf_rdata_o(pctrl_ref_buf_rdata),
 	.general_buf_rdata_o(pctrl_general_buf_rdata),
-	.general_buf_state_i(general_buf_state)
+	.general_buf_state_i(general_buf_state),
+	.offset_i(offset)
 	
 );
 
@@ -181,6 +184,7 @@ begin
 				20'h10: begin do_init		<= sys_wdata[0]; end
 				20'h14: begin trigger		<= sys_wdata[0]; end
 				20'h18: begin cal_trigger		<= sys_wdata[0]; end
+				20'h1C: begin offset        <= sys_wdata[14-1:0]; end
 			endcase
 		end
 	end
@@ -207,6 +211,7 @@ begin
 			20'h10: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, do_init}; end
 			20'h14: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, trigger}; end
 			20'h18: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, cal_trigger}; end
+			20'h1C: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, offset}; end
 			
 			20'h1zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_buf_rdata}; end // this writes data from the controller module to memory
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory
