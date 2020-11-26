@@ -74,6 +74,24 @@ calibrator cal(
 );
 
 
+////////////////////////////
+///MOVING AVERAGER MODULE///
+////////////////////////////
+
+wire [14-1:0] avg_pd;
+
+reg [3-1:0] avg_state;
+reg avg_rstn;
+
+moving_averager avg(
+    .dat_i(pd_i),
+    .dat_o(avg_pd),
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
+    .buf_state_i(avg_state),
+    .buf_rstn_i(avg_rstn)
+);
+
 
 ///////////////////////
 ///CONTROLLER MODULE///
@@ -109,7 +127,7 @@ controller pctrl(
 	.do_init_i(do_init), // bug
 	
 	.ctrl_sig_o(pctrl_ctrl_sig),
-	.pd_i(pd_i),
+	.pd_i(avg_pd),
 	.test_sig_o(test_sig_o),
 	
 	.k_p_i(k_p),
@@ -185,6 +203,8 @@ begin
 				20'h14: begin trigger		<= sys_wdata[0]; end
 				20'h18: begin cal_trigger		<= sys_wdata[0]; end
 				20'h1C: begin offset        <= sys_wdata[14-1:0]; end
+				20'h20: begin avg_state <= sys_wdata[3-1:0]; end
+				20'h24: begin avg_rstn		<= sys_wdata[0]; end
 			endcase
 		end
 	end
@@ -212,6 +232,8 @@ begin
 			20'h14: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, trigger}; end
 			20'h18: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, cal_trigger}; end
 			20'h1C: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, offset}; end
+			20'h20: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, avg_state}; end
+			20'h24: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, avg_rstn}; end
 			
 			20'h1zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_buf_rdata}; end // this writes data from the controller module to memory
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory

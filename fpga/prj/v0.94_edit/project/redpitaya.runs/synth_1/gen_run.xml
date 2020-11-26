@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1606412354">
+<GenRun Id="synth_1" LaunchPart="xc7z010clg400-1" LaunchTime="1606416755">
   <File Type="RDS-PROPCONSTRS" Name="red_pitaya_top_drc_synth.rpt"/>
   <File Type="PA-TCL" Name="red_pitaya_top.tcl"/>
   <File Type="RDS-RDS" Name="red_pitaya_top.vds"/>
@@ -34,6 +34,13 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/moving_averager.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
@@ -218,14 +225,6 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/new/prop_ctrl.v">
-      <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PSRCDIR/sources_1/new/moving_averager.v">
       <FileInfo>
         <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>

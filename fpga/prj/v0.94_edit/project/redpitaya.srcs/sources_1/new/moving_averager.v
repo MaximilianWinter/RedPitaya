@@ -47,19 +47,19 @@ begin
         sum <= 20'd0;
     end
     else begin
-        avg_buf[w_pnt] <= dat_i;
-        old_val <= avg_buf[r_pnt];
+        avg_buf[w_pnt] <= $signed(dat_i);
+        old_val <= $signed(avg_buf[r_pnt]);
         
-        sum <= sum + dat_i - old_val;
+        sum <= $signed(sum) + $signed(dat_i) - $signed(old_val);
         
         case(buf_state_i)
-            3'b000: begin avg <= dat_i; end
-            3'b001: begin avg <= sum[15-1:1]; end // division by 2
-            3'b010: begin avg <= sum[16-1:2]; end // division by 4
-            3'b011: begin avg <= sum[17-1:3]; end // division by 8
-            3'b100: begin avg <= sum[18-1:4]; end // division by 16
-            3'b101: begin avg <= sum[19-1:5]; end // division by 32
-            3'b110: begin avg <= sum[20-1:6]; end // division by 64
+            3'b000: begin avg <= $signed(dat_i); end
+            3'b001: begin avg <= $signed(sum[15-1:1]); end // division by 2
+            3'b010: begin avg <= $signed(sum[16-1:2]); end // division by 4
+            3'b011: begin avg <= $signed(sum[17-1:3]); end // division by 8
+            3'b100: begin avg <= $signed(sum[18-1:4]); end // division by 16
+            3'b101: begin avg <= $signed(sum[19-1:5]); end // division by 32
+            3'b110: begin avg <= $signed(sum[20-1:6]); end // division by 64
         endcase
     end
    
