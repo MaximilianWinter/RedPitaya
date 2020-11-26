@@ -170,6 +170,8 @@ reg [15-1:0] error;
 reg [29-1:0] scaled_error;
 
 reg first = 1'b1;
+reg trig_it_done = 1'b0;
+
 always @(posedge clk_i)
 begin
     if (!do_init_i) begin
@@ -179,8 +181,8 @@ begin
             output_val <= 14'd0;
             
             error <= $signed(ref_rdata) - $signed(pd_rdata);
-            scaled_error <= $signed(error) * $signed(k_p_i);
-            ctrl_sig_wf_val <= ctrl_sig_rdata + scaled_error[29-1:15];
+            scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
+            ctrl_sig_wf_val <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]);
             
         end
         else begin
@@ -190,13 +192,23 @@ begin
                 ctrl_sig_we <= 1'b1;
                 ctrl_sig_wf_val <= init_ctrl_sig_rdata;
                 
-                first <= 1'b0;
+                if (trig_it_done) begin
+                    first <= 1'b0;
+                end
             end
             else begin
                 ctrl_sig_we <= 1'b0;
-                output_val <= ctrl_sig_rdata;
+                if ($signed(ctrl_sig_rdata) < 0) begin // avoid negative output; NOTE: maybe it is better to do this already when writing vals to array!
+                    output_val <= 14'd0;
+                end
+                else begin
+                    output_val <= ctrl_sig_rdata;
+                end
             end
         end
+    end
+    else begin
+        first <= 1'b1;
     end
 end
 
@@ -207,7 +219,7 @@ assign ctrl_sig_o = output_val;
 ///////////////////
 
 ///DURING TRIGGER
-reg trig_it_done = 1'b0;
+
 reg ntrig_it_done = 1'b0;
 
 wire [14-1:0] ctrl_sig_nrpnt;
@@ -293,9 +305,15 @@ reg [14-1:0] general_out;
 always @(posedge clk_i)
 begin
     case (general_buf_state_i)
-        //3'b000: begin general_out <= output_val; end // controller output
-        3'b000: begin general_out <= ref_rdata; end
-        3'b001: begin general_out <= pd_rdata; end
+        // to be read out when trigger is low
+        3'b000: begin general_out <= $signed(ref_rdata); end
+        3'b001: begin general_out <= $signed(pd_rdata); end
+        3'b010: begin general_out <= $signed(error); end
+        3'b011: begin general_out <= $signed(scaled_error[29-1:15]); end
+        
+        // to be read out when trigger is high
+        3'b100: begin general_out <= $signed(output_val); end // controller output
+        3'b101: begin general_out <= $signed(init_ctrl_sig_rdata); end
     endcase
 end
 
@@ -303,12 +321,12 @@ assign test_sig_o = general_out;
 
 wire [14-1:0] general_buf_wpnt;
 
-assign general_buf_wpnt = ctrl_sig_wpnt;
+assign general_buf_wpnt = ctrl_sig_rpnt;
 
 always @(posedge clk_i)
 begin
     general_buf_wdata <= general_out;
-    general_buf_we <= (!trigger_i);
+    general_buf_we <= (!trigger_i && !general_buf_state_i[2]) || (trigger_i && general_buf_state_i[2]); // only if both are high or both are low set WE to high
     general_buf_waddr <= general_buf_wpnt;
     general_buf_raddr <= buf_addr_i;
     

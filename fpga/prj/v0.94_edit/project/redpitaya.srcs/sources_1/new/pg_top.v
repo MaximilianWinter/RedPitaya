@@ -102,8 +102,8 @@ controller pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	
-	.trigger_i(trigger_i),		// note: this is the trigger for the pulse generation
-	//.trigger_i(trigger),
+	//.trigger_i(trigger_i),		// note: this is the trigger for the pulse generation
+	.trigger_i(trigger),
 	.do_init_i(do_init), // bug
 	
 	.ctrl_sig_o(pctrl_ctrl_sig),
