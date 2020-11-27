@@ -36,7 +36,7 @@ reg [14-1:0] avg_buf [0:64-1];
 reg [14-1:0] avg;
 reg [14-1:0] old_val;
 
-reg [20-1:0] sum;
+reg [22-1:0] sum;
 
 reg [7-1:0] w_pnt = 7'd0; // as we have up to 64 elements in avg_buf,
 reg [7-1:0] r_pnt = 7'd1; // the pointers can be in the range 0-64 (always one extra element needed)
@@ -44,7 +44,7 @@ reg [7-1:0] r_pnt = 7'd1; // the pointers can be in the range 0-64 (always one e
 always @(posedge clk_i)
 begin
     if (buf_rstn_i) begin
-        sum <= 20'd0;
+        sum <= 22'd0;
     end
     else begin
         avg_buf[w_pnt] <= $signed(dat_i);
@@ -54,17 +54,17 @@ begin
         
         case(buf_state_i)
             3'b000: begin avg <= $signed(dat_i); end
-            3'b001: begin avg <= $signed(sum[15-1:1]); end // division by 2
-            3'b010: begin avg <= $signed(sum[16-1:2]); end // division by 4
-            3'b011: begin avg <= $signed(sum[17-1:3]); end // division by 8
-            3'b100: begin avg <= $signed(sum[18-1:4]); end // division by 16
-            3'b101: begin avg <= $signed(sum[19-1:5]); end // division by 32
-            3'b110: begin avg <= $signed(sum[20-1:6]); end // division by 64
+            3'b001: begin avg <= $signed({sum[15-1:1]}); end // division by 2
+            3'b010: begin avg <= $signed({sum[16-1:2]}); end // division by 4
+            3'b011: begin avg <= $signed({sum[17-1:3]}); end // division by 8
+            3'b100: begin avg <= $signed({sum[18-1:4]}); end // division by 16
+            3'b101: begin avg <= $signed({sum[19-1:5]}); end // division by 32
+            3'b110: begin avg <= $signed({sum[20-1:6]}); end // division by 64
         endcase
     end
    
 end
-assign dat_o = avg;
+assign dat_o = $signed(avg);
 
 reg [7-1:0] max_val = 7'd64;
 
@@ -77,12 +77,12 @@ begin
 	
     
     case(buf_state_i)
-    	3'b001: begin max_val <= 7'd2; end // division by 2
-    	3'b010: begin max_val <= 7'd4; end // division by 4
-    	3'b011: begin max_val <= 7'd8; end // division by 8
-    	3'b100: begin max_val <= 7'd16; end // division by 16
-    	3'b101: begin max_val <= 7'd32; end // division by 32
-    	3'b110: begin max_val <= 7'd64; end // division by 64
+    	3'b001: begin max_val <= 7'd1; end // division by 2
+    	3'b010: begin max_val <= 7'd3; end // division by 4
+    	3'b011: begin max_val <= 7'd7; end // division by 8
+    	3'b100: begin max_val <= 7'd15; end // division by 16
+    	3'b101: begin max_val <= 7'd31; end // division by 32
+    	3'b110: begin max_val <= 7'd63; end // division by 64
     endcase
     
     // note that both pointers move 1 step

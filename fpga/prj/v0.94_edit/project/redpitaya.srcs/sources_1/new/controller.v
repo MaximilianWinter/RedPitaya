@@ -43,7 +43,10 @@ module controller(
 	output	reg [14-1:0]	ref_buf_rdata_o,
 	output reg [14-1:0]    general_buf_rdata_o,
 	input [3-1:0]      general_buf_state_i,
-	input  [14-1:0]    offset_i
+	input  [14-1:0]    offset_i,
+	input  [14-1:0]    rpnt_init_offset_i,
+	input [3-1:0]      avg_state_i,
+	input              avg_rstn_i
 
 );
 //////////////////////////////
@@ -173,6 +176,8 @@ reg [29-1:0] scaled_error;
 reg first = 1'b1;
 reg trig_it_done = 1'b0;
 
+reg [14-1:0] raw_ctrl_sig_wf_val;
+
 always @(posedge clk_i)
 begin
     if (!do_init_i) begin
@@ -183,27 +188,41 @@ begin
             
             error <= $signed(ref_rdata) - $signed(pd_rdata) + $signed(offset_i);
             scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
-            ctrl_sig_wf_val <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]);
+            raw_ctrl_sig_wf_val <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]); //need to include averager
             
         end
         else begin
             ctrl_sig_we <= 1'b0;
-            //if ($signed(ctrl_sig_rdata) < 0) begin // avoid negative output; NOTE: maybe it is better to do this already when writing vals to array!
-            //    output_val <= 14'd0;
-            //end
-            //else begin
-                output_val <= ctrl_sig_rdata;
-            //end
+            output_val <= ctrl_sig_rdata;
         end
 
     end
     else begin
         ctrl_sig_we <= 1'b1;
-        ctrl_sig_wf_val <= init_ctrl_sig_rdata;
+        raw_ctrl_sig_wf_val <= init_ctrl_sig_rdata;
     end
 end
 
 assign ctrl_sig_o = output_val;
+
+
+///MOVING AVERAGER///
+wire [14-1:0] avg_ctrl_sig_wf_val;
+
+pos_moving_averager avg(
+    .dat_i(raw_ctrl_sig_wf_val),
+    .dat_o(avg_ctrl_sig_wf_val),
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
+    .buf_state_i(avg_state_i),
+    .buf_rstn_i(avg_rstn_i)
+);
+
+always @(posedge clk_i)
+begin
+    ctrl_sig_wf_val <= $signed(avg_ctrl_sig_wf_val);
+end
+
 
 ///////////////////
 ///POINTER LOGIC///
@@ -221,7 +240,7 @@ begin
     if (trigger_i) begin
         ntrig_it_done <= 1'b0;
         if (trig_it_done) begin
-            ctrl_sig_rpnt <= 14'd0;
+            ctrl_sig_rpnt <= 14'd1 + rpnt_init_offset_i;
         end
         else begin
             if (do_init_i) begin
@@ -232,7 +251,7 @@ begin
                 else begin
                     trig_it_done <= 1'b1;
                     ctrl_sig_wpnt <= 14'd0;
-                    ctrl_sig_rpnt <= 14'd0;
+                    ctrl_sig_rpnt <= 14'd1 + rpnt_init_offset_i;
                 end
             end
             else begin
@@ -241,7 +260,7 @@ begin
                 end
                 else begin
                     trig_it_done <= 1'b1;
-                    ctrl_sig_rpnt <= 14'd0;
+                    ctrl_sig_rpnt <= 14'd1 + rpnt_init_offset_i;
                 end
             end
         end
