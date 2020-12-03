@@ -176,7 +176,7 @@ reg [29-1:0] scaled_error;
 reg first = 1'b1;
 reg trig_it_done = 1'b0;
 
-reg [14-1:0] raw_ctrl_sig_wf_val;
+reg [14-1:0] ctrl_sig_wf_preval;
 
 always @(posedge clk_i)
 begin
@@ -188,8 +188,12 @@ begin
             
             error <= $signed(ref_rdata) - $signed(pd_rdata) + $signed(offset_i);
             scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
-            ctrl_sig_wf_val <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]); //need to include averager
+            ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]); //need to include averager
             
+            if ($signed(ctrl_sig_wf_preval) < 0)
+                ctrl_sig_wf_val <= 14'd0;
+            else
+                ctrl_sig_wf_val <= ctrl_sig_wf_preval;           
         end
         else begin
             ctrl_sig_we <= 1'b0;
@@ -232,7 +236,8 @@ begin
     if (trigger_i) begin
         ntrig_it_done <= 1'b0;
         if (trig_it_done) begin
-            ctrl_sig_rpnt <= 14'd1 + rpnt_init_offset_i;
+            ctrl_sig_rpnt <= 14'd4;
+            ctrl_sig_wpnt <= 14'd0;
         end
         else begin
             if (do_init_i) begin
@@ -243,7 +248,7 @@ begin
                 else begin
                     trig_it_done <= 1'b1;
                     ctrl_sig_wpnt <= 14'd0;
-                    ctrl_sig_rpnt <= 14'd1 + rpnt_init_offset_i;
+                    ctrl_sig_rpnt <= 14'd4;
                 end
             end
             else begin
@@ -252,7 +257,8 @@ begin
                 end
                 else begin
                     trig_it_done <= 1'b1;
-                    ctrl_sig_rpnt <= 14'd1 + rpnt_init_offset_i;
+                    ctrl_sig_rpnt <= 14'd4;
+                    ctrl_sig_wpnt <= 14'd0;
                 end
             end
         end
@@ -261,9 +267,9 @@ begin
         trig_it_done <= 1'b0;
         
         if (ntrig_it_done) begin
-            ref_rpnt <= 14'd3;
+            ref_rpnt <= 14'd6;
             
-            ctrl_sig_rpnt <= 14'd1;
+            ctrl_sig_rpnt <= 14'd4;
             ctrl_sig_wpnt <= 14'd0;
         end
         else begin
@@ -274,8 +280,8 @@ begin
             end
             else begin
                 ntrig_it_done <= 1'b1;
-                ref_rpnt <= 14'd3;
-                ctrl_sig_rpnt <= 14'd1;
+                ref_rpnt <= 14'd6;
+                ctrl_sig_rpnt <= 14'd4;
                 ctrl_sig_wpnt <= 14'd0;
             end
         end
@@ -347,301 +353,5 @@ begin
     
     general_buf_rdata_o <= general_buf_rdata;
 end
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-reg [14-1:0] ctrl_wpnt;
-wire [14-1:0] ctrl_nwpnt;
-
-reg iteration_done = 1'b0;
-
-
-always @(posedge clk_i)
-begin
-    if (do_ctrl_i == 1'b0) begin
-        if (ctrl_buf_we_i) begin
-            ctrl_sig_addr <= buf_addr_i;
-            ctrl_sig_wdata <= buf_wdata_i[14-1:0];
-            ctrl_sig_we <= 1'b1;
-        end
-        else begin
-            ctrl_sig_we <= 1'b0;
-        end
-    end
-    else begin
-        if (trigger_i == 1'b0) begin
-            ctrl_sig_addr <= ctrl_wpnt;
-            ctrl_sig_wdata <= pd_i;
-            ctrl_sig_we <= 1'b1;
-        end
-        else begin
-            ctrl_sig_we <= 1'b0;
-        end
-    end
-end
-
-
-///////////////////
-///POINTER LOGIC FOR ///
-///////////////////
-
-always @(posedge clk_i)
-begin
-	if (rstn_i == 1'b0) begin
-		ctrl_wpnt <= 14'h1;
-		iteration_done <= 1'b0;
-	end
-	
-	if (trigger_i == 1'b0) begin
-		if (iteration_done) begin
-			ctrl_wpnt <= 14'h1;
-		end
-		else begin
-			if (ctrl_nwpnt < 14'd16383) begin
-				ctrl_wpnt <= ctrl_nwpnt;
-			end
-			else begin
-				iteration_done <= 1'b1;
-				ctrl_wpnt <= 14'h1;
-			end
-		end
-	end
-	else begin
-		iteration_done <= 1'b1;
-		ctrl_wpnt <= 14'h1;
-	end
-end
-assign ctrl_nwpnt = ctrl_wpnt + 14'd1;
-
-
-reg [14-1:0] ctrl_sig_arr [0:16384-1];
-
-reg [14-1:0] pd_arr [0:16384-1];
-
-reg [14-1:0] ref_wf_arr [0:16384-1];
-
-
-// NOTE: this writes WF from RAM to array; should only be enabled if not controlling
-always @(posedge clk_i)
-begin
-	if (do_ctrl_i == 1'b0) begin
-		if (ctrl_buf_we_i) ctrl_sig_arr[buf_addr_i] <= buf_wdata_i[14-1:0];
-		if (ref_buf_we_i) ref_wf_arr[buf_addr_i] <= buf_wdata_i[14-1:0];
-	end
-end
-
-// NOTE: do i need to include ref_wf_arr as well?
-always @(posedge clk_i)
-begin
-    ctrl_buf_rdata_o <= ctrl_sig_arr[buf_addr_i];
-    ref_buf_rdata_o <= ref_wf_arr[buf_addr_i];
-end
-
-///////////////////
-///POINTER LOGIC///
-///////////////////
-reg [14-1:0] ctrl_rpnt;
-wire [14-1:0] ctrl_nrpnt;
-
-reg iteration_done = 1'b0;
-
-
-always @(posedge clk_i)
-begin
-	if (rstn_i == 1'b0) begin
-		ctrl_rpnt <= 14'h0;
-		iteration_done <= 1'b0;
-	end
-	
-	if (trigger_i == 1'b1) begin
-		if (iteration_done) begin
-			ctrl_rpnt <= 14'h0;
-		end
-		else begin
-			if (ctrl_nrpnt < 14'd16383) begin
-				ctrl_rpnt <= ctrl_nrpnt;
-			end
-			else begin
-				iteration_done <= 1'b1;
-				ctrl_rpnt <= 14'h0;
-			end
-		end
-	end
-	else begin
-		iteration_done <= 1'b1;
-		ctrl_rpnt <= 14'h0;
-	end
-end
-assign ctrl_nrpnt = ctrl_rpnt + 14'd1;
-
-///////////////////////////////////
-///DEFINING CURRENT CTRL SIG VAL///
-///////////////////////////////////
-
-reg [14-1:0] ctrl_sig_current_val;
-always @(posedge clk_i)
-begin
-	if (trigger_i) begin
-		ctrl_sig_current_val <= ctrl_sig_arr[ctrl_rpnt];
-	end
-	else begin
-		ctrl_sig_current_val <= 14'h0;
-	end
-end
-
-assign ctrl_sig_o = ctrl_sig_current_val;
-
-///////////////////////
-///WRITING TO PD ARR///
-///////////////////////
-
-wire [14-1:0] pd_arr_wpnt;
-assign pd_arr_wpnt = ctrl_rpnt; 
-
-always @(posedge clk_i)
-begin
-	if (trigger_i) begin
-		pd_arr[pd_arr_wpnt] <= pd_i;
-	end
-end
-
-/////////////////////////////////
-///PD/REF RPNT AND CTRL WPNT LOGIC///
-/////////////////////////////////
-
-reg [14-1:0] delta_rpnt;
-
-reg [14-1:0] pd_rpnt;
-wire [14-1:0] pd_nrpnt;
-
-reg [14-1:0] ref_rpnt;
-wire [14-1:0] ref_nrpnt;
-
-reg [14-1:0] ctrl_wpnt;
-wire [14-1:0] ctrl_nwpnt;
-
-reg pd_iteration_done = 1'b0;
-always @(posedge clk_i)
-begin
-	if (rstn_i == 1'b0) begin
-		ctrl_wpnt <= 14'h1;
-		ref_rpnt <= 14'h0;
-		pd_rpnt <= 14'h0 + delta_rpnt;
-		pd_iteration_done <= 1'b0;
-	end
-	
-	if (trigger_i == 1'b0) begin
-		if (pd_iteration_done) begin
-			ctrl_wpnt <= 14'h1;
-			ref_rpnt <= 14'h0;
-			pd_rpnt <= 14'h0;
-		end
-		else begin
-			if (ctrl_nwpnt < 14'd16383) begin
-				ctrl_wpnt <= ctrl_nwpnt;
-				ref_rpnt <= ref_nrpnt;
-				pd_rpnt <= pd_nrpnt;
-			end
-			else begin
-				pd_iteration_done <= 1'b1;
-				ctrl_wpnt <= 14'h1;
-				ref_rpnt <= 14'h0;
-				pd_rpnt <= 14'h0;
-			end
-		end
-	end
-	else begin
-		pd_iteration_done <= 1'b1;
-		ctrl_wpnt <= 14'h1;
-		ref_rpnt <= 14'h0;
-		pd_rpnt <= 14'h0 + delta_rpnt;
-	end
-end
-assign pd_nrpnt = pd_rpnt + 14'd1;
-assign ctrl_nwpnt = ctrl_wpnt + 14'd1;
-assign ref_nrpnt = ref_rpnt + 14'd1;
-
-////////////////////////
-///GET CURRENT VALUES///
-////////////////////////
-always @(posedge clk_i)
-begin
-	if (do_ctrl_i == 1'b0) begin
-		if (ctrl_buf_we_i) ctrl_sig_arr[buf_addr_i] <= buf_wdata_i[14-1:0];
-		if (ref_buf_we_i) ref_wf_arr[buf_addr_i] <= buf_wdata_i[14-1:0];
-	end
-end
-
-reg [14-1:0] ctrl_sig_new_current_val;
-reg [14-1:0] ctrl_sig_old_current_val;
-reg [14-1:0] pd_shifted_val;
-reg [14-1:0] ref_val;
-
-always @(posedge clk_i)
-begin
-	if (trigger_i == 1'b0) begin
-		ctrl_sig_arr[ctrl_wpnt] <= ctrl_sig_new_current_val;
-		
-		ctrl_sig_old_current_val <= ctrl_sig_arr[ctrl_wpnt-1];
-		pd_shifted_val <= pd_arr[pd_rpnt-3]; // NOTE: need to ensure that index stays positive!
-		ref_val <= ref_wf_arr[ref_rpnt-3];
-	end
-end
-
-reg [14-1:0] ctrl_sig_addr;
-reg [14-1:0] ctrl_sig_wdata;
-
-
-always @(posedge clk_i)
-begin
-    if (do_ctrl_i == 1'b0) begin
-        if (ctrl_buf_we_i) begin
-            ctrl_sig_addr <= buf_addr_i;
-            ctrl_sig_wdata <= buf_wdata_i[14-1:0];
-        end
-    end
-    else begin
-        if (trigger_i == 1'b0) begin
-            ctrl_sig_addr <= ctrl_wpnt;
-            ctrl_sig_wdata <= ctrl_sig_new_current_val;
-        end
-    end
-end
-
-always @(posedge clk_i)
-begin
-    if (ctrl_buf_we_i || (trigger_i == 1'b0)) begin
-        ctrl_sig_arr[ctrl_sig_addr] <= ctrl_sig_wdata;
-    end
-end
-
-
-
-
-reg [15-1:0] error;
-reg [29-1:0] scaled_error;
-
-always @(posedge clk_i)
-begin
-	if (trigger_i == 1'b0) begin
-		error <= $signed(ref_val) - $signed(pd_shifted_val);
-		scaled_error <= $signed(error) * $signed(k_p_i);
-		ctrl_sig_new_current_val <= ctrl_sig_old_current_val + scaled_error[29-1:15];
-	end
-end
-
-*/
 
 endmodule

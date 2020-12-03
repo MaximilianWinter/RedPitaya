@@ -3,10 +3,10 @@
 <!--The data in this file is primarily intended for consumption by Xilinx tools.
 The structure and the elements are likely to change over the next few releases.
 This means code written to parse this file will need to be revisited each subsequent release.-->
-<application name="pa" timeStamp="Thu Dec  3 17:17:54 2020">
+<application name="pa" timeStamp="Thu Dec  3 19:48:21 2020">
 <section name="Project Information" visible="false">
 <property name="ProjectID" value="91908d8d209a4426bac775670eed9952" type="ProjectID"/>
-<property name="ProjectIteration" value="180" type="ProjectIteration"/>
+<property name="ProjectIteration" value="186" type="ProjectIteration"/>
 </section>
 <section name="PlanAhead Usage" visible="true">
 <item name="Project Data">
@@ -30,13 +30,13 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="OpenExistingReport" value="1" type="JavaHandler"/>
 <property name="OpenHardwareManager" value="1" type="JavaHandler"/>
 <property name="OpenProject" value="5" type="JavaHandler"/>
-<property name="RunBitgen" value="173" type="JavaHandler"/>
+<property name="RunBitgen" value="179" type="JavaHandler"/>
 <property name="RunImplementation" value="13" type="JavaHandler"/>
 <property name="RunSynthesis" value="65" type="JavaHandler"/>
 <property name="SaveFileProxyHandler" value="23" type="JavaHandler"/>
 <property name="ShowView" value="47" type="JavaHandler"/>
 <property name="ToolsTemplates" value="1" type="JavaHandler"/>
-<property name="ViewTaskImplementation" value="27" type="JavaHandler"/>
+<property name="ViewTaskImplementation" value="28" type="JavaHandler"/>
 <property name="ViewTaskRTLAnalysis" value="1" type="JavaHandler"/>
 <property name="ViewTaskSynthesis" value="3" type="JavaHandler"/>
 <property name="ZoomOut" value="24" type="JavaHandler"/>
@@ -45,12 +45,12 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="AbstractFileView_CLOSE" value="3" type="GuiResourceData"/>
 <property name="AbstractSearchablePanel_SHOW_SEARCH" value="2" type="GuiResourceData"/>
 <property name="BaseDialog_CANCEL" value="2" type="GuiResourceData"/>
-<property name="BaseDialog_OK" value="416" type="GuiResourceData"/>
-<property name="BaseDialog_YES" value="166" type="GuiResourceData"/>
+<property name="BaseDialog_OK" value="424" type="GuiResourceData"/>
+<property name="BaseDialog_YES" value="172" type="GuiResourceData"/>
 <property name="BaseWorkspace_TILE_HORIZONTALLY" value="1" type="GuiResourceData"/>
 <property name="ClosePlanner_YES" value="1" type="GuiResourceData"/>
 <property name="CmdMsgDialog_MESSAGES" value="1" type="GuiResourceData"/>
-<property name="CmdMsgDialog_OK" value="25" type="GuiResourceData"/>
+<property name="CmdMsgDialog_OK" value="26" type="GuiResourceData"/>
 <property name="ConfirmSaveTextEditsDialog_YES" value="1" type="GuiResourceData"/>
 <property name="CoreTreeTablePanel_CORE_TREE_TABLE" value="9" type="GuiResourceData"/>
 <property name="CreateSrcFileDialog_FILE_NAME" value="23" type="GuiResourceData"/>
@@ -58,7 +58,7 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="DefineModulesDialog_DEFINE_MODULES_AND_SPECIFY_IO_PORTS" value="44" type="GuiResourceData"/>
 <property name="ExpRunTreePanel_EXP_RUN_TREE_TABLE" value="44" type="GuiResourceData"/>
 <property name="FileSetPanel_FILE_SET_PANEL_TREE" value="714" type="GuiResourceData"/>
-<property name="FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE" value="516" type="GuiResourceData"/>
+<property name="FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE" value="528" type="GuiResourceData"/>
 <property name="GettingStartedView_OPEN_PROJECT" value="5" type="GuiResourceData"/>
 <property name="HCodeEditor_CLOSE" value="9" type="GuiResourceData"/>
 <property name="HCodeEditor_SEARCH_TEXT_COMBO_BOX" value="121" type="GuiResourceData"/>
@@ -95,10 +95,10 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="SearchCommandComponent_QUICK_ACCESS" value="1" type="GuiResourceData"/>
 <property name="SrcChooserPanel_ADD_HDL_AND_NETLIST_FILES_TO_YOUR_PROJECT" value="4" type="GuiResourceData"/>
 <property name="SrcChooserPanel_CREATE_FILE" value="23" type="GuiResourceData"/>
-<property name="StateMonitor_RESET_RUN" value="4" type="GuiResourceData"/>
+<property name="StateMonitor_RESET_RUN" value="5" type="GuiResourceData"/>
 <property name="SyntheticaGettingStartedView_RECENT_PROJECTS" value="17" type="GuiResourceData"/>
-<property name="SyntheticaStateMonitor_CANCEL" value="20" type="GuiResourceData"/>
-<property name="TaskBanner_CLOSE" value="35" type="GuiResourceData"/>
+<property name="SyntheticaStateMonitor_CANCEL" value="21" type="GuiResourceData"/>
+<property name="TaskBanner_CLOSE" value="36" type="GuiResourceData"/>
 <property name="TclConsoleView_TCL_CONSOLE_CODE_EDITOR" value="2" type="GuiResourceData"/>
 <property name="TouchpointSurveyDialog_NO" value="1" type="GuiResourceData"/>
 </item>

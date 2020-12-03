@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date             : Thu Dec  3 17:20:07 2020
+| Date             : Thu Dec  3 19:50:42 2020
 | Host             : mpq4p217 running 64-bit major release  (build 9200)
 | Command          : report_power -file red_pitaya_top_power_routed.rpt -pb red_pitaya_top_power_summary_routed.pb -rpx red_pitaya_top_power_routed.rpx
 | Design           : red_pitaya_top
@@ -30,8 +30,8 @@ Table of Contents
 ----------
 
 +--------------------------+-------+
-| Total On-Chip Power (W)  | 1.871 |
-| Dynamic (W)              | 1.732 |
+| Total On-Chip Power (W)  | 1.873 |
+| Dynamic (W)              | 1.734 |
 | Device Static (W)        | 0.140 |
 | Effective TJA (C/W)      | 11.5  |
 | Max Ambient (C)          | 63.4  |
@@ -49,24 +49,23 @@ Table of Contents
 +--------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
-| Clocks                   |     0.021 |       14 |       --- |             --- |
-| Slice Logic              |     0.007 |     3421 |       --- |             --- |
-|   LUT as Logic           |     0.006 |     1127 |     17600 |            6.40 |
-|   Register               |    <0.001 |     1641 |     35200 |            4.66 |
-|   CARRY4                 |    <0.001 |       86 |      4400 |            1.95 |
+| Clocks                   |     0.022 |       14 |       --- |             --- |
+| Slice Logic              |     0.007 |     3430 |       --- |             --- |
+|   LUT as Logic           |     0.006 |     1136 |     17600 |            6.45 |
+|   Register               |    <0.001 |     1655 |     35200 |            4.70 |
+|   CARRY4                 |    <0.001 |       82 |      4400 |            1.86 |
 |   LUT as Distributed RAM |    <0.001 |       20 |      6000 |            0.33 |
 |   LUT as Shift Register  |    <0.001 |       62 |      6000 |            1.03 |
-|   F7/F8 Muxes            |    <0.001 |        1 |     17600 |           <0.01 |
 |   Others                 |     0.000 |      239 |       --- |             --- |
-| Signals                  |     0.015 |     2903 |       --- |             --- |
+| Signals                  |     0.015 |     2908 |       --- |             --- |
 | Block RAM                |     0.120 |     38.5 |        60 |           64.17 |
 | PLL                      |     0.097 |        1 |         2 |           50.00 |
 | DSPs                     |     0.001 |        1 |        80 |            1.25 |
-| I/O                      |     0.175 |       71 |       100 |           71.00 |
+| I/O                      |     0.176 |       71 |       100 |           71.00 |
 | XADC                     |     0.004 |        1 |       --- |             --- |
 | PS7                      |     1.292 |        1 |       --- |             --- |
 | Static Power             |     0.140 |          |           |                 |
-| Total                    |     1.871 |          |           |                 |
+| Total                    |     1.873 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -159,7 +158,7 @@ Table of Contents
 +------------------------------------------------+-----------+
 | Name                                           | Power (W) |
 +------------------------------------------------+-----------+
-| red_pitaya_top                                 |     1.732 |
+| red_pitaya_top                                 |     1.734 |
 |   i_hk                                         |     0.002 |
 |   i_iobufn[0]                                  |    <0.001 |
 |   i_iobufn[1]                                  |    <0.001 |
@@ -177,7 +176,7 @@ Table of Contents
 |   i_iobufp[5]                                  |    <0.001 |
 |   i_iobufp[6]                                  |    <0.001 |
 |   i_iobufp[7]                                  |    <0.001 |
-|   pg                                           |     0.136 |
+|   pg                                           |     0.135 |
 |     avg                                        |     0.003 |
 |       avg_buf_reg_0_63_0_2                     |    <0.001 |
 |       avg_buf_reg_0_63_12_13                   |    <0.001 |
@@ -192,12 +191,12 @@ Table of Contents
 |       pd_sram                                  |     0.028 |
 |       ref_sram                                 |     0.017 |
 |   pll                                          |     0.097 |
-|   ps                                           |     1.314 |
+|   ps                                           |     1.315 |
 |     axi_slave_gp0                              |     0.002 |
-|     system_i                                   |     1.312 |
-|       axi_protocol_converter_0                 |     0.011 |
-|         inst                                   |     0.011 |
-|           gen_axilite.gen_b2s_conv.axilite_b2s |     0.011 |
+|     system_i                                   |     1.313 |
+|       axi_protocol_converter_0                 |     0.012 |
+|         inst                                   |     0.012 |
+|           gen_axilite.gen_b2s_conv.axilite_b2s |     0.012 |
 |             RD.ar_channel_0                    |     0.002 |
 |               ar_cmd_fsm_0                     |    <0.001 |
 |               cmd_translator_0                 |     0.001 |
@@ -206,16 +205,16 @@ Table of Contents
 |             RD.r_channel_0                     |     0.002 |
 |               rd_data_fifo_0                   |     0.001 |
 |               transaction_fifo_0               |    <0.001 |
-|             SI_REG                             |     0.003 |
+|             SI_REG                             |     0.004 |
 |               ar_pipe                          |     0.001 |
 |               aw_pipe                          |     0.001 |
 |               b_pipe                           |    <0.001 |
-|               r_pipe                           |    <0.001 |
+|               r_pipe                           |     0.001 |
 |             WR.aw_channel_0                    |     0.003 |
 |               aw_cmd_fsm_0                     |     0.001 |
 |               cmd_translator_0                 |     0.002 |
 |                 incr_cmd_0                     |    <0.001 |
-|                 wrap_cmd_0                     |    <0.001 |
+|                 wrap_cmd_0                     |     0.001 |
 |             WR.b_channel_0                     |    <0.001 |
 |               bid_fifo_0                       |    <0.001 |
 |               bresp_fifo_0                     |    <0.001 |
@@ -238,7 +237,7 @@ Table of Contents
 |   pwm[0]                                       |    <0.001 |
 |   pwm[1]                                       |    <0.001 |
 |   pwm[2]                                       |    <0.001 |
-|   pwm[3]                                       |     0.001 |
+|   pwm[3]                                       |    <0.001 |
 +------------------------------------------------+-----------+
 
 
