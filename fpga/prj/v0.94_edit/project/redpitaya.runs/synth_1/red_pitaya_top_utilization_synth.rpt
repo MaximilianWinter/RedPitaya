@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date         : Fri Nov 27 18:45:36 2020
+| Date         : Thu Dec  3 17:18:41 2020
 | Host         : mpq4p217 running 64-bit major release  (build 9200)
 | Command      : report_utilization -file red_pitaya_top_utilization_synth.rpt -pb red_pitaya_top_utilization_synth.pb
 | Design       : red_pitaya_top
@@ -30,15 +30,15 @@ Table of Contents
 +----------------------------+------+-------+-----------+-------+
 |          Site Type         | Used | Fixed | Available | Util% |
 +----------------------------+------+-------+-----------+-------+
-| Slice LUTs*                |  925 |     0 |     17600 |  5.26 |
-|   LUT as Logic             |  885 |     0 |     17600 |  5.03 |
-|   LUT as Memory            |   40 |     0 |      6000 |  0.67 |
-|     LUT as Distributed RAM |   40 |     0 |           |       |
+| Slice LUTs*                |  743 |     0 |     17600 |  4.22 |
+|   LUT as Logic             |  723 |     0 |     17600 |  4.11 |
+|   LUT as Memory            |   20 |     0 |      6000 |  0.33 |
+|     LUT as Distributed RAM |   20 |     0 |           |       |
 |     LUT as Shift Register  |    0 |     0 |           |       |
-| Slice Registers            |  988 |     0 |     35200 |  2.81 |
-|   Register as Flip Flop    |  988 |     0 |     35200 |  2.81 |
+| Slice Registers            |  897 |     0 |     35200 |  2.55 |
+|   Register as Flip Flop    |  897 |     0 |     35200 |  2.55 |
 |   Register as Latch        |    0 |     0 |     35200 |  0.00 |
-| F7 Muxes                   |    0 |     0 |      8800 |  0.00 |
+| F7 Muxes                   |    1 |     0 |      8800 |  0.01 |
 | F8 Muxes                   |    0 |     0 |      4400 |  0.00 |
 +----------------------------+------+-------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
@@ -59,7 +59,7 @@ Table of Contents
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
 | 3     |          Yes |         Set |            - |
-| 985   |          Yes |       Reset |            - |
+| 894   |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -152,24 +152,25 @@ Table of Contents
 +-----------+------+---------------------+
 |  Ref Name | Used | Functional Category |
 +-----------+------+---------------------+
-| FDRE      |  985 |        Flop & Latch |
-| LUT6      |  240 |                 LUT |
-| LUT1      |  196 |                 LUT |
-| LUT2      |  184 |                 LUT |
-| LUT5      |  167 |                 LUT |
-| LUT4      |  115 |                 LUT |
-| LUT3      |  113 |                 LUT |
-| CARRY4    |   88 |          CarryLogic |
-| RAMD64E   |   40 |  Distributed Memory |
+| FDRE      |  894 |        Flop & Latch |
+| LUT6      |  215 |                 LUT |
+| LUT1      |  166 |                 LUT |
+| LUT5      |  156 |                 LUT |
+| LUT4      |  110 |                 LUT |
+| LUT3      |   89 |                 LUT |
+| LUT2      |   88 |                 LUT |
+| CARRY4    |   68 |          CarryLogic |
 | IBUF      |   40 |                  IO |
 | RAMB36E1  |   38 |        Block Memory |
 | OBUF      |   29 |                  IO |
+| RAMD64E   |   20 |  Distributed Memory |
 | ODDR      |   18 |                  IO |
 | OBUFT     |   18 |                  IO |
 | BUFG      |   10 |               Clock |
 | FDSE      |    3 |        Flop & Latch |
 | RAMB18E1  |    1 |        Block Memory |
 | PLLE2_ADV |    1 |               Clock |
+| MUXF7     |    1 |               MuxFx |
 | IBUFDS    |    1 |                  IO |
 | DSP48E1   |    1 |    Block Arithmetic |
 | DNA_PORT  |    1 |              Others |

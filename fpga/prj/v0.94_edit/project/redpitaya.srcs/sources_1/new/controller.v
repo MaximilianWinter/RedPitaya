@@ -188,7 +188,7 @@ begin
             
             error <= $signed(ref_rdata) - $signed(pd_rdata) + $signed(offset_i);
             scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
-            raw_ctrl_sig_wf_val <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]); //need to include averager
+            ctrl_sig_wf_val <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]); //need to include averager
             
         end
         else begin
@@ -199,7 +199,7 @@ begin
     end
     else begin
         ctrl_sig_we <= 1'b1;
-        raw_ctrl_sig_wf_val <= init_ctrl_sig_rdata;
+        ctrl_sig_wf_val <= $signed(init_ctrl_sig_rdata);
     end
 end
 
@@ -207,22 +207,14 @@ assign ctrl_sig_o = output_val;
 
 
 ///MOVING AVERAGER///
-wire [14-1:0] avg_ctrl_sig_wf_val;
+wire [14-1:0] avg_output_val;
 
-pos_moving_averager avg(
-    .dat_i(raw_ctrl_sig_wf_val),
-    .dat_o(avg_ctrl_sig_wf_val),
+moving_averager_64 avg(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
-    .buf_state_i(avg_state_i),
-    .buf_rstn_i(avg_rstn_i)
+    .dat_i(output_val),
+    .dat_o(avg_output_val)
 );
-
-always @(posedge clk_i)
-begin
-    ctrl_sig_wf_val <= $signed(avg_ctrl_sig_wf_val);
-end
-
 
 ///////////////////
 ///POINTER LOGIC///
@@ -348,7 +340,7 @@ assign general_buf_wpnt = ctrl_sig_rpnt;
 
 always @(posedge clk_i)
 begin
-    general_buf_wdata <= general_out;
+    general_buf_wdata <= $signed(general_out);
     general_buf_we <= (!trigger_i && !general_buf_state_i[2]) || (trigger_i && general_buf_state_i[2]); // only if both are high or both are low set WE to high
     general_buf_waddr <= general_buf_wpnt;
     general_buf_raddr <= buf_addr_i;

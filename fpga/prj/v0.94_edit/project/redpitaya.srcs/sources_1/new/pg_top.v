@@ -83,15 +83,12 @@ wire [14-1:0] avg_pd;
 reg [3-1:0] avg_state;
 reg avg_rstn;
 
-moving_averager avg_01(
-    .dat_i(pd_i),
-    .dat_o(avg_pd),
+moving_averager_64 avg(
     .clk_i(clk_i),
     .rstn_i(rstn_i),
-    .buf_state_i(avg_state),
-    .buf_rstn_i(avg_rstn)
+    .dat_i(pd_i),
+    .dat_o(avg_pd)
 );
-
 
 ///////////////////////
 ///CONTROLLER MODULE///
@@ -160,7 +157,9 @@ always @(posedge clk_i)
 begin
 	case(module_mode)
 		1'b0: begin ctrl_out <= $signed(cal_ctrl_sig); end
+		//1'b0: begin ctrl_out <= $signed(avg_pd); end
 		1'b1: begin ctrl_out <= $signed(pctrl_ctrl_sig); end
+		//1'b2: begin ctrl_out <= $signed(avg_pd); end
 	endcase
 end
 

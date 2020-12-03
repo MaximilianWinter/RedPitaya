@@ -77,12 +77,12 @@ begin
 	
     
     case(buf_state_i)
-    	3'b001: begin max_val <= 7'd1; end // division by 2
-    	3'b010: begin max_val <= 7'd3; end // division by 4
-    	3'b011: begin max_val <= 7'd7; end // division by 8
-    	3'b100: begin max_val <= 7'd15; end // division by 16
-    	3'b101: begin max_val <= 7'd31; end // division by 32
-    	3'b110: begin max_val <= 7'd63; end // division by 64
+    	3'b001: begin max_val <= 7'd2; end // division by 2
+    	3'b010: begin max_val <= 7'd4; end // division by 4
+    	3'b011: begin max_val <= 7'd8; end // division by 8
+    	3'b100: begin max_val <= 7'd16; end // division by 16
+    	3'b101: begin max_val <= 7'd32; end // division by 32
+    	3'b110: begin max_val <= 7'd64; end // division by 64
     endcase
     
     // note that both pointers move 1 step

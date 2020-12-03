@@ -450,7 +450,6 @@ assign gpio.i[23:16] = exp_n_in;
 ////////////////////////////////////////////////////////////////////////////////
 /*
 logic trig_asg_out;
-
 red_pitaya_scope i_scope (
   // ADC
   .adc_a_i       (adc_dat[0]  ),  // CH 1
@@ -484,7 +483,6 @@ red_pitaya_scope i_scope (
 //  DAC arbitrary signal generator
 ////////////////////////////////////////////////////////////////////////////////
 /*
-
 red_pitaya_asg i_asg (
    // DAC
   .dac_a_o         (asg_dat[0]  ),  // CH 1
@@ -570,9 +568,7 @@ single_pulse_generator i_pgen_a(
     .sys_rdata       (sys[6].rdata),
     .sys_err         (sys[6].err  ),
     .sys_ack         (sys[6].ack  )
-
 );
-
 single_pulse_generator i_pgen_b(
    // signals
     .clk_i           (adc_clk   ),  // clock
@@ -590,7 +586,6 @@ single_pulse_generator i_pgen_b(
     .sys_rdata       (sys[5].rdata),
     .sys_err         (sys[5].err  ),
     .sys_ack         (sys[5].ack  )
-
 );*/
 /*
 extra_simple_asg asg_A(
@@ -635,7 +630,6 @@ simple_scope scope_A(
     .sys_err         (sys[5].err  ),
     .sys_ack         (sys[5].ack  )
 );
-
 pulse_generator_top pg_top(
     .dac_a_i         (adc_dat[0]),
     .dac_a_o         (asg_dat[0]),
@@ -645,7 +639,6 @@ pulse_generator_top pg_top(
     .dac_b_o         (asg_dat[1]),
     //.trigger_b_i     (exp_p_in[7]), // TODO: need to change
     .trigger_b_i     (trigger_b),
-
     .clk_i  (adc_clk),
     .rstn_i (adc_rstn),
     
@@ -656,7 +649,6 @@ pulse_generator_top pg_top(
     .sys_rdata       (sys[6].rdata),
     .sys_err         (sys[6].err  ),
     .sys_ack         (sys[6].ack  )
-
 );
 */
 
@@ -678,5 +670,6 @@ pg_top pg(
     .sys_err         (sys[6].err  ),
     .sys_ack         (sys[6].ack  )
 );
+
 
 endmodule: red_pitaya_top
