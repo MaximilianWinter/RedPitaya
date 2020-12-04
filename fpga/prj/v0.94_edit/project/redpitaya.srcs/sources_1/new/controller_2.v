@@ -5,7 +5,7 @@
 // 
 // Create Date: 13.11.2020 18:42:41
 // Design Name: 
-// Module Name: controller
+// Module Name: controller_2
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -15,12 +15,12 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: without delta-t determination; bitfile generation works - 19.11. 18:51
+// Additional Comments: based on controller.v, but with 29 bit bram for ctrl sig
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module controller(
+module controller_2(
 	input			clk_i,
 	input			rstn_i,
 	
@@ -74,10 +74,10 @@ sram init_ctrl_sig_ram(
 reg [14-1:0]    ctrl_sig_waddr;
 reg [14-1:0]    ctrl_sig_raddr;
 reg             ctrl_sig_we;
-reg [14-1:0]    ctrl_sig_wdata;
-wire [14-1:0]    ctrl_sig_rdata;
+reg [29-1:0]    ctrl_sig_wdata;
+wire [29-1:0]    ctrl_sig_rdata;
 
-sram ctrl_sig_ram(
+big_bram ctrl_sig_ram(
     .clk_i(clk_i),
     .waddr_i(ctrl_sig_waddr),
     .raddr_i(ctrl_sig_raddr),
@@ -131,7 +131,7 @@ end
 
 
 ///CTRL SIG///
-reg [14-1:0] ctrl_sig_wf_val;
+reg [29-1:0] ctrl_sig_wf_val;
 
 reg [14-1:0] ctrl_sig_wpnt;
 reg [14-1:0] ctrl_sig_rpnt;
@@ -176,7 +176,7 @@ reg [29-1:0] scaled_error;
 reg first = 1'b1;
 reg trig_it_done = 1'b0;
 
-reg [14-1:0] ctrl_sig_wf_preval;
+reg [29-1:0] ctrl_sig_wf_preval;
 
 always @(posedge clk_i)
 begin
@@ -188,22 +188,22 @@ begin
             
             error <= $signed(ref_rdata) - $signed(pd_rdata) + $signed(offset_i);
             scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
-            ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]); //need to include averager
+            ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata) + $signed(scaled_error); //need to include averager
             
             if ($signed(ctrl_sig_wf_preval) < 0)
-                ctrl_sig_wf_val <= 14'd0;
+                ctrl_sig_wf_val <= 29'd0; //FOR TESTING
             else
                 ctrl_sig_wf_val <= ctrl_sig_wf_preval;           
         end
         else begin
             ctrl_sig_we <= 1'b0;
-            output_val <= ctrl_sig_rdata;
+            output_val <= ctrl_sig_rdata[29-1:15];
         end
 
     end
     else begin //if (trigger_i) begin
         ctrl_sig_we <= 1'b1;
-        ctrl_sig_wf_val <= $signed(init_ctrl_sig_rdata);
+        ctrl_sig_wf_val <= $signed({init_ctrl_sig_rdata,{15{1'b0}}});
     end
 end
 

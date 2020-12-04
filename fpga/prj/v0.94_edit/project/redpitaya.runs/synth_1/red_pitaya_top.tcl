@@ -28,8 +28,9 @@ read_verilog -library xil_defaultlib -sv {
 }
 read_verilog -library xil_defaultlib {
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/imports/fpga/rtl/classic/axi_master.v
+  C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/big_bram.v
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/calibrator.v
-  C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/controller.v
+  C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/controller_2.v
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/moving_averager_64.v
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/pg_top.v
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/imports/fpga/rtl/classic/red_pitaya_hk.v

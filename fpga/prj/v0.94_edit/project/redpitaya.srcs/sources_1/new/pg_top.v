@@ -117,7 +117,7 @@ reg [14-1:0] offset;
 reg [14-1:0] rpnt_init_offset;
 reg [3-1:0] avg_state_ctrl;
 reg avg_rstn_ctrl;
-controller pctrl(
+controller_2 pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	

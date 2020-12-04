@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date         : Fri Dec  4 13:44:57 2020
+| Date         : Fri Dec  4 16:36:42 2020
 | Host         : mpq4p217 running 64-bit major release  (build 9200)
 | Command      : report_drc -file red_pitaya_top_drc_routed.rpt -pb red_pitaya_top_drc_routed.pb -rpx red_pitaya_top_drc_routed.rpx
 | Design       : red_pitaya_top
@@ -24,16 +24,22 @@ Table of Contents
       Design limits: <entire design considered>
            Ruledeck: default
              Max violations: <unlimited>
-             Violations found: 3
+             Violations found: 4
 +--------+----------+---------------------------------+------------+
 | Rule   | Severity | Description                     | Violations |
 +--------+----------+---------------------------------+------------+
+| DPIP-1 | Warning  | Input pipelining                | 1          |
 | DPOP-1 | Warning  | PREG Output pipelining          | 1          |
 | RPBF-3 | Warning  | IO port buffering is incomplete | 2          |
 +--------+----------+---------------------------------+------------+
 
 2. REPORT DETAILS
 -----------------
+DPIP-1#1 Warning
+Input pipelining  
+DSP pg/pctrl/ctrl_sig_wf_preval_reg input pg/pctrl/ctrl_sig_wf_preval_reg/C[47:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
 DPOP-1#1 Warning
 PREG Output pipelining  
 DSP pg/pctrl/scaled_error_reg output pg/pctrl/scaled_error_reg/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
