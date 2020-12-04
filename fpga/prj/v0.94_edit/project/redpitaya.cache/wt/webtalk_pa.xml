@@ -3,10 +3,10 @@
 <!--The data in this file is primarily intended for consumption by Xilinx tools.
 The structure and the elements are likely to change over the next few releases.
 This means code written to parse this file will need to be revisited each subsequent release.-->
-<application name="pa" timeStamp="Thu Dec  3 19:48:21 2020">
+<application name="pa" timeStamp="Fri Dec  4 13:42:35 2020">
 <section name="Project Information" visible="false">
 <property name="ProjectID" value="91908d8d209a4426bac775670eed9952" type="ProjectID"/>
-<property name="ProjectIteration" value="186" type="ProjectIteration"/>
+<property name="ProjectIteration" value="192" type="ProjectIteration"/>
 </section>
 <section name="PlanAhead Usage" visible="true">
 <item name="Project Data">
@@ -30,11 +30,11 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="OpenExistingReport" value="1" type="JavaHandler"/>
 <property name="OpenHardwareManager" value="1" type="JavaHandler"/>
 <property name="OpenProject" value="5" type="JavaHandler"/>
-<property name="RunBitgen" value="179" type="JavaHandler"/>
+<property name="RunBitgen" value="185" type="JavaHandler"/>
 <property name="RunImplementation" value="13" type="JavaHandler"/>
 <property name="RunSynthesis" value="65" type="JavaHandler"/>
 <property name="SaveFileProxyHandler" value="23" type="JavaHandler"/>
-<property name="ShowView" value="47" type="JavaHandler"/>
+<property name="ShowView" value="48" type="JavaHandler"/>
 <property name="ToolsTemplates" value="1" type="JavaHandler"/>
 <property name="ViewTaskImplementation" value="28" type="JavaHandler"/>
 <property name="ViewTaskRTLAnalysis" value="1" type="JavaHandler"/>
@@ -42,11 +42,11 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="ZoomOut" value="24" type="JavaHandler"/>
 </item>
 <item name="Gui Resources Info">
-<property name="AbstractFileView_CLOSE" value="3" type="GuiResourceData"/>
+<property name="AbstractFileView_CLOSE" value="4" type="GuiResourceData"/>
 <property name="AbstractSearchablePanel_SHOW_SEARCH" value="2" type="GuiResourceData"/>
 <property name="BaseDialog_CANCEL" value="2" type="GuiResourceData"/>
-<property name="BaseDialog_OK" value="424" type="GuiResourceData"/>
-<property name="BaseDialog_YES" value="172" type="GuiResourceData"/>
+<property name="BaseDialog_OK" value="431" type="GuiResourceData"/>
+<property name="BaseDialog_YES" value="178" type="GuiResourceData"/>
 <property name="BaseWorkspace_TILE_HORIZONTALLY" value="1" type="GuiResourceData"/>
 <property name="ClosePlanner_YES" value="1" type="GuiResourceData"/>
 <property name="CmdMsgDialog_MESSAGES" value="1" type="GuiResourceData"/>
@@ -58,7 +58,7 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="DefineModulesDialog_DEFINE_MODULES_AND_SPECIFY_IO_PORTS" value="44" type="GuiResourceData"/>
 <property name="ExpRunTreePanel_EXP_RUN_TREE_TABLE" value="44" type="GuiResourceData"/>
 <property name="FileSetPanel_FILE_SET_PANEL_TREE" value="714" type="GuiResourceData"/>
-<property name="FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE" value="528" type="GuiResourceData"/>
+<property name="FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE" value="540" type="GuiResourceData"/>
 <property name="GettingStartedView_OPEN_PROJECT" value="5" type="GuiResourceData"/>
 <property name="HCodeEditor_CLOSE" value="9" type="GuiResourceData"/>
 <property name="HCodeEditor_SEARCH_TEXT_COMBO_BOX" value="121" type="GuiResourceData"/>
@@ -68,7 +68,7 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="LanguageTemplatesDialog_TEMPLATES_TREE" value="36" type="GuiResourceData"/>
 <property name="LogPanel_LOG_NAVIGATOR" value="1" type="GuiResourceData"/>
 <property name="MainMenuMgr_WINDOW" value="2" type="GuiResourceData"/>
-<property name="MsgTreePanel_MESSAGE_VIEW_TREE" value="48" type="GuiResourceData"/>
+<property name="MsgTreePanel_MESSAGE_VIEW_TREE" value="49" type="GuiResourceData"/>
 <property name="MsgView_WARNING_MESSAGES" value="1" type="GuiResourceData"/>
 <property name="NavigableTimingReportTab_TIMING_REPORT_NAVIGATION_TREE" value="2" type="GuiResourceData"/>
 <property name="PACommandNames_FILESET_WINDOW" value="1" type="GuiResourceData"/>
@@ -77,7 +77,7 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="PACommandNames_RUN_SYNTHESIS" value="1" type="GuiResourceData"/>
 <property name="PACommandNames_ZOOM_OUT" value="18" type="GuiResourceData"/>
 <property name="PAViews_ADDRESS_EDITOR" value="1" type="GuiResourceData"/>
-<property name="PAViews_CODE" value="160" type="GuiResourceData"/>
+<property name="PAViews_CODE" value="161" type="GuiResourceData"/>
 <property name="PAViews_DEVICE" value="12" type="GuiResourceData"/>
 <property name="PAViews_PROJECT_SUMMARY" value="1" type="GuiResourceData"/>
 <property name="PAViews_SYSTEM" value="1" type="GuiResourceData"/>

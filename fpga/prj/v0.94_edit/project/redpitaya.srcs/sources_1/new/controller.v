@@ -120,7 +120,7 @@ sram ref_sram(
 );
 
 ///INIT CTRL SIG///
-wire [14-1:0] init_ctrl_sig_rpnt;
+reg [14-1:0] init_ctrl_sig_rpnt;
 always @(posedge clk_i)
 begin
     init_ctrl_sig_wdata <= buf_wdata_i;
@@ -145,8 +145,8 @@ end
 
 
 ///PD ARRAY///
-wire [14-1:0] pd_wpnt;
-wire [14-1:0] pd_rpnt;
+reg [14-1:0] pd_wpnt;
+reg [14-1:0] pd_rpnt;
 always @(posedge clk_i)
 begin
     pd_wdata <= pd_i;
@@ -201,7 +201,7 @@ begin
         end
 
     end
-    else begin
+    else begin //if (trigger_i) begin
         ctrl_sig_we <= 1'b1;
         ctrl_sig_wf_val <= $signed(init_ctrl_sig_rdata);
     end
@@ -225,7 +225,7 @@ moving_averager_64 avg(
 ///////////////////
 
 ///DURING TRIGGER
-
+/*
 reg ntrig_it_done = 1'b0;
 
 wire [14-1:0] ctrl_sig_nrpnt;
@@ -241,7 +241,7 @@ begin
         end
         else begin
             if (do_init_i) begin
-                if (ctrl_sig_nwpnt < 14'd16383) begin
+                if (ctrl_sig_nrpnt < 14'd16383) begin
                     ctrl_sig_rpnt <= ctrl_sig_nrpnt;
                     ctrl_sig_wpnt <= ctrl_sig_nwpnt;
                 end
@@ -297,6 +297,91 @@ assign init_ctrl_sig_rpnt = ctrl_sig_rpnt; // for top
 assign pd_wpnt = ctrl_sig_rpnt; // for top
 
 assign pd_rpnt = ref_rpnt + delta_pd_i; // for bottom
+*/
+
+
+///NEW POINTER LOGIC///
+
+reg [2-1:0] pnt_logic_state = 2'b00;
+reg [2-1:0] wait_for_high = 2'b00;
+reg [2-1:0] high = 2'b01;
+reg [2-1:0] wait_for_low = 2'b10;
+reg [2-1:0] low = 2'b11;
+
+wire [14-1:0] ctrl_sig_nrpnt;
+wire [14-1:0] pd_nwpnt;
+wire [14-1:0] ctrl_sig_nwpnt;
+wire [14-1:0] init_ctrl_sig_nrpnt;
+wire [14-1:0] ref_nrpnt;
+wire [14-1:0] pd_nrpnt;
+always @(posedge clk_i)
+begin
+    case (pnt_logic_state)
+        wait_for_high:
+            begin
+                if (trigger_i)
+                    pnt_logic_state <= high;
+                // initialize pointers:
+                ctrl_sig_rpnt <= 14'd0;
+                pd_wpnt <= 14'd0;
+                init_ctrl_sig_rpnt <= 14'd0;
+                
+                if (do_init_i) begin
+                    ctrl_sig_wpnt <= 14'd0;
+                end
+            end
+        high:
+            begin
+                if (ctrl_sig_nrpnt < 14'd16383) begin
+                    ctrl_sig_rpnt <= ctrl_sig_nrpnt;
+                    pd_wpnt <= pd_nwpnt;
+                    init_ctrl_sig_rpnt <= init_ctrl_sig_nrpnt;
+                    if (do_init_i) begin
+                        ctrl_sig_wpnt <= ctrl_sig_nwpnt;
+                    end
+                end
+                else begin
+                    pnt_logic_state <= wait_for_low;
+                end
+            end
+        wait_for_low:
+            begin
+                if (!trigger_i)
+                    pnt_logic_state <= low;
+                    
+                pd_rpnt <= 14'd6 + delta_pd_i;
+                ref_rpnt <= 14'd6;
+                ctrl_sig_rpnt <= 14'd4;
+                ctrl_sig_wpnt <= 14'd0;
+            end
+        low:
+            begin
+                if (ref_nrpnt < 14'd16383) begin
+                    pd_rpnt <= pd_nrpnt;
+                    ref_rpnt <= ref_nrpnt;
+                    ctrl_sig_rpnt <= ctrl_sig_nrpnt;
+                    ctrl_sig_wpnt <= ctrl_sig_nwpnt;
+                end
+                else begin
+                    pnt_logic_state <= wait_for_high;
+                end  
+            end
+    endcase
+
+end
+
+assign ctrl_sig_nrpnt = ctrl_sig_rpnt + 14'd1;
+assign pd_nwpnt = pd_wpnt + 14'd1;
+assign ctrl_sig_nwpnt = ctrl_sig_wpnt + 14'd1;
+assign init_ctrl_sig_nrpnt = init_ctrl_sig_rpnt + 14'd1;
+assign ref_nrpnt = ref_rpnt + 14'd1;
+assign pd_nrpnt = pd_rpnt + 14'd1;
+
+
+
+
+
+
 
 
 
