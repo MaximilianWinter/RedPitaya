@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7z010clg400-1" LaunchTime="1607096065">
+<GenRun Id="impl_1" LaunchPart="xc7z010clg400-1" LaunchTime="1607104131">
   <File Type="PWROPT-DRC" Name="red_pitaya_top_drc_pwropted.rpt"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="red_pitaya_top_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="red_pitaya_top_timing_summary_init.rpt"/>
@@ -92,7 +92,7 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/new/controller_2.v">
+    <File Path="$PSRCDIR/sources_1/new/controller_3.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
@@ -214,6 +214,14 @@
       <FileInfo>
         <Attr Name="ImportPath" Val="$PPRDIR/../rtl/red_pitaya_top.sv"/>
         <Attr Name="ImportTime" Val="1532621816"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/controller_2.v">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>

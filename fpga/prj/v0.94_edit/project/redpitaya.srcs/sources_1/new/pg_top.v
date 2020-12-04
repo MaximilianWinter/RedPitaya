@@ -117,7 +117,7 @@ reg [14-1:0] offset;
 reg [14-1:0] rpnt_init_offset;
 reg [3-1:0] avg_state_ctrl;
 reg avg_rstn_ctrl;
-controller_2 pctrl(
+controller_3 pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	
@@ -141,9 +141,9 @@ controller_2 pctrl(
 	.general_buf_rdata_o(pctrl_general_buf_rdata),
 	.general_buf_state_i(general_buf_state),
 	.offset_i(offset),
-	.rpnt_init_offset_i(rpnt_init_offset),
+	.ctrl_sig_wpnt_start_i(rpnt_init_offset),
 	.avg_state_i(avg_state_ctrl),
-	.avg_rstn_i(avg_rstn_ctrl)
+	.do_smoothening_i(avg_rstn_ctrl)
 	
 );
 
