@@ -15,7 +15,8 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: only implemented for one channel
+// Additional Comments: only implemented for one channel; controller_4.v does smoothing automatically after
+//                      smoothing_cycles_i ctrl cycles; and sets output to zero after zero_output_del_i clk cycles
 // 
 //////////////////////////////////////////////////////////////////////////////////
 /*
@@ -104,8 +105,7 @@ reg do_init = 1'b0;
 reg trigger = 1'b0;
 
 reg [14-1:0] pctrl_buf_addr;
-wire [14-1:0] pctrl_buf_rdata;
-wire [14-1:0] pctrl_ref_buf_rdata;
+
 wire [14-1:0] pctrl_general_buf_rdata;
 
 reg [3-1:0] general_buf_state;
@@ -115,9 +115,12 @@ wire [14-1:0] pctrl_pd_i;
 
 reg [14-1:0] offset;
 reg [14-1:0] rpnt_init_offset;
-reg [3-1:0] avg_state_ctrl;
-reg avg_rstn_ctrl;
-controller_3 pctrl(
+
+reg smoothing_rstn;
+reg [14-1:0] smoothing_cycles;
+reg [14-1:0] zero_output_del = 14'd16383; //set to maxval initially
+
+controller_4 pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	
@@ -136,14 +139,13 @@ controller_3 pctrl(
 	.ref_buf_we_i(pctrl_ref_buf_we),
 	.buf_addr_i(pctrl_buf_addr),
 	.buf_wdata_i(sys_wdata[14-1:0]),
-	.ctrl_buf_rdata_o(pctrl_buf_rdata),			// and we might want to read it/or other signals for test purposes
-	.ref_buf_rdata_o(pctrl_ref_buf_rdata),
 	.general_buf_rdata_o(pctrl_general_buf_rdata),
 	.general_buf_state_i(general_buf_state),
 	.offset_i(offset),
 	.ctrl_sig_wpnt_start_i(rpnt_init_offset),
-	.avg_state_i(avg_state_ctrl),
-	.do_smoothening_i(avg_rstn_ctrl)
+	.smoothing_rstn_i(smoothing_rstn),
+	.smoothing_cycles_i(smoothing_cycles),
+	.zero_output_del_i(zero_output_del)
 	
 );
 
@@ -209,8 +211,9 @@ begin
 				20'h20: begin avg_state <= sys_wdata[3-1:0]; end
 				20'h24: begin avg_rstn		<= sys_wdata[0]; end
 				20'h28: begin rpnt_init_offset        <= sys_wdata[14-1:0]; end
-				20'h2C: begin avg_state_ctrl <= sys_wdata[3-1:0]; end
-				20'h30: begin avg_rstn_ctrl		<= sys_wdata[0]; end
+				20'h2C: begin smoothing_rstn <= sys_wdata[0]; end
+				20'h30: begin smoothing_cycles		<= sys_wdata[14-1:0]; end
+				30'h34: begin zero_output_del    <= sys_wdata[14-1:0]; end
 			endcase
 		end
 	end
@@ -241,13 +244,12 @@ begin
 			20'h20: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, avg_state}; end
 			20'h24: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, avg_rstn}; end
 			20'h28: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, rpnt_init_offset}; end
-			20'h2C: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, avg_state_ctrl}; end
-			20'h30: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, avg_rstn_ctrl}; end
+			20'h2C: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, smoothing_rstn}; end
+			20'h30: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, smoothing_cycles}; end
+			20'h34: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, zero_output_del}; end
 			
-			
-			20'h1zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_buf_rdata}; end // this writes data from the controller module to memory
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory
-			20'h3zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_ref_buf_rdata}; end
+
 			20'h4zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_general_buf_rdata}; end
 			
 			default: begin sys_ack <= sys_en; sys_rdata <= 32'h0; end

@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date             : Fri Dec  4 18:51:12 2020
+| Date             : Wed Dec  9 14:46:09 2020
 | Host             : mpq4p217 running 64-bit major release  (build 9200)
 | Command          : report_power -file red_pitaya_top_power_routed.rpt -pb red_pitaya_top_power_summary_routed.pb -rpx red_pitaya_top_power_routed.rpx
 | Design           : red_pitaya_top
@@ -30,12 +30,12 @@ Table of Contents
 ----------
 
 +--------------------------+-------+
-| Total On-Chip Power (W)  | 1.938 |
-| Dynamic (W)              | 1.796 |
+| Total On-Chip Power (W)  | 1.951 |
+| Dynamic (W)              | 1.809 |
 | Device Static (W)        | 0.142 |
 | Effective TJA (C/W)      | 11.5  |
-| Max Ambient (C)          | 62.6  |
-| Junction Temperature (C) | 47.4  |
+| Max Ambient (C)          | 62.5  |
+| Junction Temperature (C) | 47.5  |
 | Confidence Level         | Low   |
 | Setting File             | ---   |
 | Simulation Activity File | ---   |
@@ -50,22 +50,22 @@ Table of Contents
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
 | Clocks                   |     0.022 |       14 |       --- |             --- |
-| Slice Logic              |     0.008 |     3710 |       --- |             --- |
-|   LUT as Logic           |     0.007 |     1190 |     17600 |            6.76 |
-|   Register               |    <0.001 |     1803 |     35200 |            5.12 |
-|   CARRY4                 |    <0.001 |       88 |      4400 |            2.00 |
+| Slice Logic              |     0.009 |     3799 |       --- |             --- |
+|   LUT as Logic           |     0.007 |     1221 |     17600 |            6.94 |
+|   Register               |    <0.001 |     1844 |     35200 |            5.24 |
+|   CARRY4                 |    <0.001 |       96 |      4400 |            2.18 |
 |   LUT as Distributed RAM |    <0.001 |       40 |      6000 |            0.67 |
 |   LUT as Shift Register  |    <0.001 |       62 |      6000 |            1.03 |
 |   Others                 |     0.000 |      241 |       --- |             --- |
-| Signals                  |     0.019 |     3184 |       --- |             --- |
-| Block RAM                |     0.160 |       46 |        60 |           76.67 |
+| Signals                  |     0.019 |     3231 |       --- |             --- |
+| Block RAM                |     0.157 |       46 |        60 |           76.67 |
 | PLL                      |     0.097 |        1 |         2 |           50.00 |
 | DSPs                     |     0.003 |        2 |        80 |            2.50 |
-| I/O                      |     0.192 |       71 |       100 |           71.00 |
+| I/O                      |     0.207 |       71 |       100 |           71.00 |
 | XADC                     |     0.004 |        1 |       --- |             --- |
 | PS7                      |     1.292 |        1 |       --- |             --- |
 | Static Power             |     0.142 |          |           |                 |
-| Total                    |     1.938 |          |           |                 |
+| Total                    |     1.951 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,9 +75,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.217 |       0.207 |      0.010 |
-| Vccaux    |       1.800 |     0.067 |       0.055 |      0.012 |
-| Vcco33    |       3.300 |     0.056 |       0.055 |      0.001 |
+| Vccint    |       1.000 |     0.214 |       0.205 |      0.010 |
+| Vccaux    |       1.800 |     0.067 |       0.056 |      0.012 |
+| Vcco33    |       3.300 |     0.060 |       0.059 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
 | Vcco18    |       1.800 |     0.002 |       0.001 |      0.001 |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |
@@ -158,7 +158,7 @@ Table of Contents
 +------------------------------------------------+-----------+
 | Name                                           | Power (W) |
 +------------------------------------------------+-----------+
-| red_pitaya_top                                 |     1.796 |
+| red_pitaya_top                                 |     1.809 |
 |   i_hk                                         |     0.002 |
 |   i_iobufn[0]                                  |    <0.001 |
 |   i_iobufn[1]                                  |    <0.001 |
@@ -176,7 +176,7 @@ Table of Contents
 |   i_iobufp[5]                                  |    <0.001 |
 |   i_iobufp[6]                                  |    <0.001 |
 |   i_iobufp[7]                                  |    <0.001 |
-|   pg                                           |     0.183 |
+|   pg                                           |     0.180 |
 |     avg                                        |     0.003 |
 |       avg_buf_reg_0_63_0_2                     |    <0.001 |
 |       avg_buf_reg_0_63_12_13                   |    <0.001 |
@@ -184,16 +184,16 @@ Table of Contents
 |       avg_buf_reg_0_63_6_8                     |    <0.001 |
 |       avg_buf_reg_0_63_9_11                    |    <0.001 |
 |     cal                                        |     0.009 |
-|     pctrl                                      |     0.170 |
-|       avg                                      |     0.003 |
+|     pctrl                                      |     0.166 |
+|       avg                                      |     0.002 |
 |         avg_buf_reg_0_63_0_2                   |    <0.001 |
 |         avg_buf_reg_0_63_12_13                 |    <0.001 |
 |         avg_buf_reg_0_63_3_5                   |    <0.001 |
 |         avg_buf_reg_0_63_6_8                   |    <0.001 |
 |         avg_buf_reg_0_63_9_11                  |    <0.001 |
-|       ctrl_sig_ram                             |     0.073 |
+|       ctrl_sig_ram                             |     0.070 |
 |       general_buf_ram                          |     0.027 |
-|       init_ctrl_sig_ram                        |     0.009 |
+|       init_ctrl_sig_ram                        |     0.010 |
 |       pd_sram                                  |     0.028 |
 |       ref_sram                                 |     0.017 |
 |   pll                                          |     0.097 |
@@ -243,7 +243,7 @@ Table of Contents
 |   pwm[0]                                       |    <0.001 |
 |   pwm[1]                                       |    <0.001 |
 |   pwm[2]                                       |    <0.001 |
-|   pwm[3]                                       |     0.001 |
+|   pwm[3]                                       |    <0.001 |
 +------------------------------------------------+-----------+
 
 
