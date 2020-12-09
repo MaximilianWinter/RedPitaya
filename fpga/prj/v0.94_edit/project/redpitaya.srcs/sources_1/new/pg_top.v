@@ -84,7 +84,7 @@ wire [14-1:0] avg_pd;
 reg [3-1:0] avg_state;
 reg avg_rstn;
 
-moving_averager_64 avg(
+moving_averager_4 avg( //4 bit averager
     .clk_i(clk_i),
     .rstn_i(rstn_i),
     .dat_i(pd_i),
@@ -124,8 +124,8 @@ controller_4 pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	
-	//.trigger_i(trigger_i),		// note: this is the trigger for the pulse generation
-	.trigger_i(trigger),
+	.trigger_i(trigger_i),		// note: this is the trigger for the pulse generation
+	//.trigger_i(trigger),
 	.do_init_i(do_init), // bug
 	
 	.ctrl_sig_o(pctrl_ctrl_sig),

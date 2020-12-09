@@ -230,7 +230,7 @@ assign ctrl_sig_o = avg_output_val; //NOTE: should use averaged output!
 ///MOVING AVERAGER///
 
 
-moving_averager_64 avg(
+moving_averager_4 avg( // 4 bit averager
     .clk_i(clk_i),
     .rstn_i(rstn_i),
     .dat_i(output_val),
