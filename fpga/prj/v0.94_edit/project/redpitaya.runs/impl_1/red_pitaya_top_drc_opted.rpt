@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date         : Wed Dec  9 17:34:31 2020
+| Date         : Thu Dec 10 10:57:43 2020
 | Host         : mpq4p217 running 64-bit major release  (build 9200)
 | Command      : report_drc -file red_pitaya_top_drc_opted.rpt
 | Design       : red_pitaya_top
@@ -24,13 +24,13 @@ Table of Contents
       Design limits: <entire design considered>
            Ruledeck: default
              Max violations: <unlimited>
-             Violations found: 4
+             Violations found: 3
 +--------+----------+---------------------------------+------------+
 | Rule   | Severity | Description                     | Violations |
 +--------+----------+---------------------------------+------------+
 | DPIP-1 | Warning  | Input pipelining                | 1          |
 | DPOP-1 | Warning  | PREG Output pipelining          | 1          |
-| RPBF-3 | Warning  | IO port buffering is incomplete | 2          |
+| RPBF-3 | Warning  | IO port buffering is incomplete | 1          |
 +--------+----------+---------------------------------+------------+
 
 2. REPORT DETAILS
@@ -48,11 +48,6 @@ Related violations: <none>
 RPBF-3#1 Warning
 IO port buffering is incomplete  
 Device port led_o[6] expects both input and output buffering but the buffers are incomplete.
-Related violations: <none>
-
-RPBF-3#2 Warning
-IO port buffering is incomplete  
-Device port led_o[7] expects both input and output buffering but the buffers are incomplete.
 Related violations: <none>
 
 

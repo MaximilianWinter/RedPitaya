@@ -52,15 +52,15 @@ module red_pitaya_hk #(
   input                sys_ren    ,  // bus read enable
   output reg [ 32-1:0] sys_rdata  ,  // bus read data
   output reg           sys_err    ,  // bus error indicator
-  output reg           sys_ack       // bus acknowledge signal
+  output reg           sys_ack    ,  // bus acknowledge signal
+  input                trigger_b    // for testing
 );
 
 ///CONNECTING EXP_P_DAT_I to LED
 
 always @(posedge clk_i)
 begin
-    led_o[6] <= exp_p_dat_i[6];
-    led_o[7] <= exp_p_dat_i[7];
+    led_o[6] <= trigger_b;
 end
 
 

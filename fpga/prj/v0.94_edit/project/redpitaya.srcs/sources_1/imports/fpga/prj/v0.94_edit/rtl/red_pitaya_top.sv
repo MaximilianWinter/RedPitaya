@@ -406,6 +406,8 @@ logic [  8-1: 0] exp_p_in , exp_n_in ;
 logic [  8-1: 0] exp_p_out, exp_n_out;
 logic [  8-1: 0] exp_p_dir, exp_n_dir;
 
+reg trigger_b = 1'b0;
+
 red_pitaya_hk i_hk (
   // system signals
   .clk_i           (adc_clk ),  // clock
@@ -428,7 +430,8 @@ red_pitaya_hk i_hk (
   .sys_ren         (sys[0].ren  ),
   .sys_rdata       (sys[0].rdata),
   .sys_err         (sys[0].err  ),
-  .sys_ack         (sys[0].ack  )
+  .sys_ack         (sys[0].ack  ),
+  .trigger_b       (trigger_b   )
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -603,7 +606,7 @@ extra_simple_asg asg_A(
     .sys_ack         (sys[6].ack  )
 );
 */
-reg trigger_b = 1'b0;
+
 
 always @(posedge adc_clk)
 begin
