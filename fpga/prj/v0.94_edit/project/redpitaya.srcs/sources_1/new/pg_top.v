@@ -119,7 +119,7 @@ reg [14-1:0] rpnt_init_offset;
 reg smoothing_rstn;
 reg [14-1:0] smoothing_cycles;
 reg [14-1:0] zero_output_del = 14'd16383; //set to maxval initially
-
+reg [14-1:0] max_arr_pnt = 14'd16383;
 controller_6 pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
@@ -145,7 +145,8 @@ controller_6 pctrl(
 	.ctrl_sig_wpnt_start_i(rpnt_init_offset),
 	.smoothing_rstn_i(smoothing_rstn),
 	.smoothing_cycles_i(smoothing_cycles),
-	.zero_output_del_i(zero_output_del)
+	.zero_output_del_i(zero_output_del),
+	.max_arr_pnt_i(max_arr_pnt)
 	
 );
 
@@ -159,9 +160,7 @@ always @(posedge clk_i)
 begin
 	case(module_mode)
 		1'b0: begin ctrl_out <= $signed(cal_ctrl_sig); end
-		//1'b0: begin ctrl_out <= $signed(avg_pd); end
 		1'b1: begin ctrl_out <= $signed(pctrl_ctrl_sig); end
-		//1'b2: begin ctrl_out <= $signed(avg_pd); end
 	endcase
 end
 
@@ -214,6 +213,7 @@ begin
 				20'h2C: begin smoothing_rstn <= sys_wdata[0]; end
 				20'h30: begin smoothing_cycles		<= sys_wdata[14-1:0]; end
 				30'h34: begin zero_output_del    <= sys_wdata[14-1:0]; end
+				30'h38: begin max_arr_pnt   <= sys_wdata[14-1:0]; end
 			endcase
 		end
 	end
@@ -247,6 +247,7 @@ begin
 			20'h2C: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, smoothing_rstn}; end
 			20'h30: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, smoothing_cycles}; end
 			20'h34: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, zero_output_del}; end
+			20'h38: begin sys_ack <= sys_en;    sys_rdata <= {{32-14{1'b0}}, max_arr_pnt}; end
 			
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory
 

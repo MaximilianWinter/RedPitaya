@@ -44,7 +44,8 @@ module controller_6(
 	input  [14-1:0]    ctrl_sig_wpnt_start_i,
 	input              smoothing_rstn_i,
 	input [14-1:0]     smoothing_cycles_i,
-	input [14-1:0]     zero_output_del_i
+	input [14-1:0]     zero_output_del_i,
+	input [14-1:0]     max_arr_pnt_i
 
 );
 //////////////////////////////
@@ -282,7 +283,7 @@ begin
             end
         high:
             begin
-                if (ctrl_sig_nrpnt < 14'd16383) begin
+                if (ctrl_sig_nrpnt < max_arr_pnt_i) begin
                     ctrl_sig_rpnt <= ctrl_sig_nrpnt;
                     pd_wpnt <= pd_nwpnt;
                     init_ctrl_sig_rpnt <= init_ctrl_sig_nrpnt;
@@ -316,7 +317,7 @@ begin
             end
         low:
             begin
-                if (ref_nrpnt < 14'd16383) begin
+                if (ref_nrpnt < max_arr_pnt_i) begin
                     pd_rpnt <= pd_nrpnt;
                     ref_rpnt <= ref_nrpnt;
                     ctrl_sig_rpnt <= ctrl_sig_nrpnt;
@@ -328,7 +329,7 @@ begin
             end
         initialize:
             begin
-                if (ctrl_sig_nwpnt < 14'd16383) begin
+                if (ctrl_sig_nwpnt < max_arr_pnt_i) begin
                     ctrl_sig_wpnt <= ctrl_sig_nwpnt;
                     init_ctrl_sig_rpnt <= init_ctrl_sig_nrpnt;
                 end
