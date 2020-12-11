@@ -120,7 +120,7 @@ reg smoothing_rstn;
 reg [14-1:0] smoothing_cycles;
 reg [14-1:0] zero_output_del = 14'd16383; //set to maxval initially
 
-controller_5 pctrl(
+controller_6 pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	
