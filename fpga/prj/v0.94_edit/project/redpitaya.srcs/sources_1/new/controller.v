@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: Maximilian Winter
 // 
-// Create Date: 13.11.2020 18:42:41
+// Create Date: 16.12.2020 13:00:11
 // Design Name: 
 // Module Name: controller
 // Project Name: 
@@ -15,8 +15,7 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: without delta-t determination; bitfile generation works - 19.11. 18:51
-// 
+// Additional Comments: this is essentially controller 6, adjustments: lwoer/upper zero outpunt cnt
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -27,26 +26,33 @@ module controller(
 	input			trigger_i,
 	input			do_init_i,
 	
+	// signals
 	output	[14-1:0]	ctrl_sig_o,
 	input	[14-1:0]	pd_i,
-	
 	output  [14-1:0]    test_sig_o,
 	
+	// main control parameters
 	input	[14-1:0]	k_p_i,
 	input   [14-1:0]    delta_pd_i,
+	input  [14-1:0]    offset_i,
+    input              smoothing_rstn_i,
+    input [14-1:0]     smoothing_cycles_i,
 	
+	// additional control parameters
+    input [14-1:0]     lower_zero_output_cnt_i,
+    input [14-1:0]     upper_zero_output_cnt_i,
+    input [14-1:0]     max_arr_pnt_i,
+    input  [14-1:0]    wpnt_init_offset_i,
+    
+    // for visualizing and debugging
+    input [3-1:0]      general_buf_state_i,
+	
+	// bus logic
 	input			ctrl_buf_we_i,
 	input			ref_buf_we_i,
 	input	[14-1:0]	buf_addr_i,
 	input	[14-1:0]	buf_wdata_i,
-	output	reg [14-1:0]	ctrl_buf_rdata_o,
-	output	reg [14-1:0]	ref_buf_rdata_o,
-	output reg [14-1:0]    general_buf_rdata_o,
-	input [3-1:0]      general_buf_state_i,
-	input  [14-1:0]    offset_i,
-	input  [14-1:0]    rpnt_init_offset_i,
-	input [3-1:0]      avg_state_i,
-	input              avg_rstn_i
+	output reg [14-1:0]    general_buf_rdata_o
 
 );
 //////////////////////////////
@@ -74,10 +80,10 @@ sram init_ctrl_sig_ram(
 reg [14-1:0]    ctrl_sig_waddr;
 reg [14-1:0]    ctrl_sig_raddr;
 reg             ctrl_sig_we;
-reg [14-1:0]    ctrl_sig_wdata;
-wire [14-1:0]    ctrl_sig_rdata;
+reg [29-1:0]    ctrl_sig_wdata;
+wire [29-1:0]    ctrl_sig_rdata;
 
-sram ctrl_sig_ram(
+big_bram ctrl_sig_ram(
     .clk_i(clk_i),
     .waddr_i(ctrl_sig_waddr),
     .raddr_i(ctrl_sig_raddr),
@@ -131,7 +137,7 @@ end
 
 
 ///CTRL SIG///
-reg [14-1:0] ctrl_sig_wf_val;
+reg [29-1:0] ctrl_sig_wf_val;
 
 reg [14-1:0] ctrl_sig_wpnt;
 reg [14-1:0] ctrl_sig_rpnt;
@@ -176,7 +182,13 @@ reg [29-1:0] scaled_error;
 reg first = 1'b1;
 reg trig_it_done = 1'b0;
 
-reg [14-1:0] ctrl_sig_wf_preval;
+reg [29-1:0] ctrl_sig_wf_preval;
+
+wire [14-1:0] avg_output_val;
+
+reg do_smoothing = 1'b0;
+
+reg zero_output = 1'b0;
 
 always @(posedge clk_i)
 begin
@@ -188,32 +200,44 @@ begin
             
             error <= $signed(ref_rdata) - $signed(pd_rdata) + $signed(offset_i);
             scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
-            ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata) + $signed(scaled_error[29-1:15]); //need to include averager
+            ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata) + $signed(scaled_error); //need to include averager
             
             if ($signed(ctrl_sig_wf_preval) < 0)
-                ctrl_sig_wf_val <= 14'd0;
+                ctrl_sig_wf_val <= 29'd0;
             else
                 ctrl_sig_wf_val <= ctrl_sig_wf_preval;           
         end
         else begin
-            ctrl_sig_we <= 1'b0;
-            output_val <= ctrl_sig_rdata;
+            if (!zero_output) begin
+                output_val <= ctrl_sig_rdata[29-1:15];
+            end
+            else begin
+                output_val <= 14'd0;
+            end    
+            
+            if (do_smoothing) begin
+                ctrl_sig_we <= 1'b1;
+                ctrl_sig_wf_val <= $signed({avg_output_val,{15{1'b0}}});
+            end
+            else begin
+                ctrl_sig_we <= 1'b0;
+            end
         end
 
     end
     else begin //if (trigger_i) begin
         ctrl_sig_we <= 1'b1;
-        ctrl_sig_wf_val <= $signed(init_ctrl_sig_rdata);
+        ctrl_sig_wf_val <= $signed({init_ctrl_sig_rdata,{15{1'b0}}});
     end
 end
 
-assign ctrl_sig_o = output_val;
+assign ctrl_sig_o = avg_output_val; //NOTE: should use averaged output!
 
 
 ///MOVING AVERAGER///
-wire [14-1:0] avg_output_val;
 
-moving_averager_64 avg(
+
+moving_averager_4 avg( // 4 bit averager
     .clk_i(clk_i),
     .rstn_i(rstn_i),
     .dat_i(output_val),
@@ -225,11 +249,12 @@ moving_averager_64 avg(
 ///////////////////////
 
 
-reg [2-1:0] pnt_logic_state = 2'b00;
-reg [2-1:0] wait_for_high = 2'b00;
-reg [2-1:0] high = 2'b01;
-reg [2-1:0] wait_for_low = 2'b10;
-reg [2-1:0] low = 2'b11;
+reg [3-1:0] pnt_logic_state = 3'b000;
+reg [3-1:0] wait_for_high = 3'b000;
+reg [3-1:0] high = 3'b001;
+reg [3-1:0] wait_for_low = 3'b010;
+reg [3-1:0] low = 3'b011;
+reg [3-1:0] initialize = 3'b100;
 
 wire [14-1:0] ctrl_sig_nrpnt;
 wire [14-1:0] pd_nwpnt;
@@ -237,6 +262,8 @@ wire [14-1:0] ctrl_sig_nwpnt;
 wire [14-1:0] init_ctrl_sig_nrpnt;
 wire [14-1:0] ref_nrpnt;
 wire [14-1:0] pd_nrpnt;
+
+reg smoothing_even_odd_cnt = 1'b0;
 always @(posedge clk_i)
 begin
     case (pnt_logic_state)
@@ -251,20 +278,35 @@ begin
                 
                 if (do_init_i) begin
                     ctrl_sig_wpnt <= 14'd0;
+                    pnt_logic_state <= initialize;
+                end
+                else if (do_smoothing) begin
+                    
+                    smoothing_even_odd_cnt <= !(smoothing_even_odd_cnt);
+                    
+                    ctrl_sig_wpnt <= wpnt_init_offset_i + {{13{1'b0}},smoothing_even_odd_cnt};
+
                 end
             end
         high:
             begin
-                if (ctrl_sig_nrpnt < 14'd16383) begin
+                if (ctrl_sig_nrpnt < max_arr_pnt_i) begin
                     ctrl_sig_rpnt <= ctrl_sig_nrpnt;
                     pd_wpnt <= pd_nwpnt;
                     init_ctrl_sig_rpnt <= init_ctrl_sig_nrpnt;
-                    if (do_init_i) begin
+                    if (do_smoothing) begin
                         ctrl_sig_wpnt <= ctrl_sig_nwpnt;
+                    end
+                    if ((ctrl_sig_rpnt < lower_zero_output_cnt_i) || (ctrl_sig_rpnt > upper_zero_output_cnt_i)) begin
+                        zero_output <= 1'b1;
+                    end
+                    else begin
+                        zero_output <= 1'b0;
                     end
                 end
                 else begin
                     pnt_logic_state <= wait_for_low;
+                    zero_output <= 1'b0;
                 end
             end
         wait_for_low:
@@ -276,10 +318,16 @@ begin
                 ref_rpnt <= 14'd6;
                 ctrl_sig_rpnt <= 14'd4;
                 ctrl_sig_wpnt <= 14'd0;
+                
+                if (do_init_i) begin
+                    init_ctrl_sig_rpnt <= 14'd0;
+                    pnt_logic_state <= initialize;
+                end
+                
             end
         low:
             begin
-                if (ref_nrpnt < 14'd16383) begin
+                if (ref_nrpnt < max_arr_pnt_i) begin
                     pd_rpnt <= pd_nrpnt;
                     ref_rpnt <= ref_nrpnt;
                     ctrl_sig_rpnt <= ctrl_sig_nrpnt;
@@ -288,6 +336,16 @@ begin
                 else begin
                     pnt_logic_state <= wait_for_high;
                 end  
+            end
+        initialize:
+            begin
+                if (ctrl_sig_nwpnt < max_arr_pnt_i) begin
+                    ctrl_sig_wpnt <= ctrl_sig_nwpnt;
+                    init_ctrl_sig_rpnt <= init_ctrl_sig_nrpnt;
+                end
+                else if (!do_init_i) begin
+                    pnt_logic_state <= wait_for_high;
+                end
             end
     endcase
 
@@ -303,7 +361,37 @@ assign pd_nrpnt = pd_rpnt + 14'd1;
 
 
 
+reg [14-1:0] trigger_cnt = 14'd0;
+reg          wait_for_high_trigger = 1'b1;
 
+always @(posedge clk_i)
+begin
+    if (smoothing_rstn_i) begin
+        trigger_cnt <= 14'd0;
+        wait_for_high_trigger = 1'b1;
+        do_smoothing <= 1'b0;
+    end
+    else begin
+        if (wait_for_high_trigger) begin
+            if (trigger_i) begin
+                trigger_cnt <= trigger_cnt + 14'd1;
+                wait_for_high_trigger <= 1'b0;
+            end
+        end
+        else begin
+            if (!trigger_i) begin
+                if (trigger_cnt == smoothing_cycles_i) begin
+                    trigger_cnt <= 14'd0;
+                    do_smoothing <= 1'b1;
+                end
+                else begin
+                    do_smoothing <= 1'b0;
+                end
+                wait_for_high_trigger <= 1'b1;
+            end
+        end
+    end
+end
 
 
 
@@ -342,7 +430,10 @@ begin
         
         // to be read out when trigger is high
         3'b100: begin general_out <= $signed(output_val); end // controller output
+        
         3'b101: begin general_out <= $signed(init_ctrl_sig_rdata); end
+        
+        3'b111: begin general_out <= $signed(avg_output_val); end
     endcase
 end
 

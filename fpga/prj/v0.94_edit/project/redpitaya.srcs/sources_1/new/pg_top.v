@@ -81,8 +81,6 @@ calibrator cal(
 
 wire [14-1:0] avg_pd;
 
-reg [3-1:0] avg_state;
-reg avg_rstn;
 
 moving_averager_4 avg( //4 bit averager
     .clk_i(clk_i),
@@ -102,7 +100,21 @@ reg pctrl_buf_we;
 reg pctrl_ref_buf_we;
 
 reg do_init = 1'b0;
-reg trigger = 1'b0;
+reg software_trigger = 1'b0;
+reg trigger_select = 1'b0;
+
+reg trigger;
+
+always @(posedge clk_i)
+begin
+    if (trigger_select == 1'b0) begin
+        trigger <= trigger_i;
+    end
+    else begin
+        trigger <= software_trigger;
+    end
+end
+
 
 reg [14-1:0] pctrl_buf_addr;
 
@@ -114,39 +126,49 @@ wire [14-1:0] pctrl_ctrl_sig;
 wire [14-1:0] pctrl_pd_i;
 
 reg [14-1:0] offset;
-reg [14-1:0] rpnt_init_offset;
+reg [14-1:0] wpnt_init_offset;
 
 reg smoothing_rstn;
 reg [14-1:0] smoothing_cycles;
-reg [14-1:0] zero_output_del = 14'd16383; //set to maxval initially
+reg [14-1:0] upper_zero_output_cnt = 14'd16383; //set to maxval initially
+reg [14-1:0] lower_zero_output_cnt = 14'd0;
 reg [14-1:0] max_arr_pnt = 14'd16383;
-controller_6 pctrl(
+
+
+controller pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	
-	.trigger_i(trigger_i),		// note: this is the trigger for the pulse generation
-	//.trigger_i(trigger),
-	.do_init_i(do_init), // bug
+	.trigger_i(trigger),
+	.do_init_i(do_init), 
 	
+	// signals
 	.ctrl_sig_o(pctrl_ctrl_sig),
 	.pd_i(avg_pd),
 	.test_sig_o(test_sig_o),
 	
+	// main control parameters
 	.k_p_i(k_p),
 	.delta_pd_i(delta_pd),
+	.offset_i(offset),
+	.smoothing_rstn_i(smoothing_rstn),
+    .smoothing_cycles_i(smoothing_cycles),
 	
+	// additional control parameters
+	.lower_zero_output_cnt_i(lower_zero_output_cnt),
+    .upper_zero_output_cnt_i(upper_zero_output_cnt),
+    .max_arr_pnt_i(max_arr_pnt),
+    .wpnt_init_offset_i(wpnt_init_offset),
+        
+    // for visualizing and debugging
+    .general_buf_state_i(general_buf_state),
+    
+    // bus logic
 	.ctrl_buf_we_i(pctrl_buf_we),			// note: we want to write the ref_wf from memory into an array
 	.ref_buf_we_i(pctrl_ref_buf_we),
 	.buf_addr_i(pctrl_buf_addr),
 	.buf_wdata_i(sys_wdata[14-1:0]),
-	.general_buf_rdata_o(pctrl_general_buf_rdata),
-	.general_buf_state_i(general_buf_state),
-	.offset_i(offset),
-	.ctrl_sig_wpnt_start_i(rpnt_init_offset),
-	.smoothing_rstn_i(smoothing_rstn),
-	.smoothing_cycles_i(smoothing_cycles),
-	.zero_output_del_i(zero_output_del),
-	.max_arr_pnt_i(max_arr_pnt)
+	.general_buf_rdata_o(pctrl_general_buf_rdata)
 	
 );
 
@@ -199,21 +221,29 @@ begin
 		
 		if (sys_wen) begin
 			case(sys_addr[19:0])
-				20'h0: begin module_mode	<= sys_wdata[0]; end // this writes data from memory to the internal module_mode register
-				20'h4: begin k_p		<= sys_wdata[14-1:0]; end
-				20'h8: begin delta_pd		<= sys_wdata[14-1:0]; end
-				20'hC: begin general_buf_state <= sys_wdata[3-1:0]; end
-				20'h10: begin do_init		<= sys_wdata[0]; end
-				20'h14: begin trigger		<= sys_wdata[0]; end
-				20'h18: begin cal_trigger		<= sys_wdata[0]; end
-				20'h1C: begin offset        <= sys_wdata[14-1:0]; end
-				20'h20: begin avg_state <= sys_wdata[3-1:0]; end
-				20'h24: begin avg_rstn		<= sys_wdata[0]; end
-				20'h28: begin rpnt_init_offset        <= sys_wdata[14-1:0]; end
-				20'h2C: begin smoothing_rstn <= sys_wdata[0]; end
-				20'h30: begin smoothing_cycles		<= sys_wdata[14-1:0]; end
-				30'h34: begin zero_output_del    <= sys_wdata[14-1:0]; end
-				30'h38: begin max_arr_pnt   <= sys_wdata[14-1:0]; end
+			    // module parameters
+				20'h0: begin module_mode                <= sys_wdata[0]; end // 0: calib mode, 1: ctrl mode
+				20'h4: begin cal_trigger                <= sys_wdata[0]; end
+				20'h8: begin do_init		            <= sys_wdata[0]; end
+				20'hC: begin software_trigger		    <= sys_wdata[0]; end
+				20'h10: begin trigger_select		    <= sys_wdata[0]; end
+				
+				
+				// main control parameters
+				20'h14: begin k_p                       <= sys_wdata[14-1:0]; end
+				20'h18: begin delta_pd		            <= sys_wdata[14-1:0]; end
+				20'h2C: begin offset                    <= sys_wdata[14-1:0]; end				
+				20'h30: begin smoothing_rstn            <= sys_wdata[0]; end
+				20'h34: begin smoothing_cycles		    <= sys_wdata[14-1:0]; end
+				
+				// additional control parameters
+				20'h38: begin lower_zero_output_cnt     <= sys_wdata[14-1:0]; end
+				20'h3C: begin upper_zero_output_cnt     <= sys_wdata[14-1:0]; end
+				20'h40: begin max_arr_pnt               <= sys_wdata[14-1:0]; end
+				20'h44: begin wpnt_init_offset          <= sys_wdata[14-1:0]; end
+				
+				// for visualizing and debugging
+				20'h48: begin general_buf_state         <= sys_wdata[3-1:0]; end
 			endcase
 		end
 	end
@@ -233,24 +263,31 @@ begin
 		sys_err <= 1'b0;
 		
 		casez (sys_addr[19:0])
+		    // module parameters
 			20'h0: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, module_mode}; end
-			20'h4: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, k_p}; end
-			20'h8: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_pd}; end
-			20'hC: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, general_buf_state}; end
-			20'h10: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, do_init}; end
-			20'h14: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, trigger}; end
-			20'h18: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, cal_trigger}; end
-			20'h1C: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, offset}; end
-			20'h20: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, avg_state}; end
-			20'h24: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, avg_rstn}; end
-			20'h28: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, rpnt_init_offset}; end
-			20'h2C: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, smoothing_rstn}; end
-			20'h30: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, smoothing_cycles}; end
-			20'h34: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, zero_output_del}; end
-			20'h38: begin sys_ack <= sys_en;    sys_rdata <= {{32-14{1'b0}}, max_arr_pnt}; end
+			20'h4: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, cal_trigger}; end
+			20'h8: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, do_init}; end
+			20'hC: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, software_trigger}; end
+			20'h10: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, trigger_select}; end
 			
+			// main control parameters
+			20'h14: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, k_p}; end
+			20'h18: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_pd}; end
+			20'h2C: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, offset}; end
+			20'h30: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, smoothing_rstn}; end
+            20'h34: begin sys_ack <= sys_en;    sys_rdata <= {{32-14{1'b0}}, smoothing_cycles}; end
+                        
+            // additional control parameters
+			20'h38: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, lower_zero_output_cnt}; end
+			20'h3C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, upper_zero_output_cnt}; end
+			20'h40: begin sys_ack <= sys_en;    sys_rdata <= {{32-14{1'b0}}, max_arr_pnt}; end
+			20'h44: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, wpnt_init_offset}; end
+			
+			// for visualizing and debugging		
+			20'h48: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, general_buf_state}; end
+			
+			// waveforms
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory
-
 			20'h4zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_general_buf_rdata}; end
 			
 			default: begin sys_ack <= sys_en; sys_rdata <= 32'h0; end
