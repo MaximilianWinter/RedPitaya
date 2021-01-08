@@ -2,8 +2,8 @@
 # Vivado v2017.2 (64-bit)
 # SW Build 1909853 on Thu Jun 15 18:39:09 MDT 2017
 # IP Build 1909766 on Thu Jun 15 19:58:00 MDT 2017
-# Start of session at: Fri Jan  8 15:30:50 2021
-# Process ID: 4464
+# Start of session at: Fri Jan  8 17:58:16 2021
+# Process ID: 6344
 # Current directory: C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.runs/impl_1
 # Command line: vivado.exe -log red_pitaya_top.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source red_pitaya_top.tcl -notrace
 # Log file: C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.runs/impl_1/red_pitaya_top.vdi
