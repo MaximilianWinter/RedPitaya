@@ -94,7 +94,6 @@ moving_averager_4 avg( //4 bit averager
 ///////////////////////
 
 reg [14-1:0] k_p;
-reg [14-1:0] delta_pd;
 
 reg pctrl_buf_we;
 reg pctrl_ref_buf_we;
@@ -119,6 +118,10 @@ end
 reg [14-1:0] pctrl_buf_addr;
 
 wire [14-1:0] pctrl_general_buf_rdata;
+wire [14-1:0] init_ctrl_sig_rdata;
+wire [14-1:0] pd_rdata;
+wire [14-1:0] ref_rdata;
+wire [14-1:0] ctrl_sig_rdata;
 
 reg [3-1:0] general_buf_state;
 
@@ -130,12 +133,23 @@ reg [14-1:0] wpnt_init_offset;
 
 reg smoothing_rstn;
 reg [14-1:0] smoothing_cycles;
-reg [14-1:0] upper_zero_output_cnt = 14'd16383; //set to maxval initially
+reg [14-1:0] upper_zero_output_cnt = 14'd4095; //set to maxval initially
 reg [14-1:0] lower_zero_output_cnt = 14'd0;
-reg [14-1:0] max_arr_pnt = 14'd16383;
+reg [14-1:0] max_arr_pnt = 14'd4095;
 
+reg [14-1:0] delta_center_init;
+reg [14-1:0] deltashift_upper;
+reg [14-1:0] deltashift_lower;
+reg [14_1:0] patience;
+reg [14-1:0] deltajump_upper;
+reg [14-1:0] deltajump_lower;
+wire [14-1:0] delta_center;
 
-controller pctrl(
+wire [14-1:0] err_0;
+wire [14-1:0] err_1;
+wire [14-1:0] err_2;
+/*
+controller_delta_finder pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	
@@ -149,7 +163,53 @@ controller pctrl(
 	
 	// main control parameters
 	.k_p_i(k_p),
-	.delta_pd_i(delta_pd),
+	.offset_i(offset),
+	.smoothing_rstn_i(smoothing_rstn),
+    .smoothing_cycles_i(smoothing_cycles),
+    .delta_center_init_i(delta_center_init),
+    .deltashift_upper_i(deltashift_upper),
+    .deltashift_lower_i(deltashift_lower),
+    .patience_i(patience),
+    .deltajump_upper_i(deltajump_upper),
+    .deltajump_lower_i(deltajump_lower),
+    .delta_center_o(delta_center),
+    .err_0_o(err_0),
+    .err_1_o(err_1),
+    .err_2_o(err_2),
+	
+	// additional control parameters
+	.lower_zero_output_cnt_i(lower_zero_output_cnt),
+    .upper_zero_output_cnt_i(upper_zero_output_cnt),
+    .max_arr_pnt_i(max_arr_pnt),
+    .wpnt_init_offset_i(wpnt_init_offset),
+        
+    // for visualizing and debugging
+    .general_buf_state_i(general_buf_state),
+    
+    // bus logic
+	.ctrl_buf_we_i(pctrl_buf_we),			// note: we want to write the ref_wf from memory into an array
+	.ref_buf_we_i(pctrl_ref_buf_we),
+	.buf_addr_i(pctrl_buf_addr),
+	.buf_wdata_i(sys_wdata[14-1:0]),
+	.general_buf_rdata_o(pctrl_general_buf_rdata)
+	
+);
+*/
+controller_dual_ram pctrl(
+	.clk_i(clk_i),
+	.rstn_i(rstn_i),
+	
+	.trigger_i(trigger),
+	.do_init_i(do_init), 
+	
+	// signals
+	.ctrl_sig_o(pctrl_ctrl_sig),
+	.pd_i(avg_pd),
+	.test_sig_o(test_sig_o),
+	
+	// main control parameters
+	.k_p_i(k_p),
+	.delta_pd_i(delta_center_init),
 	.offset_i(offset),
 	.smoothing_rstn_i(smoothing_rstn),
     .smoothing_cycles_i(smoothing_cycles),
@@ -168,7 +228,11 @@ controller pctrl(
 	.ref_buf_we_i(pctrl_ref_buf_we),
 	.buf_addr_i(pctrl_buf_addr),
 	.buf_wdata_i(sys_wdata[14-1:0]),
-	.general_buf_rdata_o(pctrl_general_buf_rdata)
+	.general_buf_rdata_o(pctrl_general_buf_rdata),
+	.init_ctrl_sig_rdata_o(init_ctrl_sig_rdata),
+	.pd_rdata_o(pd_rdata),
+	.ref_rdata_o(ref_rdata),
+	.ctrl_sig_rdata_o(ctrl_sig_rdata)
 	
 );
 
@@ -231,7 +295,7 @@ begin
 				
 				// main control parameters
 				20'h14: begin k_p                       <= sys_wdata[14-1:0]; end
-				20'h18: begin delta_pd		            <= sys_wdata[14-1:0]; end
+				//20'h18: begin delta_pd		            <= sys_wdata[14-1:0]; end
 				20'h2C: begin offset                    <= sys_wdata[14-1:0]; end				
 				20'h30: begin smoothing_rstn            <= sys_wdata[0]; end
 				20'h34: begin smoothing_cycles		    <= sys_wdata[14-1:0]; end
@@ -244,6 +308,15 @@ begin
 				
 				// for visualizing and debugging
 				20'h48: begin general_buf_state         <= sys_wdata[3-1:0]; end
+				
+				// new params:
+				20'h4C: begin delta_center_init		            <= sys_wdata[14-1:0]; end
+				20'h50: begin deltashift_upper		            <= sys_wdata[14-1:0]; end
+				20'h54: begin deltashift_lower		            <= sys_wdata[14-1:0]; end
+				20'h58: begin patience		            <= sys_wdata[14-1:0]; end
+				20'h5C: begin deltajump_upper		            <= sys_wdata[14-1:0]; end
+				20'h60: begin deltajump_lower		            <= sys_wdata[14-1:0]; end
+			
 			endcase
 		end
 	end
@@ -272,7 +345,7 @@ begin
 			
 			// main control parameters
 			20'h14: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, k_p}; end
-			20'h18: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_pd}; end
+			//20'h18: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_pd}; end
 			20'h2C: begin sys_ack <= sys_en; sys_rdata <= {{32-14{1'b0}}, offset}; end
 			20'h30: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, smoothing_rstn}; end
             20'h34: begin sys_ack <= sys_en;    sys_rdata <= {{32-14{1'b0}}, smoothing_cycles}; end
@@ -286,9 +359,26 @@ begin
 			// for visualizing and debugging		
 			20'h48: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, general_buf_state}; end
 			
+			// new params:
+			20'h4C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_center_init}; end
+			20'h50: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltashift_upper}; end
+			20'h54: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltashift_lower}; end
+			20'h58: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, patience}; end
+			20'h5C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltajump_upper}; end
+			20'h60: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltajump_lower}; end
+			20'h64: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_center}; end
+			
+			20'h68: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, err_0}; end
+			20'h6C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, err_1}; end
+			20'h70: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, err_2}; end
+			
 			// waveforms
+			20'h1zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, init_ctrl_sig_rdata}; end
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory
+			20'h3zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, ref_rdata}; end
 			20'h4zzzz: begin sys_ack <= ack_dly; 	sys_rdata <= {{18{1'b0}}, pctrl_general_buf_rdata}; end
+			20'h5zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, pd_rdata}; end
+			20'h6zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, ctrl_sig_rdata}; end
 			
 			default: begin sys_ack <= sys_en; sys_rdata <= 32'h0; end
 		endcase
