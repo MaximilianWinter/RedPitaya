@@ -208,7 +208,7 @@ begin
     ctrl_sig_waddr_B <= 14'd0;
     ctrl_sig_raddr_B <= buf_addr_i;
     
-    ctrl_sig_rdata_o <= ctrl_sig_rdata_B;
+    ctrl_sig_rdata_o <= ctrl_sig_rdata_B[29-1:15];
 end
 
 
