@@ -138,7 +138,7 @@ reg [14-1:0] upper_zero_output_cnt = 14'd4095; //set to maxval initially
 reg [14-1:0] lower_zero_output_cnt = 14'd0;
 reg [14-1:0] max_arr_pnt = 14'd4095;
 
-reg [14-1:0] delta_center_init;
+reg [14-1:0] delta_center;
 reg [14-1:0] deltashift_upper;
 reg [14-1:0] deltashift_lower;
 reg [14_1:0] patience;
@@ -146,7 +146,7 @@ reg [14-1:0] deltajump_upper;
 reg [14-1:0] deltajump_lower;
 reg [14-1:0] min_delta_range;
 reg [14-1:0] max_delta_range;
-wire [14-1:0] delta_center;
+wire [14-1:0] ctrl_sig_rpnt_shift;
 
 wire [32-1:0] err_0;
 wire [32-1:0] err_1;
@@ -171,7 +171,7 @@ controller_dual_ram_delta_finder pctrl(
 	.offset_i(offset),
 	.smoothing_rstn_i(smoothing_rstn),
     .smoothing_cycles_i(smoothing_cycles),
-    .delta_center_init_i(delta_center_init),
+    .delta_center_i(delta_center),
     .deltashift_upper_i(deltashift_upper),
     .deltashift_lower_i(deltashift_lower),
     .patience_i(patience),
@@ -179,7 +179,7 @@ controller_dual_ram_delta_finder pctrl(
     .deltajump_lower_i(deltajump_lower),
     .min_delta_range_i(min_delta_range),
     .max_delta_range_i(max_delta_range),
-    .delta_center_o(delta_center),
+    .ctrl_sig_rpnt_shift_o(ctrl_sig_rpnt_shift),
     .err0_o(err_0),
     .err1_o(err_1),
     .err2_o(err_2),
@@ -281,7 +281,7 @@ begin
 				20'h48: begin general_buf_state         <= sys_wdata[3-1:0]; end
 				
 				// new params:
-				20'h4C: begin delta_center_init		            <= sys_wdata[14-1:0]; end
+				20'h4C: begin delta_center		            <= sys_wdata[14-1:0]; end
 				20'h50: begin deltashift_upper		            <= sys_wdata[14-1:0]; end
 				20'h54: begin deltashift_lower		            <= sys_wdata[14-1:0]; end
 				20'h58: begin patience		            <= sys_wdata[14-1:0]; end
@@ -334,13 +334,13 @@ begin
 			20'h48: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, general_buf_state}; end
 			
 			// new params:
-			20'h4C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_center_init}; end
+			20'h4C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_center}; end
 			20'h50: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltashift_upper}; end
 			20'h54: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltashift_lower}; end
 			20'h58: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, patience}; end
 			20'h5C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltajump_upper}; end
 			20'h60: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, deltajump_lower}; end
-			20'h64: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, delta_center}; end
+			20'h64: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, ctrl_sig_rpnt_shift}; end
 			
 			20'h68: begin sys_ack <= sys_en;	sys_rdata <= {err_0}; end
 			20'h6C: begin sys_ack <= sys_en;	sys_rdata <= {err_1}; end

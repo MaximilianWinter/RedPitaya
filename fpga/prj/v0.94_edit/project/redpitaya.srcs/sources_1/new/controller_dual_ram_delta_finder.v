@@ -38,7 +38,7 @@ module controller_dual_ram_delta_finder(
     input              smoothing_rstn_i,
     input [14-1:0]     smoothing_cycles_i,
     
-    input [14-1:0]      delta_center_init_i,
+    input [14-1:0]      delta_center_i,
     input [14-1:0]      deltashift_upper_i,
     input [14-1:0]      deltashift_lower_i,
     input [14-1:0]      patience_i,
@@ -46,7 +46,7 @@ module controller_dual_ram_delta_finder(
     input [14-1:0]      deltajump_lower_i,
     input [14-1:0]      min_delta_range_i,
     input [14-1:0]      max_delta_range_i,
-    output [14-1:0]     delta_center_o,
+    output [14-1:0]     ctrl_sig_rpnt_shift_o,
     output [32-1:0]     err0_o,
     output [32-1:0]     err1_o,
     output [32-1:0]     err2_o,
@@ -359,7 +359,6 @@ wire [14-1:0] pd_nrpnt;
 
 reg smoothing_even_odd_cnt = 1'b0;
 
-reg [14-1:0] delta_center = 14'd0;
 reg [14-1:0] ctrl_sig_rpnt_shift = 14'd0;
 always @(posedge clk_i)
 begin
@@ -369,32 +368,34 @@ begin
                 if (trigger_i)
                     pnt_logic_state <= high;
                 // initialize pointers:
-                ctrl_sig_rpnt <= 14'd0;// + $signed(ctrl_sig_rpnt_shift);
+                
                 pd_wpnt <= 14'd0;
                 init_ctrl_sig_rpnt <= 14'd0;
                 
                 if (do_init_i) begin
                     ctrl_sig_wpnt <= 14'd0;
+                    ctrl_sig_rpnt <= 14'd0;
                     pnt_logic_state <= initialize;
                 end
                 else if (do_smoothing) begin
-                    
                     smoothing_even_odd_cnt <= !(smoothing_even_odd_cnt);
-                    
                     ctrl_sig_wpnt <= wpnt_init_offset_i + {{13{1'b0}},smoothing_even_odd_cnt};
-
+                    ctrl_sig_rpnt <= 14'd0;
+                end
+                else begin
+                    ctrl_sig_rpnt <= 14'd0 + $signed(ctrl_sig_rpnt_shift);
                 end
             end
         high:
             begin
-                if (ctrl_sig_nrpnt < max_arr_pnt_i) begin
+                if (pd_nwpnt < max_arr_pnt_i) begin
                     ctrl_sig_rpnt <= ctrl_sig_nrpnt;
                     pd_wpnt <= pd_nwpnt;
                     init_ctrl_sig_rpnt <= init_ctrl_sig_nrpnt;
                     if (do_smoothing) begin
                         ctrl_sig_wpnt <= ctrl_sig_nwpnt;
                     end
-                    if ((ctrl_sig_rpnt < lower_zero_output_cnt_i) || (ctrl_sig_rpnt > upper_zero_output_cnt_i)) begin
+                    if ((pd_wpnt < lower_zero_output_cnt_i) || (pd_wpnt > upper_zero_output_cnt_i)) begin
                         zero_output <= 1'b1;
                     end
                     else begin
@@ -411,7 +412,7 @@ begin
                 if (!trigger_i)
                     pnt_logic_state <= low;
                     
-                pd_rpnt <= 14'd6 + delta_center;
+                pd_rpnt <= 14'd6 + delta_center_i;
                 ref_rpnt <= 14'd6;
                 ctrl_sig_rpnt <= 14'd4;
                 ctrl_sig_wpnt <= 14'd0;
@@ -531,7 +532,7 @@ begin
                         delta_finder_state <= delta_get_error_sums;
                     end
                     ref_rpnt_B <= 14'd0 + min_delta_range_i;
-                    pd_rpnt_B <= (delta_center-deltashift_lower_i) + min_delta_range_i;
+                    pd_rpnt_B <= (delta_center_i-deltashift_lower_i) + min_delta_range_i; //peak will be later
                     
                     error_sum_index <= 2'd0;
                     error_sum[0] <= 32'd0;
@@ -557,13 +558,13 @@ begin
                     else begin
                         ref_rpnt_B <= 14'd0 + min_delta_range_i;
                         if (error_sum_index == 2'b00) begin
-                            pd_rpnt_B <= delta_center + min_delta_range_i;
+                            pd_rpnt_B <= delta_center_i + min_delta_range_i;
                             
                             
                             error_sum_index <= 2'b01;
                         end
                         else if (error_sum_index == 2'b01) begin
-                            pd_rpnt_B <= (delta_center + deltashift_upper_i)+ min_delta_range_i;
+                            pd_rpnt_B <= (delta_center_i + deltashift_upper_i)+ min_delta_range_i;
                     
                             error_sum_index <= 2'b10;
                         end
@@ -604,12 +605,12 @@ begin
             evaluate_patience_cnts:
                 begin
                     if (lower_patience_cnt == patience_i) begin
-                        delta_center <= delta_center - deltajump_lower_i;
+                        ctrl_sig_rpnt_shift <= ctrl_sig_rpnt_shift - deltajump_lower_i; // PD peak should be later
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
                     end
                     else if (upper_patience_cnt == patience_i) begin
-                        delta_center <= delta_center + deltajump_upper_i;
+                        ctrl_sig_rpnt_shift <= ctrl_sig_rpnt_shift + deltajump_upper_i; // PD peak should be earlier
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
                     end
@@ -625,7 +626,7 @@ begin
         endcase        
     end
     else begin
-        delta_center <= delta_center_init_i;
+        ctrl_sig_rpnt_shift <= 14'd0;
         delta_finder_state <= delta_wait_for_low;
         lower_patience_cnt <= 14'd0;
         upper_patience_cnt <= 14'd0;
@@ -635,7 +636,7 @@ end
 assign err0_o = err0;
 assign err1_o = err1;
 assign err2_o = err2;
-assign delta_center_o = delta_center;
+assign  ctrl_sig_rpnt_shift_o =  ctrl_sig_rpnt_shift;
 
 assign delta_finder_state_o = delta_finder_state;
 
