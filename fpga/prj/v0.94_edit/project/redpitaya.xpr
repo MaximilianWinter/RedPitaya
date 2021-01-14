@@ -58,6 +58,9 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
+        <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_axi_protocol_converter_0_0/system_axi_protocol_converter_0_0.xci">
+          <Proxy FileSetName="system_axi_protocol_converter_0_0"/>
+        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_proc_sys_reset_0/system_proc_sys_reset_0.xci">
           <Proxy FileSetName="system_proc_sys_reset_0"/>
         </CompFileExtendedInfo>
@@ -69,9 +72,6 @@
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_xlconstant_0/system_xlconstant_0.xci">
           <Proxy FileSetName="system_xlconstant_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system.bd" FileRelPathName="ip/system_axi_protocol_converter_0_0/system_axi_protocol_converter_0_0.xci">
-          <Proxy FileSetName="system_axi_protocol_converter_0_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/axi_master.v">

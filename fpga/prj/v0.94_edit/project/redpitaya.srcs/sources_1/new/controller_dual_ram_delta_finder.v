@@ -44,6 +44,8 @@ module controller_dual_ram_delta_finder(
     input [14-1:0]      patience_i,
     input [14-1:0]      deltajump_upper_i,
     input [14-1:0]      deltajump_lower_i,
+    input [14-1:0]      min_delta_range_i,
+    input [14-1:0]      max_delta_range_i,
     output [14-1:0]     delta_center_o,
     output [32-1:0]     err0_o,
     output [32-1:0]     err1_o,
@@ -358,6 +360,7 @@ wire [14-1:0] pd_nrpnt;
 reg smoothing_even_odd_cnt = 1'b0;
 
 reg [14-1:0] delta_center = 14'd0;
+reg [14-1:0] ctrl_sig_rpnt_shift = 14'd0;
 always @(posedge clk_i)
 begin
     case (pnt_logic_state)
@@ -366,7 +369,7 @@ begin
                 if (trigger_i)
                     pnt_logic_state <= high;
                 // initialize pointers:
-                ctrl_sig_rpnt <= 14'd0;
+                ctrl_sig_rpnt <= 14'd0;// + $signed(ctrl_sig_rpnt_shift);
                 pd_wpnt <= 14'd0;
                 init_ctrl_sig_rpnt <= 14'd0;
                 
@@ -527,8 +530,9 @@ begin
                     if (!trigger_i) begin
                         delta_finder_state <= delta_get_error_sums;
                     end
-                    ref_rpnt_B <= 14'd0;
-                    pd_rpnt_B <= (delta_center-deltashift_lower_i);
+                    ref_rpnt_B <= 14'd0 + min_delta_range_i;
+                    pd_rpnt_B <= (delta_center-deltashift_lower_i) + min_delta_range_i;
+                    
                     error_sum_index <= 2'd0;
                     error_sum[0] <= 32'd0;
                     error_sum[1] <= 32'd0;
@@ -537,7 +541,7 @@ begin
                 
             delta_get_error_sums:
                 begin
-                    if (ref_rpnt_B < 14'd4096) begin
+                    if (ref_rpnt_B < max_delta_range_i) begin
                         error_B <= $signed(ref_rdata_B) - $signed(pd_rdata_B) + $signed(offset_i);
                         
                         if ($signed(error_B) > 0) begin
@@ -551,13 +555,16 @@ begin
                         pd_rpnt_B <= pd_rpnt_B + 14'd1;
                     end
                     else begin
-                        ref_rpnt_B <= 14'd0;
+                        ref_rpnt_B <= 14'd0 + min_delta_range_i;
                         if (error_sum_index == 2'b00) begin
-                            pd_rpnt_B <= delta_center;
+                            pd_rpnt_B <= delta_center + min_delta_range_i;
+                            
+                            
                             error_sum_index <= 2'b01;
                         end
                         else if (error_sum_index == 2'b01) begin
-                            pd_rpnt_B <= (delta_center + deltashift_upper_i);
+                            pd_rpnt_B <= (delta_center + deltashift_upper_i)+ min_delta_range_i;
+                    
                             error_sum_index <= 2'b10;
                         end
                         else if (error_sum_index == 2'b10) begin

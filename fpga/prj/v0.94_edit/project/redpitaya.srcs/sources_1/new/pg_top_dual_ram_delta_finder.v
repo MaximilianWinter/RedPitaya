@@ -16,7 +16,8 @@
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments: only implemented for one channel; controller_4.v does smoothing automatically after
-//                      smoothing_cycles_i ctrl cycles; and sets output to zero after zero_output_del_i clk cycles
+//                      smoothing_cycles_i ctrl cycles; and sets output to zero after zero_output_del_i clk cycles;
+//                      included min/max delta range
 // 
 //////////////////////////////////////////////////////////////////////////////////
 /*
@@ -143,6 +144,8 @@ reg [14-1:0] deltashift_lower;
 reg [14_1:0] patience;
 reg [14-1:0] deltajump_upper;
 reg [14-1:0] deltajump_lower;
+reg [14-1:0] min_delta_range;
+reg [14-1:0] max_delta_range;
 wire [14-1:0] delta_center;
 
 wire [32-1:0] err_0;
@@ -174,6 +177,8 @@ controller_dual_ram_delta_finder pctrl(
     .patience_i(patience),
     .deltajump_upper_i(deltajump_upper),
     .deltajump_lower_i(deltajump_lower),
+    .min_delta_range_i(min_delta_range),
+    .max_delta_range_i(max_delta_range),
     .delta_center_o(delta_center),
     .err0_o(err_0),
     .err1_o(err_1),
@@ -282,6 +287,9 @@ begin
 				20'h58: begin patience		            <= sys_wdata[14-1:0]; end
 				20'h5C: begin deltajump_upper		            <= sys_wdata[14-1:0]; end
 				20'h60: begin deltajump_lower		            <= sys_wdata[14-1:0]; end
+				
+				20'h78: begin min_delta_range		            <= sys_wdata[14-1:0]; end
+				20'h7C: begin max_delta_range		            <= sys_wdata[14-1:0]; end
 			
 			endcase
 		end
@@ -339,6 +347,9 @@ begin
 			20'h70: begin sys_ack <= sys_en;	sys_rdata <= {err_2}; end
 			
 			20'h74: begin sys_ack <= sys_en;	sys_rdata <= {{32-3{1'b0}}, delta_finder_state}; end
+			
+			20'h78: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, min_delta_range}; end
+			20'h7C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, max_delta_range}; end
 			
 			// waveforms
 			20'h1zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, init_ctrl_sig_rdata}; end
