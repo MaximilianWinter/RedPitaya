@@ -42,15 +42,19 @@ module controller_dual_ram_delta_finder(
     input [14-1:0]      deltashift_upper_i,
     input [14-1:0]      deltashift_lower_i,
     input [14-1:0]      patience_i,
+    input [14-1:0]      center_patience_i,
     input [14-1:0]      deltajump_upper_i,
     input [14-1:0]      deltajump_lower_i,
     input [14-1:0]      min_delta_range_i,
     input [14-1:0]      max_delta_range_i,
+    input               start_delta_finder_i,
     output [14-1:0]     ctrl_sig_rpnt_shift_o,
     output [32-1:0]     err0_o,
     output [32-1:0]     err1_o,
     output [32-1:0]     err2_o,
     output [3-1:0]      delta_finder_state_o,
+    output reg [32-1:0] too_low_center_patience_cnt_o,
+    output reg [32-1:0] center_patience_cnt_o,
 	
 	// additional control parameters
     input [14-1:0]     lower_zero_output_cnt_i,
@@ -284,6 +288,8 @@ reg do_smoothing = 1'b0;
 
 reg zero_output = 1'b0;
 
+reg [14-1:0] k_p;
+
 always @(posedge clk_i)
 begin
     if (!do_init_i) begin
@@ -293,7 +299,7 @@ begin
             output_val <= 14'd0;
             
             error <= $signed(ref_rdata_A) - $signed(pd_rdata_A) + $signed(offset_i);
-            scaled_error <= $signed(error) * $signed({1'b0,k_p_i});
+            scaled_error <= $signed(error) * $signed({1'b0,k_p});
             ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata_A) + $signed(scaled_error); //need to include averager
             
             if ($signed(ctrl_sig_wf_preval) < 0)
@@ -474,7 +480,9 @@ begin
     else begin
         if (wait_for_high_trigger) begin
             if (trigger_i) begin
-                trigger_cnt <= trigger_cnt + 14'd1;
+                if (k_p != 14'd0) begin
+                    trigger_cnt <= trigger_cnt + 14'd1;
+                end
                 wait_for_high_trigger <= 1'b0;
             end
         end
@@ -521,10 +529,11 @@ reg [32-1:0] err2 = 32'd0;
 
 reg [14-1:0] upper_patience_cnt = 14'd0;
 reg [14-1:0] lower_patience_cnt = 14'd0;
+reg [14-1:0] center_patience_cnt = 14'd0;
 
 always @(posedge clk_i)
 begin   
-    if (!do_init_i) begin
+    if (!do_init_i && start_delta_finder_i) begin
         case (delta_finder_state)
             delta_wait_for_low:
                 begin
@@ -589,15 +598,18 @@ begin
                         if (err0 < err2) begin
                             lower_patience_cnt <= lower_patience_cnt + 14'd1;
                             upper_patience_cnt <= 14'd0;
+                            center_patience_cnt <= 14'd0;
                         end
                         else begin
                             lower_patience_cnt <= 14'd0;
                             upper_patience_cnt <= upper_patience_cnt + 14'd1;
+                            center_patience_cnt <= 14'd0;
                         end
                     end
                     else begin
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
+                        center_patience_cnt <= center_patience_cnt + 14'd1;
                     end
                     delta_finder_state <= evaluate_patience_cnts;
                 end
@@ -608,11 +620,22 @@ begin
                         ctrl_sig_rpnt_shift <= ctrl_sig_rpnt_shift - deltajump_lower_i; // PD peak should be later
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
+                        k_p <= 14'd0;
                     end
                     else if (upper_patience_cnt == patience_i) begin
                         ctrl_sig_rpnt_shift <= ctrl_sig_rpnt_shift + deltajump_upper_i; // PD peak should be earlier
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
+                        k_p <= 14'd0;
+                    end
+                    else if (center_patience_cnt >= center_patience_i) begin // maybe better to have a different patience_i here
+                        k_p <= k_p_i;
+                        center_patience_cnt <= center_patience_i; // avoiding overflow; not very elegant
+                        center_patience_cnt_o <= center_patience_cnt_o + 32'd1; // for debugging
+                    end
+                    else begin
+                        too_low_center_patience_cnt_o <= too_low_center_patience_cnt_o + 32'd1; // for debugging
+                        k_p <= 14'd0;
                     end
                     delta_finder_state <= delta_wait_for_high;
                 end
@@ -630,6 +653,10 @@ begin
         delta_finder_state <= delta_wait_for_low;
         lower_patience_cnt <= 14'd0;
         upper_patience_cnt <= 14'd0;
+        center_patience_cnt <= 14'd0;
+        k_p <= k_p_i;
+        too_low_center_patience_cnt_o <= 32'd0;
+        center_patience_cnt_o <= 32'd0;
     end
 end
 

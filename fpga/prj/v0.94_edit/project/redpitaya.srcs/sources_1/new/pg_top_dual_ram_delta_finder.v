@@ -139,13 +139,16 @@ reg [14-1:0] lower_zero_output_cnt = 14'd0;
 reg [14-1:0] max_arr_pnt = 14'd4095;
 
 reg [14-1:0] delta_center;
-reg [14-1:0] deltashift_upper;
-reg [14-1:0] deltashift_lower;
-reg [14_1:0] patience;
-reg [14-1:0] deltajump_upper;
-reg [14-1:0] deltajump_lower;
-reg [14-1:0] min_delta_range;
-reg [14-1:0] max_delta_range;
+reg [14-1:0] deltashift_upper = 14'd5;
+reg [14-1:0] deltashift_lower = 14'd5;
+reg [14_1:0] patience = 14'd100;
+reg [14-1:0] center_patience = 14'd100;
+reg [14-1:0] deltajump_upper = 14'd1;
+reg [14-1:0] deltajump_lower = 14'd1;
+reg [14-1:0] min_delta_range = 14'd0;
+reg [14-1:0] max_delta_range = 14'd4095;
+reg          start_delta_finder = 1'd0;
+
 wire [14-1:0] ctrl_sig_rpnt_shift;
 
 wire [32-1:0] err_0;
@@ -153,6 +156,9 @@ wire [32-1:0] err_1;
 wire [32-1:0] err_2;
 
 wire [3-1:0] delta_finder_state;
+
+wire [32-1:0] too_low_center_patience_cnt;
+wire [32-1:0] center_patience_cnt;
 
 controller_dual_ram_delta_finder pctrl(
 	.clk_i(clk_i),
@@ -175,16 +181,19 @@ controller_dual_ram_delta_finder pctrl(
     .deltashift_upper_i(deltashift_upper),
     .deltashift_lower_i(deltashift_lower),
     .patience_i(patience),
+    .center_patience_i(center_patience),
     .deltajump_upper_i(deltajump_upper),
     .deltajump_lower_i(deltajump_lower),
     .min_delta_range_i(min_delta_range),
     .max_delta_range_i(max_delta_range),
+    .start_delta_finder_i(start_delta_finder),
     .ctrl_sig_rpnt_shift_o(ctrl_sig_rpnt_shift),
     .err0_o(err_0),
     .err1_o(err_1),
     .err2_o(err_2),
     .delta_finder_state_o(delta_finder_state),
-	
+    .too_low_center_patience_cnt_o(too_low_center_patience_cnt),
+	.center_patience_cnt_o(center_patience_cnt),
 	// additional control parameters
 	.lower_zero_output_cnt_i(lower_zero_output_cnt),
     .upper_zero_output_cnt_i(upper_zero_output_cnt),
@@ -290,6 +299,10 @@ begin
 				
 				20'h78: begin min_delta_range		            <= sys_wdata[14-1:0]; end
 				20'h7C: begin max_delta_range		            <= sys_wdata[14-1:0]; end
+				
+				20'h80: begin center_patience		            <= sys_wdata[14-1:0]; end
+				20'h84: begin start_delta_finder            <= sys_wdata[0]; end
+				
 			
 			endcase
 		end
@@ -350,6 +363,13 @@ begin
 			
 			20'h78: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, min_delta_range}; end
 			20'h7C: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, max_delta_range}; end
+			
+			20'h80: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, center_patience}; end
+			20'h84: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, start_delta_finder}; end
+			
+			
+			20'h88: begin sys_ack <= sys_en;	sys_rdata <= {too_low_center_patience_cnt}; end
+			20'h8C: begin sys_ack <= sys_en;	sys_rdata <= {center_patience_cnt}; end
 			
 			// waveforms
 			20'h1zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, init_ctrl_sig_rdata}; end
