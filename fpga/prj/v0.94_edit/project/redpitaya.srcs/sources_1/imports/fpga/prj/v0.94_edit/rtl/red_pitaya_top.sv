@@ -655,7 +655,7 @@ pulse_generator_top pg_top(
 );
 */
 
-pg_top_dual_ram_delta_finder pg(
+pg_top_delta_robust pg(
     .clk_i  (adc_clk),
     .rstn_i (adc_rstn),
     
