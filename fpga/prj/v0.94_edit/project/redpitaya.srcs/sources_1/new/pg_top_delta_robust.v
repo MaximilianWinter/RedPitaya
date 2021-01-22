@@ -149,6 +149,8 @@ reg [14-1:0] min_delta_range = 14'd0;
 reg [14-1:0] max_delta_range = 14'd4095;
 reg          delta_finder_rstn = 1'd1;
 
+reg [32-1:0] err_gap = 14'd0;
+
 wire [14-1:0] ctrl_sig_rpnt_shift;
 
 wire [32-1:0] err_0;
@@ -202,6 +204,8 @@ controller_delta_robust pctrl(
         
     // for visualizing and debugging
     .general_buf_state_i(general_buf_state),
+    
+    .err_gap_i(err_gap),
     
     // bus logic
 	.ctrl_buf_we_i(pctrl_buf_we),			// note: we want to write the ref_wf from memory into an array
@@ -303,6 +307,8 @@ begin
 				20'h80: begin center_patience		            <= sys_wdata[14-1:0]; end
 				20'h84: begin delta_finder_rstn            <= sys_wdata[0]; end
 				
+				20'h90: begin err_gap            <= sys_wdata[32-1:0]; end
+				
 			
 			endcase
 		end
@@ -370,6 +376,8 @@ begin
 			
 			20'h88: begin sys_ack <= sys_en;	sys_rdata <= {too_low_center_patience_cnt}; end
 			20'h8C: begin sys_ack <= sys_en;	sys_rdata <= {center_patience_cnt}; end
+			
+			20'h90: begin sys_ack <= sys_en;	sys_rdata <= {err_gap}; end
 			
 			// waveforms
 			20'h1zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, init_ctrl_sig_rdata}; end

@@ -64,6 +64,8 @@ module controller_delta_robust(
     
     // for visualizing and debugging
     input [3-1:0]      general_buf_state_i,
+    
+    input [32-1:0]     err_gap_i,
 	
 	// bus logic
 	input			ctrl_buf_we_i,
@@ -620,7 +622,7 @@ begin
             
             delta_compare_error_sums:
                 begin
-                    if ((err0 < err1) || (err2 < err1)) begin
+                    if (((err0 + err_gap_i) < err1) || ((err2 + err_gap_i) < err1)) begin
                         if (err0 < err2) begin
                             lower_patience_cnt <= lower_patience_cnt + 14'd1;
                             upper_patience_cnt <= 14'd0;
