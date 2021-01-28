@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module controller_delta_robust(
+module controller_delta_avg(
 	input			clk_i,
 	input			rstn_i,
 	

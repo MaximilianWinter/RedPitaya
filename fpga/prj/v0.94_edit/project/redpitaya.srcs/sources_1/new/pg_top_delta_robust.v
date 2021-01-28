@@ -148,6 +148,7 @@ reg [14-1:0] deltajump_lower = 14'd1;
 reg [14-1:0] min_delta_range = 14'd0;
 reg [14-1:0] max_delta_range = 14'd4095;
 reg          delta_finder_rstn = 1'd1;
+reg          delta_finder_start = 1'd0;
 
 reg [32-1:0] err_gap = 14'd0;
 
@@ -189,6 +190,7 @@ controller_delta_robust pctrl(
     .min_delta_range_i(min_delta_range),
     .max_delta_range_i(max_delta_range),
     .delta_finder_rstn_i(delta_finder_rstn),
+    .delta_finder_start_i(delta_finder_start),
     .ctrl_sig_rpnt_shift_o(ctrl_sig_rpnt_shift),
     .err0_o(err_0),
     .err1_o(err_1),
@@ -309,6 +311,8 @@ begin
 				
 				20'h90: begin err_gap            <= sys_wdata[32-1:0]; end
 				
+				20'h94: begin delta_finder_start            <= sys_wdata[0]; end
+				
 			
 			endcase
 		end
@@ -378,6 +382,7 @@ begin
 			20'h8C: begin sys_ack <= sys_en;	sys_rdata <= {center_patience_cnt}; end
 			
 			20'h90: begin sys_ack <= sys_en;	sys_rdata <= {err_gap}; end
+			20'h94: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, delta_finder_start}; end
 			
 			// waveforms
 			20'h1zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, init_ctrl_sig_rdata}; end
