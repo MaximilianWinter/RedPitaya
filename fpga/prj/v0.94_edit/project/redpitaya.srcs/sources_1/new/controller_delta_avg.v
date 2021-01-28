@@ -15,8 +15,7 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: updated design, with focus on state machines; thus more robust if trigger comes too early
-// only reacts to new trigger if task is finished
+// Additional Comments: instead of using pure errors, use averages
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -53,6 +52,9 @@ module controller_delta_avg(
     output [32-1:0]     err0_o,
     output [32-1:0]     err1_o,
     output [32-1:0]     err2_o,
+    output [32-1:0]     err0_avg_o,
+    output [32-1:0]     err1_avg_o,
+    output [32-1:0]     err2_avg_o,
     output [3-1:0]      delta_finder_state_o,
     output reg [32-1:0] too_low_center_patience_cnt_o,
     output reg [32-1:0] center_patience_cnt_o,
@@ -554,9 +556,53 @@ reg [32-1:0] err0 = 32'd0;
 reg [32-1:0] err1 = 32'd0;
 reg [32-1:0] err2 = 32'd0;
 
+wire [32-1:0] err0_avg;
+wire [32-1:0] err1_avg;
+wire [32-1:0] err2_avg;
+
+wire err0_full;
+wire err1_full;
+wire err2_full;
+
+reg new_data = 1'd0;
+
+moving_averager_1024 avg_err0(
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
+    .dat_i(err0),
+    .dat_o(err0_avg),
+    .full_o(err0_full),
+    .new_data_i(new_data)
+);
+
+moving_averager_1024 avg_err1(
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
+    .dat_i(err1),
+    .dat_o(err1_avg),
+    .full_o(err1_full),
+    .new_data_i(new_data)
+);
+
+moving_averager_1024 avg_err2(
+    .clk_i(clk_i),
+    .rstn_i(rstn_i),
+    .dat_i(err2),
+    .dat_o(err2_avg),
+    .full_o(err2_full),
+    .new_data_i(new_data)
+);
+
+
+
+
+
+
 reg [14-1:0] upper_patience_cnt = 14'd0;
 reg [14-1:0] lower_patience_cnt = 14'd0;
 reg [14-1:0] center_patience_cnt = 14'd0;
+
+reg [32-1:0] err1_avg_old = 32'd0;
 
 always @(posedge clk_i)
 begin   
@@ -574,6 +620,7 @@ begin
                     error_sum[0] <= 32'd0;
                     error_sum[1] <= 32'd0;
                     error_sum[2] <= 32'd0;
+                    new_data <= 1'd0;
                     
                     delta_done <= 1'b0;
                 end
@@ -618,7 +665,8 @@ begin
                     err0 <= error_sum[0];
                     err1 <= error_sum[1];
                     err2 <= error_sum[2];
-                    if (delta_finder_start_i) begin
+                    new_data <= 1'd1;
+                    if (delta_finder_start_i && err0_full && err1_full && err2_full) begin
                         delta_finder_state <= delta_compare_error_sums;
                     end
                     else begin
@@ -630,8 +678,8 @@ begin
             
             delta_compare_error_sums:
                 begin
-                    if (((err0 + err_gap_i) < err1) || ((err2 + err_gap_i) < err1)) begin
-                        if (err0 < err2) begin
+                    if (((err0_avg + err_gap_i) < err1_avg) || ((err2_avg + err_gap_i) < err1_avg)) begin
+                        if (err0_avg < err2_avg) begin
                             lower_patience_cnt <= lower_patience_cnt + 14'd1;
                             upper_patience_cnt <= 14'd0;
                             center_patience_cnt <= 14'd0;
@@ -642,12 +690,16 @@ begin
                             center_patience_cnt <= 14'd0;
                         end
                     end
+                    else if (err1_avg > (err1_avg_old + err_gap_i)) begin
+                        center_patience_cnt <=14'd0;
+                    end 
                     else begin
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
                         center_patience_cnt <= center_patience_cnt + 14'd1;
                     end
                     delta_finder_state <= evaluate_patience_cnts;
+                    err1_avg_old <= err1_avg;
                 end
                 
             evaluate_patience_cnts:
@@ -686,7 +738,7 @@ begin
                 end
         endcase        
     end
-    else begin
+    else begin //maybe need to reset averager as well
         ctrl_sig_rpnt_shift <= 14'd0;
         delta_finder_state <= delta_wait_for_start;
         lower_patience_cnt <= 14'd0;
@@ -704,6 +756,12 @@ end
 assign err0_o = err0;
 assign err1_o = err1;
 assign err2_o = err2;
+
+assign err0_avg_o = err0_avg;
+assign err1_avg_o = err1_avg;
+assign err2_avg_o = err2_avg;
+
+
 assign  ctrl_sig_rpnt_shift_o =  ctrl_sig_rpnt_shift;
 
 assign delta_finder_state_o = delta_finder_state;

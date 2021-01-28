@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date         : Thu Jan 28 13:26:02 2021
+| Date         : Thu Jan 28 18:50:19 2021
 | Host         : mpq4p217 running 64-bit major release  (build 9200)
 | Command      : report_methodology -file red_pitaya_top_methodology_drc_routed.rpt -rpx red_pitaya_top_methodology_drc_routed.rpx
 | Design       : red_pitaya_top
@@ -23,11 +23,11 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 129
+             Violations found: 132
 +-----------+----------+-------------------------------------------------+------------+
 | Rule      | Severity | Description                                     | Violations |
 +-----------+----------+-------------------------------------------------+------------+
-| SYNTH-6   | Warning  | Timing of a block RAM might be sub-optimal      | 18         |
+| SYNTH-6   | Warning  | Timing of a block RAM might be sub-optimal      | 21         |
 | TIMING-15 | Warning  | Large hold violation on inter-clock path        | 28         |
 | TIMING-17 | Warning  | Non-clocked sequential cell                     | 1          |
 | TIMING-18 | Warning  | Missing input or output delay                   | 46         |
@@ -59,70 +59,85 @@ Related violations: <none>
 
 SYNTH-6#5 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/avg_err0/avg_buf_reg, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#6 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/avg_err1/avg_buf_reg, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#7 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_2, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/avg_err2/avg_buf_reg, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#8 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_3, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#9 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#10 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_2, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#11 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_3, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#12 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#13 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/pd_sram/memory_array_reg_2_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#14 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/pd_sram/memory_array_reg_2_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#15 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ref_sram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#16 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ref_sram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/pd_sram/memory_array_reg_2_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#17 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ref_sram/memory_array_reg_2_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/pd_sram/memory_array_reg_2_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#18 Warning
+Timing of a block RAM might be sub-optimal  
+The timing for the instance pg/pctrl/ref_sram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+Related violations: <none>
+
+SYNTH-6#19 Warning
+Timing of a block RAM might be sub-optimal  
+The timing for the instance pg/pctrl/ref_sram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+Related violations: <none>
+
+SYNTH-6#20 Warning
+Timing of a block RAM might be sub-optimal  
+The timing for the instance pg/pctrl/ref_sram/memory_array_reg_2_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+Related violations: <none>
+
+SYNTH-6#21 Warning
 Timing of a block RAM might be sub-optimal  
 The timing for the instance pg/pctrl/ref_sram/memory_array_reg_2_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
