@@ -150,7 +150,8 @@ reg [14-1:0] max_delta_range = 14'd4095;
 reg          delta_finder_rstn = 1'd1;
 reg          delta_finder_start = 1'd0;
 
-reg [32-1:0] err_gap = 14'd0;
+reg [32-1:0] err_gap = 32'd0;
+reg [32-1:0] err1_gap = 32'd0;
 
 wire [14-1:0] ctrl_sig_rpnt_shift;
 
@@ -215,6 +216,7 @@ controller_delta_avg pctrl(
     .general_buf_state_i(general_buf_state),
     
     .err_gap_i(err_gap),
+    .err1_gap_i(err1_gap),
     
     // bus logic
 	.ctrl_buf_we_i(pctrl_buf_we),			// note: we want to write the ref_wf from memory into an array
@@ -394,7 +396,7 @@ begin
 			20'h98: begin sys_ack <= sys_en;	sys_rdata <= {err_0_avg}; end
             20'h9C: begin sys_ack <= sys_en;    sys_rdata <= {err_1_avg}; end
             20'hA0: begin sys_ack <= sys_en;    sys_rdata <= {err_2_avg}; end
-			
+			20'hA4: begin sys_ack <= sys_en;	sys_rdata <= {err1_gap}; end
 			// waveforms
 			20'h1zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, init_ctrl_sig_rdata}; end
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory

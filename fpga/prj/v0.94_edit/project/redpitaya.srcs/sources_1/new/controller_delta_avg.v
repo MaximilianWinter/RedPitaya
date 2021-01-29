@@ -69,6 +69,7 @@ module controller_delta_avg(
     input [3-1:0]      general_buf_state_i,
     
     input [32-1:0]     err_gap_i,
+    input [32-1:0]     err1_gap_i,
 	
 	// bus logic
 	input			ctrl_buf_we_i,
@@ -566,27 +567,29 @@ wire err2_full;
 
 reg new_data = 1'd0;
 
-moving_averager_1024 avg_err0(
+reg err_avg_rstn = 1'b0;
+
+moving_averager_128 avg_err0(
     .clk_i(clk_i),
-    .rstn_i(rstn_i),
+    .rstn_i(err_avg_rstn),
     .dat_i(err0),
     .dat_o(err0_avg),
     .full_o(err0_full),
     .new_data_i(new_data)
 );
 
-moving_averager_1024 avg_err1(
+moving_averager_128 avg_err1(
     .clk_i(clk_i),
-    .rstn_i(rstn_i),
+    .rstn_i(err_avg_rstn),
     .dat_i(err1),
     .dat_o(err1_avg),
     .full_o(err1_full),
     .new_data_i(new_data)
 );
 
-moving_averager_1024 avg_err2(
+moving_averager_128 avg_err2(
     .clk_i(clk_i),
-    .rstn_i(rstn_i),
+    .rstn_i(err_avg_rstn),
     .dat_i(err2),
     .dat_o(err2_avg),
     .full_o(err2_full),
@@ -621,6 +624,7 @@ begin
                     error_sum[1] <= 32'd0;
                     error_sum[2] <= 32'd0;
                     new_data <= 1'd0;
+                    err_avg_rstn <= 1'b0;
                     
                     delta_done <= 1'b0;
                 end
@@ -708,6 +712,7 @@ begin
                         ctrl_sig_rpnt_shift <= ctrl_sig_rpnt_shift - deltajump_lower_i; // PD peak should be later
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
+                        //err_avg_rstn <= 1'b1;
                         k_p <= 14'd0;
                     end
                     else if (upper_patience_cnt == patience_i) begin
@@ -715,6 +720,7 @@ begin
                         lower_patience_cnt <= 14'd0;
                         upper_patience_cnt <= 14'd0;
                         k_p <= 14'd0;
+                        //err_avg_rstn <= 1'b1;
                     end
                     else if (center_patience_cnt >= center_patience_i) begin // maybe better to have a different patience_i here
                         k_p <= k_p_i;
@@ -743,13 +749,14 @@ begin
         delta_finder_state <= delta_wait_for_start;
         lower_patience_cnt <= 14'd0;
         upper_patience_cnt <= 14'd0;
-        center_patience_cnt <= 14'd0;
+        center_patience_cnt <= center_patience_i;
         k_p <= k_p_i;
         too_low_center_patience_cnt_o <= 32'd0;
         center_patience_cnt_o <= 32'd0;
         err0 <= 32'd0;
         err1 <= 32'd0;
         err2 <= 32'd0;
+        err_avg_rstn <= 1'b1;
     end
 end
 

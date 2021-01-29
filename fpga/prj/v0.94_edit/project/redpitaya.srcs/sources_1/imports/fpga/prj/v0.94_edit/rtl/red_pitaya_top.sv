@@ -655,7 +655,7 @@ pulse_generator_top pg_top(
 );
 */
 
-pg_top_delta_avg pg(
+pg_top_lock_monitoring pg(
     .clk_i  (adc_clk),
     .rstn_i (adc_rstn),
     
