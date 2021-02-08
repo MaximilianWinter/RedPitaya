@@ -311,7 +311,7 @@ begin
                 zero_out <= 1'd1;
             end
             else begin
-                zero_out <= 1'd1;
+                zero_out <= 1'd0;
                 error <= $signed(ref_rdata_A) - $signed(pd_rdata_A) + $signed(offset_i);
             end
             
@@ -408,11 +408,11 @@ begin
                 end
                 else if (do_smoothing) begin
                     smoothing_even_odd_cnt <= !(smoothing_even_odd_cnt);
-                    ctrl_sig_wpnt <= wpnt_init_offset_i + {{13{1'b0}},smoothing_even_odd_cnt};
-                    ctrl_sig_rpnt <= 14'd0;
+                    ctrl_sig_wpnt <= wpnt_init_offset_i + {{13{1'b0}},smoothing_even_odd_cnt} + $signed(ctrl_sig_rpnt_shift);
+                    ctrl_sig_rpnt <= 14'd0;// + $signed(ctrl_sig_rpnt_shift); // Is this problematic?
                 end
                 else begin
-                    ctrl_sig_rpnt <= 14'd0 + $signed(ctrl_sig_rpnt_shift);
+                    ctrl_sig_rpnt <= 14'd0;// + $signed(ctrl_sig_rpnt_shift);
                 end
             end
         high:
@@ -544,11 +544,12 @@ wire error_full;
 
 reg err_avg_rstn = 1'b0;
 reg new_data = 1'd0;
+reg [32-1:0] err_raw = 32'd0;
 
 moving_averager_128 avg_err0(
     .clk_i(clk_i),
     .rstn_i(err_avg_rstn),
-    .dat_i(error_sum),
+    .dat_i(err_raw),
     .dat_o(error_avg),
     .full_o(error_full),
     .new_data_i(new_data)
@@ -583,6 +584,7 @@ begin
         case (ctrl_state)
             wait_for_high:
                 begin
+                    err_raw <= error_sum;
                     new_data <= 1'b1;
                     err_avg_rstn <= 1'b0;
                     //if (error_full) begin
