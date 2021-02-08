@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
-| Date         : Fri Jan 29 19:19:39 2021
+| Date         : Mon Feb  8 18:09:26 2021
 | Host         : mpq4p217 running 64-bit major release  (build 9200)
 | Command      : report_methodology -file red_pitaya_top_methodology_drc_routed.rpt -rpx red_pitaya_top_methodology_drc_routed.rpx
 | Design       : red_pitaya_top
@@ -23,12 +23,13 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 125
+             Violations found: 144
 +-----------+----------+-------------------------------------------------+------------+
 | Rule      | Severity | Description                                     | Violations |
 +-----------+----------+-------------------------------------------------+------------+
-| SYNTH-6   | Warning  | Timing of a block RAM might be sub-optimal      | 14         |
+| SYNTH-6   | Warning  | Timing of a block RAM might be sub-optimal      | 16         |
 | TIMING-15 | Warning  | Large hold violation on inter-clock path        | 28         |
+| TIMING-16 | Warning  | Large setup violation                           | 17         |
 | TIMING-17 | Warning  | Non-clocked sequential cell                     | 1          |
 | TIMING-18 | Warning  | Missing input or output delay                   | 46         |
 | XDCC-5    | Warning  | User Non-Timing constraint/property overwritten | 4          |
@@ -59,52 +60,62 @@ Related violations: <none>
 
 SYNTH-6#5 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/avg_err0/avg_buf_reg, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#6 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#7 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_2, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#8 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_3, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_2, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#9 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/ctrl_sig_ram/memory_array_reg_1_3, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#10 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#11 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/init_ctrl_sig_ram/memory_array_reg_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#12 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#13 Warning
 Timing of a block RAM might be sub-optimal  
-The timing for the instance pg/pctrl/ref_sram/memory_array_reg_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+The timing for the instance pg/pctrl/pd_sram/memory_array_reg_1_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 SYNTH-6#14 Warning
 Timing of a block RAM might be sub-optimal  
+The timing for the instance pg/pctrl/ref_sram/memory_array_reg_0, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+Related violations: <none>
+
+SYNTH-6#15 Warning
+Timing of a block RAM might be sub-optimal  
 The timing for the instance pg/pctrl/ref_sram/memory_array_reg_1, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
+Related violations: <none>
+
+SYNTH-6#16 Warning
+Timing of a block RAM might be sub-optimal  
+The timing for the instance pg/pctrl/spread/avg_buf_reg, implemented as a block RAM, might be sub-optimal as no output register was merged into the block
 Related violations: <none>
 
 TIMING-15#1 Warning
@@ -245,6 +256,91 @@ Related violations: <none>
 TIMING-15#28 Warning
 Large hold violation on inter-clock path  
 There is a large inter-clock skew of 2.611 ns between adc_dat_i[1][8] (clocked by adc_clk) and adc_dat_raw_reg[1][6]/D (clocked by pll_adc_clk) that results in large hold timing violation(s) of -2.151 ns. Fixing large hold violations during routing might impact setup slack and result in more difficult timing closure
+Related violations: <none>
+
+TIMING-16#1 Warning
+Large setup violation  
+There is a large setup violation of -1.016 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[23]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#2 Warning
+Large setup violation  
+There is a large setup violation of -1.024 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[21]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#3 Warning
+Large setup violation  
+There is a large setup violation of -1.037 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[24]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#4 Warning
+Large setup violation  
+There is a large setup violation of -1.057 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[26]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#5 Warning
+Large setup violation  
+There is a large setup violation of -1.133 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[27]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#6 Warning
+Large setup violation  
+There is a large setup violation of -1.141 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[25]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#7 Warning
+Large setup violation  
+There is a large setup violation of -1.153 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[28]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#8 Warning
+Large setup violation  
+There is a large setup violation of -1.173 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[30]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#9 Warning
+Large setup violation  
+There is a large setup violation of -1.249 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[31]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#10 Warning
+Large setup violation  
+There is a large setup violation of -1.257 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[29]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#11 Warning
+Large setup violation  
+There is a large setup violation of -1.270 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[32]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#12 Warning
+Large setup violation  
+There is a large setup violation of -1.290 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[34]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#13 Warning
+Large setup violation  
+There is a large setup violation of -1.366 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[35]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#14 Warning
+Large setup violation  
+There is a large setup violation of -1.374 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[33]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#15 Warning
+Large setup violation  
+There is a large setup violation of -1.387 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[36]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#16 Warning
+Large setup violation  
+There is a large setup violation of -1.407 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[38]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+TIMING-16#17 Warning
+Large setup violation  
+There is a large setup violation of -1.491 ns between pg/pctrl/error_sum_reg[1]/C (clocked by pll_adc_clk) and pg/pctrl/spread/sum_reg[37]/D (clocked by pll_adc_clk). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-17#1 Warning

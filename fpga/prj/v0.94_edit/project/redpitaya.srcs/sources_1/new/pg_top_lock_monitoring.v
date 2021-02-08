@@ -146,6 +146,11 @@ reg [32-1:0] error_threshold = 32'd4294967295;
 
 wire need_to_relock;
 
+wire [32-1:0] avg_spread;
+
+reg [14-1:0] min_err_range = 14'd0;
+reg [14-1:0] max_err_range = 14'd4095;
+
 controller_lock_monitoring pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
@@ -169,6 +174,9 @@ controller_lock_monitoring pctrl(
     .error_avg_o(error_avg),
     .error_threshold_i(error_threshold),
     .need_to_relock_o(need_to_relock),
+    .avg_spread_o(avg_spread),
+    .min_err_range_i(min_err_range),
+    .max_err_range_i(max_err_range),
     
 	// additional control parameters
 	.lower_zero_output_cnt_i(lower_zero_output_cnt),
@@ -270,6 +278,8 @@ begin
 				20'h50: begin monitoring_rstn               <= sys_wdata[0]; end
 				20'h54: begin error_threshold               <= sys_wdata[32-1:0]; end
 				
+				20'h64: begin min_err_range     <= sys_wdata[14-1:0]; end
+				20'h68: begin max_err_range     <= sys_wdata[14-1:0]; end
 			
 			endcase
 		end
@@ -320,6 +330,12 @@ begin
 			
 			20'h58: begin sys_ack <= sys_en;	sys_rdata <= {error_avg}; end
 			20'h5C: begin sys_ack <= sys_en;	sys_rdata <= {{32-1{1'b0}}, need_to_relock}; end
+			
+			20'h60: begin sys_ack <= sys_en;	sys_rdata <= {avg_spread}; end
+			
+			20'h64: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, min_err_range}; end
+			20'h68: begin sys_ack <= sys_en;	sys_rdata <= {{32-14{1'b0}}, max_err_range}; end
+			
 			// waveforms
 			20'h1zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, init_ctrl_sig_rdata}; end
 			20'h2zzzz: begin sys_ack <= ack_dly;	    sys_rdata <= {{18{1'b0}}, cal_buf_rdata}; end // this writes data from the calibrator module to memory

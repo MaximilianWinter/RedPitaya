@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7z010clg400-1" LaunchTime="1611944226">
+<GenRun Id="impl_1" LaunchPart="xc7z010clg400-1" LaunchTime="1612804007">
   <File Type="PWROPT-DRC" Name="red_pitaya_top_drc_pwropted.rpt"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="red_pitaya_top_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="red_pitaya_top_timing_summary_init.rpt"/>
@@ -235,7 +235,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_delta_avg.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -243,7 +242,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pg_top_delta_avg.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -251,7 +249,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/moving_averager_1024.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -259,7 +256,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_delta_robust.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -267,7 +263,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pg_top_delta_robust.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -275,7 +270,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_dual_ram_delta_finder.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -283,7 +277,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pg_top_dual_ram_delta_finder.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -291,7 +284,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_dual_ram.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -299,7 +291,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pg_top.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -307,7 +298,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/big_bram.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -315,7 +305,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_delta_finder.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -323,7 +312,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -331,7 +319,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_6.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -339,7 +326,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_5.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -347,7 +333,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_4.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -355,7 +340,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/moving_averager_64.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -363,7 +347,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_3.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -371,7 +354,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/controller_2.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -379,7 +361,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pos_moving_averager.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -387,7 +368,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/moving_averager.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -395,7 +375,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/boxcar.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -403,7 +382,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_ams.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_ams.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -413,7 +391,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_block_sh.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_block_sh.v"/>
         <Attr Name="ImportTime" Val="1526549556"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -423,7 +400,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_block_sh_d.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_block_sh_d.v"/>
         <Attr Name="ImportTime" Val="1528973076"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -433,7 +409,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_sh.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_sh.v"/>
         <Attr Name="ImportTime" Val="1532461546"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -443,7 +418,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pulse_generator_ch.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -451,7 +425,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pulse_generator_top.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -459,7 +432,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/simple_scope.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -467,7 +439,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/prop_ctrl.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -475,7 +446,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pulse_generator_init.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -483,7 +453,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pulse_generator_delta_finder.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -491,7 +460,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/extra_simple_asg.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -499,7 +467,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/extra_simple_asg_ch.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -507,7 +474,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/single_pulse_generator.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -515,7 +481,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/double_pulse_generator.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -523,7 +488,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/double_pulse_generator_ch.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -531,7 +495,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/longer_pulse_generator_01.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -539,7 +502,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/longer_pulse_generator.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -547,7 +509,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/pulse_generator_lp.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/pulse_generator_lp.v"/>
         <Attr Name="ImportTime" Val="1532621808"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -557,7 +518,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/axi4_lite_slave.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/axi4_lite_slave.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -567,7 +527,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/axi_wr_fifo.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/axi_wr_fifo.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -577,7 +536,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/pulsegen_development/pulse_generator.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/pulsegen_development/pulse_generator.v"/>
         <Attr Name="ImportTime" Val="1532548104"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -587,7 +545,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/pulsegen_development/pulse_generator3.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/pulsegen_development/pulse_generator3.v"/>
         <Attr Name="ImportTime" Val="1532619944"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -597,7 +554,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_asg.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_asg.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -607,7 +563,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_asg_ch.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_asg_ch.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -617,7 +572,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_id.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_id.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -627,7 +581,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_pid.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -637,7 +590,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_block.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_pid_block.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -647,7 +599,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_pid_edit.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../Lukas_Projekt/Pulse Stabilization Red Pitaya/RedPitaya/fpga/rtl/classic/red_pitaya_pid_edit.v"/>
         <Attr Name="ImportTime" Val="1526496858"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -657,7 +608,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/classic/red_pitaya_scope.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/classic/red_pitaya_scope.v"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -667,7 +617,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/acq.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/acq.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -677,7 +626,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/evn_pkg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/evn_pkg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -687,7 +635,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/asg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/asg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -697,7 +644,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/asg_bst.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/asg_bst.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -707,7 +653,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/asg_per.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/asg_per.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -717,7 +662,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/axi4_stream_cnt.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/axi4_stream_cnt.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -727,7 +671,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/axi4_stream_demux.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/axi4_stream_demux.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -737,7 +680,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/axi4_stream_dly.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/axi4_stream_dly.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -747,7 +689,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/interface/axi4_stream_if.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/interface/axi4_stream_if.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -757,7 +698,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/axi4_stream_mux.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/axi4_stream_mux.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -767,7 +707,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/axi4_stream_pas.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/axi4_stream_pas.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -777,7 +716,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/axi4_stream_reg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/axi4_stream_reg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -787,7 +725,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/bin_and.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/bin_and.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -797,7 +734,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/clb.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/clb.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -807,7 +743,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/clkdiv.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/clkdiv.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -817,7 +752,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/ctrg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/ctrg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -827,7 +761,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/cts.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/cts.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -837,7 +770,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/debounce.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/debounce.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -847,7 +779,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/gen.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/gen.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -857,7 +788,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/id.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/id.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -867,7 +797,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/la.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/la.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -877,7 +806,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/la_trg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/la_trg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -887,7 +815,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/lg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/lg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -897,7 +824,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/lin_add.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/lin_add.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -907,7 +833,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/lin_mul.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/lin_mul.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -917,7 +842,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/mgmt.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/mgmt.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -927,7 +851,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/muxctl.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/muxctl.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -937,7 +860,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/old_acq.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/old_acq.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -947,7 +869,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/old_asg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/old_asg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -957,7 +878,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/old_asg_top.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/old_asg_top.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -967,7 +887,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/old_id.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/old_id.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -977,7 +896,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/old_la_top.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/old_la_top.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -987,7 +905,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/osc.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/osc.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -997,7 +914,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/osc_trg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/osc_trg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1007,7 +923,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/pdm.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/pdm.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1017,7 +932,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/pid.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/pid.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1027,7 +941,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/pid_block.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/pid_block.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1037,7 +950,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/pwm.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/pwm.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1047,7 +959,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/red_pitaya_dfilt1.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/red_pitaya_dfilt1.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1057,7 +968,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/rle.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/rle.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1067,7 +977,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/scope_dec_avg.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/scope_dec_avg.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1077,7 +986,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/scope_filter.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/scope_filter.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1087,7 +995,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/str2mm.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/str2mm.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1097,7 +1004,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/str_dec.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/str_dec.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1107,7 +1013,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/sys_reg_array_o.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/sys_reg_array_o.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1117,7 +1022,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/interface/axi4_lite_if.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/interface/axi4_lite_if.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1127,7 +1031,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/imports/fpga/rtl/interface/spi_if.sv">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../rtl/interface/spi_if.sv"/>
         <Attr Name="ImportTime" Val="1525269708"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -1137,7 +1040,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/simplified_asg.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -1145,7 +1047,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/simplified_asg_ch.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -1153,7 +1054,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/single_pulse_generator_sram.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -1161,7 +1061,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/pulse_generator_shaper.v">
       <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>

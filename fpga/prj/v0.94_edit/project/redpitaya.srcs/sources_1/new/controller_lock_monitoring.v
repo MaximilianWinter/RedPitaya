@@ -43,6 +43,9 @@ module controller_lock_monitoring(
     output [32-1:0]     error_avg_o,
     input [32-1:0]     error_threshold_i,
     output             need_to_relock_o,
+    output [32-1:0]    avg_spread_o,
+    input [14-1:0]     min_err_range_i,
+    input [14-1:0]     max_err_range_i,
 	
 	// additional control parameters
     input [14-1:0]     lower_zero_output_cnt_i,
@@ -225,6 +228,13 @@ begin
     ctrl_sig_rdata_o <= ctrl_sig_rdata_B[29-1:15];
 end
 
+///CONTROLLER STATES//////////////////////////////////////////////////////////////
+reg [3-1:0] ctrl_state = 3'b000;
+reg [3-1:0] wait_for_high = 3'b000;
+reg [3-1:0] high = 3'b001;
+reg [3-1:0] wait_for_low = 3'b011;
+reg [3-1:0] low = 3'b100;
+reg [3-1:0] initialize = 3'b101;
 
 ///PD ARRAY///////////////////////////////////////////////////////////////////////
 reg [14-1:0] pd_wpnt;
@@ -233,7 +243,7 @@ reg [14-1:0] pd_rpnt_B;
 always @(posedge clk_i)
 begin
     pd_wdata_A <= pd_i;
-    pd_we_A <= trigger_i;
+    pd_we_A <= (ctrl_state == high);//trigger_i;
     pd_waddr_A <= pd_wpnt;
     pd_raddr_A <= pd_rpnt;
     
@@ -283,16 +293,10 @@ wire [14-1:0] avg_output_val;
 reg do_smoothing = 1'b0;
 reg zero_output = 1'b0;
 
-
-///CONTROLLER STATES//////////////////////////////////////////////////////////////
-reg [3-1:0] ctrl_state = 3'b000;
-reg [3-1:0] wait_for_high = 3'b000;
-reg [3-1:0] high = 3'b001;
-reg [3-1:0] wait_for_low = 3'b011;
-reg [3-1:0] low = 3'b100;
-reg [3-1:0] initialize = 3'b101;
-
 reg [14-1:0] k_p = 14'd0;
+
+reg zero_out = 1'b0;
+reg zero_out_del = 1'b0;
 
 always @(posedge clk_i)
 begin
@@ -302,9 +306,26 @@ begin
             
             output_val <= 14'd0;
             
-            error <= $signed(ref_rdata_A) - $signed(pd_rdata_A) + $signed(offset_i);
+            if ($signed(ref_rdata_A) == 14'd0) begin // leave output unchanged where target is zero
+                error <= 15'd0;
+                zero_out <= 1'd1;
+            end
+            else begin
+                zero_out <= 1'd1;
+                error <= $signed(ref_rdata_A) - $signed(pd_rdata_A) + $signed(offset_i);
+            end
+            
+            
+            zero_out_del <= zero_out;
             scaled_error <= $signed(error) * $signed({1'b0,k_p});
-            ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata_A) + $signed(scaled_error); //need to include averager
+            
+            
+            if (zero_out_del == 1'b1) begin
+                ctrl_sig_wf_preval <= 29'd0;
+            end
+            else begin
+                ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata_A) + $signed(scaled_error); //need to include averager
+            end
             
             if ($signed(ctrl_sig_wf_preval) < 0)
                 ctrl_sig_wf_val <= 29'd0;
@@ -533,6 +554,29 @@ moving_averager_128 avg_err0(
     .new_data_i(new_data)
 );
 
+
+
+wire [32-1:0] current_spread;
+assign current_spread = $signed(error_sum) - $signed(error_avg);
+
+wire [32-1:0] abs_current_spread;
+assign abs_current_spread = ($signed(current_spread) > 0)? $signed(current_spread):-$signed(current_spread);
+
+wire [32-1:0] avg_spread;
+
+wire spread_full;
+
+moving_averager_128 spread(
+    .clk_i(clk_i),
+    .rstn_i(err_avg_rstn),
+    .dat_i(abs_current_spread),
+    .dat_o(avg_spread),
+    .full_o(spread_full),
+    .new_data_i(new_data)
+);
+
+reg [15-1:0] abs_error = 15'd0;
+
 always @(posedge clk_i)
 begin
     if (!monitoring_rstn_i) begin
@@ -541,11 +585,11 @@ begin
                 begin
                     new_data <= 1'b1;
                     err_avg_rstn <= 1'b0;
-                    if (error_full) begin
-                        if (error_avg > old_error_avg + error_threshold_i) begin
-                            need_to_relock <= 1'b1;
-                        end
-                    end
+                    //if (error_full) begin
+                    //    if (error_avg > old_error_avg + error_threshold_i) begin // relock criterion
+                    //        need_to_relock <= 1'b1;
+                    //    end
+                    //end
                     old_error_avg <= error_avg;
                 end
             high:
@@ -560,14 +604,18 @@ begin
             wait_for_low:
                 begin
                     new_data <= 1'b0;
+                    error_sum <= 32'b0;
                 end
             low:
                 begin
-                    if($signed(error) > 0) begin
-                        error_sum <= error_sum + $signed(error);
-                    end
-                    else begin
-                        error_sum <= error_sum - $signed(error);
+                    if ((ref_rpnt > min_err_range_i) && (ref_rpnt < max_err_range_i)) begin
+                        if($signed(error) > 0) begin
+                            abs_error <= $signed(error);
+                        end
+                        else begin
+                            abs_error <= -$signed(error);
+                        end
+                        error_sum <= error_sum + $signed(abs_error);
                     end
                 end
             initialize:
@@ -587,7 +635,7 @@ end
 
 assign error_avg_o = error_avg;
 assign need_to_relock_o = need_to_relock;
-
+assign avg_spread_o = avg_spread;
 
 //////////////////////////////////////////////////////////////////////////////////
 ///GENERAL BUF LOGIC//////////////////////////////////////////////////////////////

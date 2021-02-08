@@ -320,7 +320,13 @@ begin
             
             output_val <= 14'd0;
             
-            error <= $signed(ref_rdata_A) - $signed(pd_rdata_A) + $signed(offset_i);
+            if ($signed(ref_rdata_A) == 14'd0) begin // leave output unchanged where target is zero
+                error <= 15'd0;
+            end
+            else begin
+                error <= $signed(ref_rdata_A) - $signed(pd_rdata_A) + $signed(offset_i);
+            end
+            
             scaled_error <= $signed(error) * $signed({1'b0,k_p});
             ctrl_sig_wf_preval <= $signed(ctrl_sig_rdata_A) + $signed(scaled_error); //need to include averager
             
