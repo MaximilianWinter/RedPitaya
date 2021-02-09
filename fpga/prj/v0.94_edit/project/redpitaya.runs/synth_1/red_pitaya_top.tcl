@@ -139,6 +139,7 @@ read_verilog -library xil_defaultlib {
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/simplified_asg_ch.v
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/single_pulse_generator_sram.v
   C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/pulse_generator_shaper.v
+  C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/new/controller_ctrl_shift.v
 }
 add_files C:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/bd/system/system.bd
 set_property used_in_implementation false [get_files -all c:/Users/mWinter/Documents/HiWi_MPQ/RedPitaya_Testing/RedPitaya/fpga/prj/v0.94_edit/project/redpitaya.srcs/sources_1/bd/system/ip/system_axi_protocol_converter_0_0/system_axi_protocol_converter_0_0_ooc.xdc]

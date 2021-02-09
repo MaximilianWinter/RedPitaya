@@ -151,7 +151,8 @@ wire [32-1:0] avg_spread;
 reg [14-1:0] min_err_range = 14'd0;
 reg [14-1:0] max_err_range = 14'd4095;
 
-controller_lock_monitoring pctrl(
+//controller_lock_monitoring pctrl(
+controller_ctrl_shift pctrl(
 	.clk_i(clk_i),
 	.rstn_i(rstn_i),
 	

@@ -15,11 +15,11 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: instead of using pure errors, use averages
+// Additional Comments: instead of shifting pd, shift ctrl signa
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module controller_lock_monitoring(
+module controller_ctrl_shift(
 	input			clk_i,
 	input			rstn_i,
 	
@@ -408,11 +408,11 @@ begin
                 end
                 else if (do_smoothing) begin
                     smoothing_even_odd_cnt <= !(smoothing_even_odd_cnt);
-                    ctrl_sig_wpnt <= wpnt_init_offset_i + {{13{1'b0}},smoothing_even_odd_cnt} + $signed(ctrl_sig_rpnt_shift);
-                    ctrl_sig_rpnt <= 14'd0;// + $signed(ctrl_sig_rpnt_shift); // Is this problematic?
+                    ctrl_sig_wpnt <= wpnt_init_offset_i + {{13{1'b0}},smoothing_even_odd_cnt} + delta_center_i;// + $signed(ctrl_sig_rpnt_shift);
+                    ctrl_sig_rpnt <= 14'd0 + delta_center_i;// + $signed(ctrl_sig_rpnt_shift); // Is this problematic?
                 end
                 else begin
-                    ctrl_sig_rpnt <= 14'd0;// + $signed(ctrl_sig_rpnt_shift);
+                    ctrl_sig_rpnt <= 14'd0 + delta_center_i;// + $signed(ctrl_sig_rpnt_shift);
                 end
             end
         high:
@@ -441,7 +441,7 @@ begin
                 if (!trigger_i)
                     ctrl_state <= low;
                     
-                pd_rpnt <= 14'd6 + delta_center_i;
+                pd_rpnt <= 14'd6;
                 ref_rpnt <= 14'd6;
                 ctrl_sig_rpnt <= 14'd4;
                 ctrl_sig_wpnt <= 14'd0;
